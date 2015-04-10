@@ -1,0 +1,47 @@
+parameters:
+    dos.listener.user_update.class: Dos\UserBundle\EventListener\UserUpdateListener
+    dos.listener.user_delete.class: Dos\UserBundle\EventListener\UserDeleteListener
+    dos.listener.user_mailer.class: Dos\UserBundle\EventListener\UserMailerListener
+    dos.listener.user_acl.class: Dos\UserBundle\EventListener\UserAclListener
+    dos.listener.user_aware.class: Dos\UserBundle\EventListener\UserAwareResourceListener
+
+services:
+    dos.listener.user_update:
+        class: %dos.listener.user_update.class%
+        arguments:
+            - @fos_user.user_manager
+        tags:
+            - { name: kernel.event_listener, event: dos.user.post_update, method: processUser }
+
+    dos.listener.user_delete:
+        class: %dos.listener.user_delete.class%
+        scope: request
+        arguments:
+            - @dos.user.security
+            - @router
+            - @session
+            - "route_backend_user_index"
+        tags:
+            - { name: kernel.event_listener, event: dos.user.pre_delete, method: deleteUser }
+
+    dos.listener.user_mailer:
+        class: %dos.listener.user_mailer.class%
+        arguments:
+            - @sylius.email_sender
+        tags:
+            - {name: kernel.event_listener, event: fos_user.registration.completed, method: sendUserConfirmationEmail}
+            - {name: kernel.event_listener, event: fos_user.registration.confirmed, method: sendUserConfirmationEmail}
+
+    dos.listener.user_acl:
+        class: %dos.listener.user_acl.class%
+        arguments:
+            - @service_container
+        tags:
+            - {name: doctrine.event_listener, event: postPersist, piority: -128}
+
+    dos.listener.user_aware:
+        class: %dos.listener.user_aware.class%
+        arguments:
+            - @dos.user.security
+        tags:
+            - {name: doctrine.event_subscriber, connection: default}

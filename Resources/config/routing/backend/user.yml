@@ -1,0 +1,61 @@
+route_backend_user_index:
+    path: /
+    methods: [GET]
+    defaults:
+        _controller: dos.controller.user:indexAction
+        _sylius:
+            template: ui:package/backend/User:index.html.twig
+            method: createFilterPaginator
+            arguments: [$criteria, $sorting, $deleted]
+            sortable: true
+
+route_backend_user_create:
+    path: /new
+    methods: [GET, POST]
+    defaults:
+        _controller: dos.controller.user:createAction
+        _sylius:
+            template: ui:package/backend/User:create.html.twig
+            redirect: route_backend_user_update
+
+route_backend_user_update:
+    path: /{id}/edit
+    methods: [GET, PUT, PATCH]
+    requirements:
+        id: \d+
+    defaults:
+        _controller: dos.controller.user:updateAction
+        _sylius:
+            template: ui:package/backend/User:update.html.twig
+            redirect: referer
+            method: findForDetailsPage
+            arguments: [$id]
+
+route_backend_user_change_state:
+    path: /{id}/change-state
+    methods: [PATCH]
+    requirements:
+        id: \d+
+    defaults:
+        _controller: dos.controller.user:changeStateAction
+
+route_backend_user_reset_password:
+    path: /{id}/reset-password
+    methods: [GET, PUT]
+    requirements:
+        id: \d+
+    defaults:
+        _controller: dos.controller.user:resetPasswordAction
+        _sylius:
+            redirect: referer
+            template: ui:package/backend/User:resetPassword.html.twig
+
+route_backend_user_delete:
+    path: /{id}
+    methods: [DELETE]
+    requirements:
+        id: \d+
+    defaults:
+        _controller: dos.controller.user:deleteAction
+        _sylius:
+            redirect: route_backend_user_index

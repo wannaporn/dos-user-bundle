@@ -1,0 +1,7 @@
+ui.trans:
+    backend:
+        user:
+            header: ผู้ใช้และกลุ่ม
+            index: ผู้ใช้งาน
+        group:
+            index: กลุ่มผู้ใช้

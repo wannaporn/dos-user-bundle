@@ -1,0 +1,9 @@
+parameters:
+    dos.provider.user.class: Dos\UserBundle\OAuth\UserProvider
+
+services:
+    dos.provider.user:
+        class: %dos.provider.user.class%
+        arguments:
+            - @fos_user.user_manager
+            - @dos.repository.user_oauth

@@ -1,0 +1,17 @@
+Dos\UserBundle\Model\User:
+    exclusion_policy: ALL
+    xml_root_name: user
+
+    virtual_properties:
+        getProfilePicture:
+            serialized_name: profile_picture
+            type: string
+
+    properties:
+        displayname:
+            expose: true
+            type: string
+
+        email:
+            expose: true
+            type: string

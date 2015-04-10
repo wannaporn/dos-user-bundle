@@ -1,0 +1,28 @@
+parameters:
+    dos.form.type.user_search.class: Dos\UserBundle\Form\Type\UserSearchType
+    dos.form.type.user_reistration.class: Dos\UserBundle\Form\Type\RegistrationFormType
+    dos.form.type.user_profile.class: Dos\UserBundle\Form\Type\ProfileFormType
+
+services:
+    dos.form.type.user_search:
+        class: %dos.form.type.user_search.class%
+        arguments:
+            - @dos.repository.user
+            - @router
+            - "route_api_user_search"
+        tags:
+            - {name: form.type, alias: dos_user_search}
+
+    dos.form.type.user_reistration:
+        class: %dos.form.type.user_reistration.class%
+        arguments:
+            - %dos.model.user.class%
+        tags:
+            - {name: form.type, alias: dos_user_registration}
+
+    dos.form.type.user_profile:
+        class: %dos.form.type.user_profile.class%
+        arguments:
+            - %dos.model.user.class%
+        tags:
+            - {name: form.type, alias: dos_user_profile}

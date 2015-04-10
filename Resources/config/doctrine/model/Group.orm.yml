@@ -1,0 +1,17 @@
+Dos\UserBundle\Model\Group:
+    type: entity
+    table: dos_user_group
+
+    id:
+        id:
+            type: integer
+            column: id
+            generator:
+                strategy: AUTO
+
+    fields:
+        color:
+            type: string
+            length: 10
+            nullable: true
+            column: color

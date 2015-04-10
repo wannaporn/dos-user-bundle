@@ -1,0 +1,3 @@
+Dos\UserBundle\Model\Permission:
+    type: mappedSuperclass
+    table: dos_rbac_permission

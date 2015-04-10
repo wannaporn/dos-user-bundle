@@ -1,0 +1,32 @@
+{
+    "name": "liverbool/dos-user",
+    "description": "User Bundle for Symfony",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "ツ Liverbool",
+            "email": "nukboon@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "hwi/oauth-bundle": "~0.3",
+        "friendsofsymfony/user-bundle": "2.0.*@dev",
+        "liverbool/dos-resource": "dev-master",
+        "sylius/rbac-bundle": "dev-master"
+    },
+    "require-dev": {
+        "liil/kint": "1.0"
+    },
+    "autoload": {
+        "psr-4": { "Dos\\UserBundle\\": "" }
+    },
+    "autoload-dev": {
+        "psr-4": { "Dos\\UserBundle\\spec\\": "spec/" }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "master-dev"
+        }
+    }
+}

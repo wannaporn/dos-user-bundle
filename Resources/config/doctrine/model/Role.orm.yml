@@ -1,0 +1,20 @@
+Dos\UserBundle\Model\Role:
+    type: mappedSuperclass
+    table: dos_rbac_role
+
+    # BUG Cannot override joinTable to change the name.
+    # sylius_role_permission
+    #associationOverride:
+    #    permissions:
+    #        joinTable:
+    #            name: dos_role_permission
+    #            joinColumns:
+    #                role_id:
+    #                    referencedColumnName: id
+    #                    nullable: false
+    #                    onDelete: CASCADE
+    #            inverseJoinColumns:
+    #                permission_id:
+    #                    referencedColumnName: id
+    #                    nullable: false
+    #                    onDelete: CASCADE

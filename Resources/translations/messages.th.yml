@@ -1,0 +1,10 @@
+ui.trans:
+    user:
+        menu:
+            overview: Overview
+            edit: Edit
+
+sylius:
+    form:
+        user:
+            roles: Roles

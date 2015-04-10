@@ -1,0 +1,10 @@
+parameters:
+    dos.user.twig.user_profile.class: Dos\UserBundle\Twig\UserProfile
+
+services:
+    dos.user.twig.user_profile:
+        class: %dos.user.twig.user_profile.class%
+        arguments:
+            - @liip_imagine.cache.manager
+        tags:
+            - {name: twig.extension}

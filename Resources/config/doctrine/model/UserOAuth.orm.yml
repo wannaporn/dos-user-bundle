@@ -1,0 +1,39 @@
+Dos\UserBundle\Model\UserOAuth:
+    type: mappedSuperclass
+    table: dos_user_oauth
+
+    id:
+        id:
+            type: integer
+            column: id
+            generator:
+                strategy: AUTO
+
+    uniqueConstraints:
+        user_provider:
+            columns: [user_id, provider]
+
+    fields:
+        provider:
+            type: string
+
+        identifier:
+            type: string
+
+        accessToken:
+            type: string
+            nullable: true
+            column: access_token
+
+        profilePicture:
+            type: string
+            nullable: true
+            column: profile_picture
+
+    manyToOne:
+        user:
+            inversedBy: oauthAccounts
+            targetEntity: Dos\UserBundle\Model\UserInterface
+            joinColumn:
+                name: user_id
+                referencedColumnName: id

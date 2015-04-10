@@ -1,0 +1,21 @@
+parameters:
+    dos.menus:
+        menu.backend.main:
+            items:
+                user_group:
+                    label: ui.trans.backend.user.header
+                    extras:
+                        icon: icon caret right
+
+                    items:
+                        user:
+                            route: route_backend_user_index
+                            label: ui.trans.backend.user.index
+                            extras:
+                                icon: icon user
+
+                        group:
+                            route: route_backend_group_index
+                            label: ui.trans.backend.group.index
+                            extras:
+                                icon: icon users

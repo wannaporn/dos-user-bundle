@@ -1,0 +1,12 @@
+parameters:
+    dos.user.security.class: Dos\UserBundle\OAuth\Security
+    dos.user.oauth.response.class: Dos\UserBundle\OAuth\ResourceResponse
+    dos.user.oauth.response.facebook.class: Dos\UserBundle\OAuth\FacebookResponse
+    dos.user.oauth.response.google.class: Dos\UserBundle\OAuth\GoogleResponse
+    dos.user.oauth.response.github.class: Dos\UserBundle\OAuth\GithubResponse
+
+services:
+    dos.user.security:
+        class: %dos.user.security.class%
+        arguments:
+            - @service_container
