@@ -1,5 +1,5 @@
 {
-    "name": "liverbool/dos-user",
+    "name": "liverbool/dos-user-bundle",
     "description": "User Bundle for Symfony",
     "license": "MIT",
     "authors": [
@@ -12,7 +12,7 @@
     "require": {
         "hwi/oauth-bundle": "~0.3",
         "friendsofsymfony/user-bundle": "2.0.*@dev",
-        "liverbool/dos-resource": "dev-master",
+        "liverbool/dos-resource-bundle": "dev-master",
         "sylius/rbac-bundle": "dev-master"
     },
     "require-dev": {
