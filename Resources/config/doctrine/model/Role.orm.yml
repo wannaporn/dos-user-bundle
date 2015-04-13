@@ -1,4 +1,4 @@
-Dos\UserBundle\Model\Role:
+DoS\UserBundle\Model\Role:
     type: mappedSuperclass
     table: dos_rbac_role
 

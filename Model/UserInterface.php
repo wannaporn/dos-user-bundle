@@ -1,10 +1,10 @@
 <?php
 
-namespace Dos\UserBundle\Model;
+namespace DoS\UserBundle\Model;
 
 use Doctrine\Common\Collections\Collection;
-use Dos\CoreBundle\Model\AddressInterface;
-use Dos\CoreBundle\Model\ImageInterface;
+use DoS\CoreBundle\Model\AddressInterface;
+use DoS\CoreBundle\Model\ImageInterface;
 use FOS\UserBundle\Model\UserInterface as BaseUserInterface;
 use libphonenumber\PhoneNumber;
 use Sylius\Component\Rbac\Model\IdentityInterface;

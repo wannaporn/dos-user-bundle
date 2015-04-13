@@ -1,11 +1,11 @@
 <?php
 
-namespace Dos\UserBundle\DependencyInjection;
+namespace DoS\UserBundle\DependencyInjection;
 
-use Dos\ResourceBundle\DependencyInjection\AbstractResourceExtension;
+use DoS\ResourceBundle\DependencyInjection\AbstractResourceExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class DosUserExtension extends AbstractResourceExtension
+class DoSUserExtension extends AbstractResourceExtension
 {
     /**
      * {@inheritdoc}

@@ -1,13 +1,13 @@
 <?php
 
-namespace Dos\UserBundle\EventListener;
+namespace DoS\UserBundle\EventListener;
 
 use Doctrine\Common\EventSubscriber;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
-use Dos\UserBundle\OAuth\Security;
-use Dos\UserBundle\Model\UserUpdaterAwareInterface;
-use Dos\UserBundle\Model\UserAwareInterface;
-use Dos\UserBundle\Model\UserInterface;
+use DoS\UserBundle\OAuth\Security;
+use DoS\UserBundle\Model\UserUpdaterAwareInterface;
+use DoS\UserBundle\Model\UserAwareInterface;
+use DoS\UserBundle\Model\UserInterface;
 
 class UserAwareResourceListener implements EventSubscriber
 {

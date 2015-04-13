@@ -1,4 +1,4 @@
-Dos\UserBundle\Model\User:
+DoS\UserBundle\Model\User:
     type: mappedSuperclass
     table: dos_user
 
@@ -101,12 +101,12 @@ Dos\UserBundle\Model\User:
 
         oauthAccounts:
             mappedBy: user
-            targetEntity: Dos\UserBundle\Model\UserOAuthInterface
+            targetEntity: DoS\UserBundle\Model\UserOAuthInterface
             cascade: [all]
 
     manyToMany:
         groups:
-            targetEntity: Dos\UserBundle\Model\GroupInterface
+            targetEntity: DoS\UserBundle\Model\GroupInterface
             cascade: [all]
             joinTable:
                 name: dos_user_groups

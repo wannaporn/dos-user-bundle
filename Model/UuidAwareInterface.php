@@ -1,6 +1,6 @@
 <?php
 
-namespace Dos\UserBundle\Model;
+namespace DoS\UserBundle\Model;
 
 interface UuidAwareInterface
 {

@@ -1,4 +1,4 @@
-Dos\UserBundle\Model\User:
+DoS\UserBundle\Model\User:
     properties:
 
         firstName:
@@ -36,7 +36,7 @@ Dos\UserBundle\Model\User:
                 message: ui.trans.user.last_name.blank
                 groups: [ProfileAdd]
 
-Dos\UserBundle\Model\Group:
+DoS\UserBundle\Model\Group:
     properties:
 
         name:

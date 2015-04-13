@@ -1,6 +1,6 @@
 <?php
 
-namespace Dos\UserBundle\Form\Type;
+namespace DoS\UserBundle\Form\Type;
 
 use FOS\UserBundle\Form\Type\RegistrationFormType as BaseType;
 use Symfony\Component\Form\FormBuilderInterface;

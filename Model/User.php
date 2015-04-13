@@ -1,9 +1,9 @@
 <?php
 
-namespace Dos\UserBundle\Model;
+namespace DoS\UserBundle\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Dos\CoreBundle\Model\AddressInterface;
+use DoS\CoreBundle\Model\AddressInterface;
 use FOS\UserBundle\Model\User as BaseUser;
 use libphonenumber\PhoneNumber;
 use Sylius\Component\Rbac\Model\RoleInterface;

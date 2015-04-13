@@ -1,6 +1,6 @@
 <?php
 
-namespace Dos\UserBundle\OAuth;
+namespace DoS\UserBundle\OAuth;
 
 use HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse;
 

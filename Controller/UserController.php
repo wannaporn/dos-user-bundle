@@ -1,9 +1,9 @@
 <?php
 
-namespace Dos\UserBundle\Controller;
+namespace DoS\UserBundle\Controller;
 
-use Dos\ResourceBundle\Controller\ResourceController;
-use Dos\UserBundle\Model\UserInterface;
+use DoS\ResourceBundle\Controller\ResourceController;
+use DoS\UserBundle\Model\UserInterface;
 use FOS\UserBundle\Event\FilterUserResponseEvent;
 use FOS\UserBundle\Event\FormEvent;
 use Symfony\Component\HttpFoundation\Request;

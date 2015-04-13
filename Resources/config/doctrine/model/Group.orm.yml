@@ -1,4 +1,4 @@
-Dos\UserBundle\Model\Group:
+DoS\UserBundle\Model\Group:
     type: entity
     table: dos_user_group
 

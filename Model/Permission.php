@@ -1,6 +1,6 @@
 <?php
 
-namespace Dos\UserBundle\Model;
+namespace DoS\UserBundle\Model;
 
 use Sylius\Component\Rbac\Model\Permission as BasePermission;
 

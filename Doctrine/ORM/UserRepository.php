@@ -1,9 +1,9 @@
 <?php
 
-namespace Dos\UserBundle\Doctrine\ORM;
+namespace DoS\UserBundle\Doctrine\ORM;
 
-use Dos\ResourceBundle\Doctrine\ORM\EntityRepository;
-use Dos\UserBundle\Model\UserInterface;
+use DoS\ResourceBundle\Doctrine\ORM\EntityRepository;
+use DoS\UserBundle\Model\UserInterface;
 use Pagerfanta\PagerfantaInterface;
 
 /**

@@ -1250,7 +1250,7 @@
             },
             "autoload": {
                 "psr-4": {
-                    "Dos\\ResourceBundle\\": ""
+                    "DoS\\ResourceBundle\\": ""
                 }
             },
             "notification-url": "https://packagist.org/downloads/",

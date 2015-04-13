@@ -1,6 +1,6 @@
 <?php
 
-namespace Dos\UserBundle\EventListener;
+namespace DoS\UserBundle\EventListener;
 
 use FOS\UserBundle\Model\UserInterface;
 use FOS\UserBundle\Model\UserManagerInterface;

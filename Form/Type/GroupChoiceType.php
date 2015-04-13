@@ -1,6 +1,6 @@
 <?php
 
-namespace Dos\UserBundle\Form\Type;
+namespace DoS\UserBundle\Form\Type;
 
 use Sylius\Bundle\ResourceBundle\Form\Type\ResourceChoiceType;
 

@@ -1,11 +1,11 @@
 <?php
 
-namespace Dos\UserBundle\DataFixtures\ORM;
+namespace DoS\UserBundle\DataFixtures\ORM;
 
 use Doctrine\Common\Persistence\ObjectManager;
-use Dos\UserBundle\Doctrine\ORM\UserRepository;
-use Dos\FixturesBundle\DataFixtures\DataFixture;
-use Dos\UserBundle\Model\UserInterface;
+use DoS\UserBundle\Doctrine\ORM\UserRepository;
+use DoS\FixturesBundle\DataFixtures\DataFixture;
+use DoS\UserBundle\Model\UserInterface;
 
 /**
  * User fixtures.
@@ -26,7 +26,7 @@ class LoadUsersData extends DataFixture
 
         $manager->persist($user);
 
-        $this->setReference('Dos.Administrator', $user);
+        $this->setReference('DoS.Administrator', $user);
 
         $user = $this->createUser(
             'user@gmail.com',
@@ -36,7 +36,7 @@ class LoadUsersData extends DataFixture
 
         $manager->persist($user);
 
-        $this->setReference('Dos.User', $user);
+        $this->setReference('DoS.User', $user);
 
         $manager->flush();
     }

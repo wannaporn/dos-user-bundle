@@ -1,5 +1,5 @@
 parameters:
-    dos.user.twig.user_profile.class: Dos\UserBundle\Twig\UserProfile
+    dos.user.twig.user_profile.class: DoS\UserBundle\Twig\UserProfile
 
 services:
     dos.user.twig.user_profile:

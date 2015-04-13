@@ -1,7 +1,7 @@
 parameters:
-    dos.form.type.user_search.class: Dos\UserBundle\Form\Type\UserSearchType
-    dos.form.type.user_reistration.class: Dos\UserBundle\Form\Type\RegistrationFormType
-    dos.form.type.user_profile.class: Dos\UserBundle\Form\Type\ProfileFormType
+    dos.form.type.user_search.class: DoS\UserBundle\Form\Type\UserSearchType
+    dos.form.type.user_reistration.class: DoS\UserBundle\Form\Type\RegistrationFormType
+    dos.form.type.user_profile.class: DoS\UserBundle\Form\Type\ProfileFormType
 
 services:
     dos.form.type.user_search:

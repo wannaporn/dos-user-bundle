@@ -1,8 +1,8 @@
 <?php
 
-namespace Dos\UserBundle\DependencyInjection;
+namespace DoS\UserBundle\DependencyInjection;
 
-use Dos\ResourceBundle\DependencyInjection\AbstractResourceConfiguration;
+use DoS\ResourceBundle\DependencyInjection\AbstractResourceConfiguration;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
 class Configuration extends AbstractResourceConfiguration
@@ -23,22 +23,22 @@ class Configuration extends AbstractResourceConfiguration
         $rootNode
             ->append($this->createResourcesSection(array(
                 'user' => array(
-                    'model' => 'Dos\UserBundle\Model\User',
-                    'repository' => 'Dos\UserBundle\Doctrine\ORM\UserRepository',
-                    'controller' => 'Dos\UserBundle\Controller\UserController',
+                    'model' => 'DoS\UserBundle\Model\User',
+                    'repository' => 'DoS\UserBundle\Doctrine\ORM\UserRepository',
+                    'controller' => 'DoS\UserBundle\Controller\UserController',
                     'form' => array(
-                        'default' => 'Dos\UserBundle\Form\Type\UserType',
+                        'default' => 'DoS\UserBundle\Form\Type\UserType',
                     ),
                 ),
                 'user_group' => array(
-                    'model' => 'Dos\UserBundle\Model\Group',
+                    'model' => 'DoS\UserBundle\Model\Group',
                     'form' => array(
-                        'default' => 'Dos\UserBundle\Form\Type\GroupType',
-                        'choice' => 'Dos\UserBundle\Form\Type\GroupChoiceType',
+                        'default' => 'DoS\UserBundle\Form\Type\GroupType',
+                        'choice' => 'DoS\UserBundle\Form\Type\GroupChoiceType',
                     ),
                 ),
                 'user_oauth' => array(
-                    'model' => 'Dos\UserBundle\Model\UserOAuth',
+                    'model' => 'DoS\UserBundle\Model\UserOAuth',
                 ),
             )))
         ;

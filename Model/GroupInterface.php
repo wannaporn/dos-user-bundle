@@ -1,6 +1,6 @@
 <?php
 
-namespace Dos\UserBundle\Model;
+namespace DoS\UserBundle\Model;
 
 use FOS\UserBundle\Model\GroupInterface as BaseGroupInterface;
 

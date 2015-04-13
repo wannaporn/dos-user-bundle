@@ -19,10 +19,10 @@
         "liil/kint": "1.0"
     },
     "autoload": {
-        "psr-4": { "Dos\\UserBundle\\": "" }
+        "psr-4": { "DoS\\UserBundle\\": "" }
     },
     "autoload-dev": {
-        "psr-4": { "Dos\\UserBundle\\spec\\": "spec/" }
+        "psr-4": { "DoS\\UserBundle\\spec\\": "spec/" }
     },
     "extra": {
         "branch-alias": {

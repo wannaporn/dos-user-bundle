@@ -1,6 +1,6 @@
 <?php
 
-namespace Dos\UserBundle\Form\Type;
+namespace DoS\UserBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -8,8 +8,8 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Routing\RouterInterface;
-use Dos\ResourceBundle\Form\DataTransformer\IdentifierToObjectTransformer;
-use Dos\UserBundle\Doctrine\ORM\UserRepository;
+use DoS\ResourceBundle\Form\DataTransformer\IdentifierToObjectTransformer;
+use DoS\UserBundle\Doctrine\ORM\UserRepository;
 
 class UserSearchType extends AbstractType
 {

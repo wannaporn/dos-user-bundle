@@ -1,5 +1,5 @@
 parameters:
-    dos.provider.user.class: Dos\UserBundle\OAuth\UserProvider
+    dos.provider.user.class: DoS\UserBundle\OAuth\UserProvider
 
 services:
     dos.provider.user:

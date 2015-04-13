@@ -1,8 +1,8 @@
 <?php
 
-namespace Dos\UserBundle\Twig;
+namespace DoS\UserBundle\Twig;
 
-use Dos\UserBundle\Model\UserInterface;
+use DoS\UserBundle\Model\UserInterface;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 
 class UserProfile extends \Twig_Extension

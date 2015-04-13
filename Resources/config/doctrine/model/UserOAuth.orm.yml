@@ -1,4 +1,4 @@
-Dos\UserBundle\Model\UserOAuth:
+DoS\UserBundle\Model\UserOAuth:
     type: mappedSuperclass
     table: dos_user_oauth
 
@@ -33,7 +33,7 @@ Dos\UserBundle\Model\UserOAuth:
     manyToOne:
         user:
             inversedBy: oauthAccounts
-            targetEntity: Dos\UserBundle\Model\UserInterface
+            targetEntity: DoS\UserBundle\Model\UserInterface
             joinColumn:
                 name: user_id
                 referencedColumnName: id

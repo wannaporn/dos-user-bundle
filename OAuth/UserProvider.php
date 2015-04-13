@@ -1,6 +1,6 @@
 <?php
 
-namespace Dos\UserBundle\OAuth;
+namespace DoS\UserBundle\OAuth;
 
 use FOS\UserBundle\Model\UserInterface as FOSUserInterface;
 use FOS\UserBundle\Model\UserManagerInterface;
@@ -8,8 +8,8 @@ use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\User\FOSUBUserProvider;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Dos\UserBundle\Model\UserOAuthInterface;
-use Dos\UserBundle\Model\UserInterface as CoreUserInterface;
+use DoS\UserBundle\Model\UserOAuthInterface;
+use DoS\UserBundle\Model\UserInterface as CoreUserInterface;
 
 /**
  * Loading and ad-hoc creation of a user by an OAuth sign-in provider account.

@@ -1,8 +1,8 @@
 <?php
 
-namespace Dos\UserBundle\EventListener;
+namespace DoS\UserBundle\EventListener;
 
-use Dos\UserBundle\OAuth\Security;
+use DoS\UserBundle\OAuth\Security;
 use FOS\UserBundle\Model\UserInterface;
 use Sylius\Component\Resource\Exception\UnexpectedTypeException;
 use Sylius\Component\Resource\Event\ResourceEvent;

@@ -1,12 +1,12 @@
 <?php
 
-namespace Dos\UserBundle\EventListener;
+namespace DoS\UserBundle\EventListener;
 
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
-use Dos\UserBundle\Model\UserAclOwnerAwareInterface;
-use Dos\UserBundle\Model\UserAwareInterface;
+use DoS\UserBundle\Model\UserAclOwnerAwareInterface;
+use DoS\UserBundle\Model\UserAwareInterface;
 
 class UserAclListener
 {

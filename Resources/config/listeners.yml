@@ -1,9 +1,9 @@
 parameters:
-    dos.listener.user_update.class: Dos\UserBundle\EventListener\UserUpdateListener
-    dos.listener.user_delete.class: Dos\UserBundle\EventListener\UserDeleteListener
-    dos.listener.user_mailer.class: Dos\UserBundle\EventListener\UserMailerListener
-    dos.listener.user_acl.class: Dos\UserBundle\EventListener\UserAclListener
-    dos.listener.user_aware.class: Dos\UserBundle\EventListener\UserAwareResourceListener
+    dos.listener.user_update.class: DoS\UserBundle\EventListener\UserUpdateListener
+    dos.listener.user_delete.class: DoS\UserBundle\EventListener\UserDeleteListener
+    dos.listener.user_mailer.class: DoS\UserBundle\EventListener\UserMailerListener
+    dos.listener.user_acl.class: DoS\UserBundle\EventListener\UserAclListener
+    dos.listener.user_aware.class: DoS\UserBundle\EventListener\UserAwareResourceListener
 
 services:
     dos.listener.user_update:

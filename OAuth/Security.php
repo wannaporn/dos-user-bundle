@@ -1,12 +1,12 @@
 <?php
 
-namespace Dos\UserBundle\OAuth;
+namespace DoS\UserBundle\OAuth;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Dos\UserBundle\Model\UserInterface;
+use DoS\UserBundle\Model\UserInterface;
 
 class Security
 {
