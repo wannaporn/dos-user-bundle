@@ -89,3 +89,7 @@ sylius:
     form:
         user:
             roles: Roles
+
+        settings:
+            security:
+                enabled: ใช้งานระบบ RBAC

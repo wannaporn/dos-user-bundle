@@ -1,0 +1,8 @@
+parameters:
+    dos.user.setting.schema.security.class: DoS\UserBundle\SettingSchema\SecuritySettingsSchema
+
+services:
+    dos.user.setting.schema.security:
+        class: %dos.user.setting.schema.security.class%
+        tags:
+            - {name: dos.settings_schema, namespace: security}
