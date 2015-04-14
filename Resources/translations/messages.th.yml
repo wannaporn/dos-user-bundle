@@ -4,6 +4,79 @@ ui.trans:
             overview: Overview
             edit: Edit
 
+        header:
+            index: ผู้ใช้งาน
+            create: เพิ่มผู้ใช้ใหม่
+            update: %user%
+            reset_password: รีเซ็ตรหัสผ่าน %user%
+
+        id: ID
+        email: อีเมล์
+        firstname: ชื่อ
+        lastname: นามสกุล
+        status: สถานะ
+        registration_date: วันที่ลงทะเบียน
+        groups: กลุ่ม
+        roles: Roles
+        no_results: ไม่มีรายการผู้ใช้งาน
+        no_unconfirmed_results: ไม่มีรายการผู้ใช้ ที่ยังไม่ทำการยืนยันอีเมล์
+        personal_information: ข้อมูลผู้ใช้
+        last_logged_in: เข้าระบบล่าสุด
+        no_groups: ไม่อยู่ในกลุ่มใด
+        no_roles: ไม่ได้กำหนด
+        account_details: รายละเอียด
+        search: ค้นหาผู้ใช้
+
+        confirmation:
+            disable: กรุณายืนยันการระงับการเข้าระบบของ %user%
+            enable: กรุณายืนยันการอนุญาตให้ %user% เข้าระบบได้
+
+        button:
+            create: เพิ่มผู้ใช้
+            manage: จัดการผู้ใช้งาน
+            disable: ระงับการใชังาน
+            enable: เปิดการใชังาน
+            reset_password: รีเซ็ตรหัสผ่าน
+
+        form:
+            filter:
+                query: Search for users
+
+            firstname: ชื่อ
+            lastname: นามสกุล
+            password: รหัสผ่าน
+            enabled: เปิดใช้งาน?
+            groups: กลุ่มผู้ใช้
+
+        filter:
+            all: ผู้ใช้ทั้งหมด
+            unconfirmed: ยังไม่ทำการยืนยัน
+
+        email:
+            reset_password:
+                title: การเปลี่ยนรหัสผ่าน
+                header: สวัสดี %user%
+                body: "รหัสผ่านของคุณถูกเปลี่ยนแปลงเรียบร้อยแล้ว นี่คือรหัสใหม่ของคุณ: <strong>%password%</strong>"
+
+    group:
+        no_results: ยังไม่มีกลุ่มผู้ใช้
+        id: ID
+        name: ชื่อกลุ่ม
+        roles: หน้าที่
+
+        button:
+            create: สร้างกลุ่ม
+            manage: จัดการกลุ่มผู้ใช้
+
+        header:
+            index: กลุ่มผู้ใช้ทั้งหมด
+            create: สร้างกลุ่มใหม่
+            update: แก้ไขกลุ่ม %name%
+
+        form:
+            name: ชื่อกลุ่ม
+            roles: หน้าที่
+
 sylius:
     form:
         user:
