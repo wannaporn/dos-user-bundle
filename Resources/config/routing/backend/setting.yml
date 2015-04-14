@@ -5,4 +5,4 @@ route_backend_setting_security:
         namespace: security
         template: ui:package/backend/Settings:security.html.twig
         _sylius:
-            redirect: route_backend_setting_general
+            redirect: route_backend_setting_security
