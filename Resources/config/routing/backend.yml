@@ -16,3 +16,7 @@ route_backend_permission:
 route_backend_role:
     resource: @DoSUserBundle/Resources/config/routing/backend/role.yml
     prefix: /roles
+
+route_backend_setting:
+    resource: @DoSUserBundle/Resources/config/routing/backend/setting.yml
+    prefix: /settings

@@ -1,7 +1,7 @@
 route_backend_setting_security:
     path: /security
     defaults:
-        _controller: sylius.controller.settings:updateAction
+        _controller: dos.controller.settings:updateAction
         namespace: security
         template: ui:package/backend/Settings:security.html.twig
         _sylius:
