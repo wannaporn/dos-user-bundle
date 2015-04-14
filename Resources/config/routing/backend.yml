@@ -1,22 +1,22 @@
-route_backend_security:
+route_backend_user_security:
     resource: @DoSUserBundle/Resources/config/routing/security.yml
 
-route_backend_user:
+route_backend_user_user:
     resource: @DoSUserBundle/Resources/config/routing/backend/user.yml
     prefix: /users
 
-route_backend_group:
+route_backend_user_group:
     resource: @DoSUserBundle/Resources/config/routing/backend/group.yml
     prefix: /groups
 
-route_backend_permission:
+route_backend_user_permission:
     resource: @DoSUserBundle/Resources/config/routing/backend/permission.yml
     prefix: /permissions
 
-route_backend_role:
+route_backend_user_role:
     resource: @DoSUserBundle/Resources/config/routing/backend/role.yml
     prefix: /roles
 
-route_backend_setting:
+route_backend_user_setting:
     resource: @DoSUserBundle/Resources/config/routing/backend/setting.yml
     prefix: /settings
