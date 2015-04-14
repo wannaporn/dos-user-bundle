@@ -64,6 +64,7 @@ class UserSearchType extends AbstractType
         $resolver->setDefaults(array(
             'required' => true,
             'identifier' => 'username',
+            'attr' => array('placeholder' => 'ui.trans.user.search'),
             'selectize' => array(
                 'plugins' => array(),
                 'valueField' => 'username',
