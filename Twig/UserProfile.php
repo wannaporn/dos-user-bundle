@@ -37,7 +37,7 @@ class UserProfile extends \Twig_Extension
     public function getUserAvartar(UserInterface $user = null, $filter = 'avatar', array $runtimeConfig = array())
     {
         if (!$user) {
-            return null;
+            return;
         }
 
         if ($avatar = $user->getProfilePicture()) {
@@ -48,7 +48,7 @@ class UserProfile extends \Twig_Extension
             return $this->cacheManager->getBrowserPath($avatar, $filter, $runtimeConfig);
         }
 
-        return null;
+        return;
     }
 
     /**

@@ -586,12 +586,12 @@ class User extends BaseUser implements UserInterface
             return $this->path;
         }
 
-        foreach($this->oauthAccounts as $account) {
+        foreach ($this->oauthAccounts as $account) {
             if ($avatar = $account->getProfilePicture()) {
                 return $avatar;
             }
         }
 
-        return null;
+        return;
     }
 }
