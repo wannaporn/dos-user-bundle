@@ -34,6 +34,7 @@ class SecuritySettingsSchema implements SchemaInterface
         $builder
             ->add('enabled', 'checkbox', array(
                 'label' => 'sylius.form.settings.security.enabled',
+                'required' => false
             ))
         ;
     }
