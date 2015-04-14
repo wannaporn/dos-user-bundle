@@ -11,13 +11,14 @@
     "minimum-stability": "dev",
     "require": {
         "hwi/oauth-bundle": "~0.3",
+        "sylius/rbac": "0.14.*@dev",
+        "sylius/rbac-bundle": "0.14.*@dev",
         "friendsofsymfony/user-bundle": "2.0.*@dev",
-        "liverbool/dos-resource-bundle": "dev-master",
-        "sylius/rbac-bundle": "dev-master"
+        "liverbool/dos-resource-bundle": "dev-master"
     },
     "require-dev": {
         "liil/kint": "1.0",
-        "phpspec/phpspec": "~2.1",
+        "phpspec/phpspec": "~2.1"
     },
     "autoload": {
         "psr-4": { "DoS\\UserBundle\\": "" }
