@@ -77,6 +77,14 @@ ui.trans:
             name: ชื่อกลุ่ม
             roles: หน้าที่
 
+    breadcrumb:
+        group:
+            index: กลุ่มผู้ใช้งาน
+
+        user:
+            index: ผู้ใช้งานทั้งหมด
+            reset_password: รีเซ็ตรหัสผ่าน
+
 sylius:
     form:
         user:
