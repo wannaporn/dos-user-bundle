@@ -11,8 +11,8 @@
     "minimum-stability": "dev",
     "require": {
         "hwi/oauth-bundle": "~0.3",
-        "sylius/rbac": "0.14.*@dev",
-        "sylius/rbac-bundle": "0.14.*@dev",
+        "sylius/rbac": "dev-master",
+        "sylius/rbac-bundle": "dev-master",
         "friendsofsymfony/user-bundle": "2.0.*@dev",
         "liverbool/dos-resource-bundle": "dev-master"
     },
