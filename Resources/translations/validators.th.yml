@@ -1,0 +1,10 @@
+ui.trans:
+    profile:
+        mobile:
+            invalid: เบอร์มือถือไม่ถูกต้อง
+
+    user:
+        first_name:
+            blank: กรุณาระบุชื่อของคุณ
+        last_name:
+            blank: กรุณาระบุนามสกุล

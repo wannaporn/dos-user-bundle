@@ -13,6 +13,10 @@ class ProfileFormType extends BaseType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('file', 'file', array(
+                'label' => 'ui.trans.profile.form.avatar',
+                'required' => false,
+            ))
             ->add('firstName', 'text', array(
                 'label' => 'ui.trans.profile.form.first_name',
                 'required' => true,

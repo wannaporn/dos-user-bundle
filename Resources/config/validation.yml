@@ -1,6 +1,13 @@
 DoS\UserBundle\Model\User:
     properties:
 
+        file:
+            - Image:
+                #mimeTypesMessage: ui.trans.user.avatar.invalid_mime_type
+                maxSize: 10M
+                #maxSizeMessage: ui.trans.user.avatar.invalid_max_size
+                groups: [Profile]
+
         firstName:
             - NotBlank:
                 message: ui.trans.user.first_name.blank

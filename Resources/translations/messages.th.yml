@@ -77,6 +77,21 @@ ui.trans:
             name: ชื่อกลุ่ม
             roles: หน้าที่
 
+    profile:
+        header:
+            edit: แก้ไขข้อมูลส่วนตัว
+            change_password: แก้ไขรหัสผ่าน
+        form:
+            first_name: ชื่อ
+            last_name: นามสกุล
+            email: อีเมล์
+            mobile: เบอร์มือถือ
+            avatar: ภาพโปรไฟล์
+        password:
+            current: รหัสผ่านปัจจุบัน
+            new: รหัสผ่านใหม่
+            confirmation: ยืนยันรหัสผ่าน
+
     settings:
         security:
             header: ตั้งค่าความปลอดภัย
