@@ -6,8 +6,8 @@ use FOS\UserBundle\Model\UserInterface as FOSUserInterface;
 use FOS\UserBundle\Model\UserManagerInterface;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\User\FOSUBUserProvider;
-use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use DoS\ResourceBundle\Doctrine\ORM\EntityRepository;
 use DoS\UserBundle\Model\UserOAuthInterface;
 use DoS\UserBundle\Model\UserInterface as CoreUserInterface;
 
@@ -17,22 +17,22 @@ use DoS\UserBundle\Model\UserInterface as CoreUserInterface;
 class UserProvider extends FOSUBUserProvider
 {
     /**
-     * @var RepositoryInterface
+     * @var EntityRepository
      */
     protected $oauthRepository;
 
     /**
-     * Constructor.
-     *
-     * @param UserManagerInterface $userManager     FOSUB user provider.
-     * @param RepositoryInterface  $oauthRepository
+     * @param UserManagerInterface $userManager
+     * @param EntityRepository     $oauthRepository
+     * @param array                $properties
      */
     public function __construct(
         UserManagerInterface $userManager,
-        RepositoryInterface $oauthRepository
+        EntityRepository $oauthRepository,
+        array $properties = array()
     ) {
-        $this->userManager = $userManager;
         $this->oauthRepository = $oauthRepository;
+        parent::__construct($userManager, $properties);
     }
 
     /**
@@ -81,8 +81,13 @@ class UserProvider extends FOSUBUserProvider
         $user = $this->userManager->createUser();
 
         // set default values taken from OAuth sign-in provider account
-        if (null !== $email = $response->getEmail()) {
-            $user->setEmail($email);
+        // todo: check security configuration provide by `fos....username_email`
+        if (null === $response->getEmail()) {
+            throw new AccountNoEmailException;
+        }
+
+        if (!$user->getEmail()) {
+            $user->setEmail($response->getEmail());
         }
 
         if (!$user->getUsername()) {

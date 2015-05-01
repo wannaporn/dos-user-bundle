@@ -115,3 +115,5 @@ sylius:
         settings:
             security:
                 enabled: ใช้งานระบบ RBAC
+
+"Not found email to completed registration. Check setting on your {{ resource_owner_name }} to provide an email with API access.": "Not found email to completed registration. Check setting on your <strong>{{ resource_owner_name }}</strong> to provide an email with API access."

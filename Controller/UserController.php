@@ -7,19 +7,31 @@ use DoS\UserBundle\Model\UserInterface;
 use FOS\UserBundle\Event\FilterUserResponseEvent;
 use FOS\UserBundle\Event\FormEvent;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class UserController extends ResourceController
 {
+    /**
+     * @param Request $request
+     *
+     * @return RedirectResponse
+     */
     public function changeStateAction(Request $request)
     {
         /** @var UserInterface $resource */
         $resource = $this->findOr404($request);
-        $resource->setEnabled((bool) $request->query->get('state'));
+        $resource->setEnabled((bool)$request->query->get('state'));
         $this->domainManager->update($resource);
 
         return $this->redirectHandler->redirectToReferer();
     }
 
+    /**
+     * @param Request $request
+     *
+     * @return RedirectResponse
+     */
     public function resetPasswordAction(Request $request)
     {
         /** @var $formFactory \FOS\UserBundle\Form\Factory\FactoryInterface */
@@ -35,14 +47,17 @@ class UserController extends ResourceController
         $form->setData($user);
 
         if (in_array($request->getMethod(), array('POST', 'PUT', 'PATCH'))
-            && $form->submit($request, !$request->isMethod('PATCH'))->isValid()) {
+            && $form->submit($request, !$request->isMethod('PATCH'))->isValid()
+        ) {
             $event = new FormEvent($form, $request);
-            $dispatcher->dispatch('core.resetting.reset.success', $event);
+            $dispatcher->dispatch('dos.user.resetting.reset.success', $event);
 
             $userManager->updateUser($user);
             $response = $this->redirectHandler->redirectTo($user);
 
-            $dispatcher->dispatch('core.resetting.reset.completed', new FilterUserResponseEvent($user, $request, $response));
+            $dispatcher->dispatch('dos.user.resetting.reset.completed',
+                new FilterUserResponseEvent($user, $request, $response)
+            );
 
             return $response;
         }
@@ -53,12 +68,16 @@ class UserController extends ResourceController
             ->setData(array(
                 $this->config->getResourceName() => $user,
                 'form' => $form->createView(),
-            ))
-        ;
+            ));
 
         return $this->handleView($view);
     }
 
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
     public function searchAction(Request $request)
     {
         return parent::indexAction($request);
