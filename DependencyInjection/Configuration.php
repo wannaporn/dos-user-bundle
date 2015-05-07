@@ -13,17 +13,12 @@ class Configuration extends AbstractResourceConfiguration
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('dos_user');
 
-        $this->addDefaults($rootNode, 'doctrine/orm', 'default', array(
-            'user' => array('Default'),
-            'user_group' => array('Default'),
-        ));
-
-        $rootNode
-            ->append($this->createResourcesSection(array(
+        $this->setDefaults($treeBuilder->root('dos_user'), array(
+            'classes' => array(
                 'user' => array(
                     'model' => 'DoS\UserBundle\Model\User',
+                    'interface' => 'DoS\UserBundle\Model\UserInterface',
                     'repository' => 'DoS\UserBundle\Doctrine\ORM\UserRepository',
                     'controller' => 'DoS\UserBundle\Controller\UserController',
                     'form' => array(
@@ -32,6 +27,7 @@ class Configuration extends AbstractResourceConfiguration
                 ),
                 'user_group' => array(
                     'model' => 'DoS\UserBundle\Model\Group',
+                    'interface' => 'DoS\UserBundle\Model\GroupInterface',
                     'form' => array(
                         'default' => 'DoS\UserBundle\Form\Type\GroupType',
                         'choice' => 'DoS\UserBundle\Form\Type\GroupChoiceType',
@@ -39,9 +35,14 @@ class Configuration extends AbstractResourceConfiguration
                 ),
                 'user_oauth' => array(
                     'model' => 'DoS\UserBundle\Model\UserOAuth',
+                    'interface' => 'DoS\UserBundle\Model\UserOAuthInterface',
                 ),
-            )))
-        ;
+            ),
+            'validation_groups' => array(
+                'user' => array('Default'),
+                'user_group' => array('Default'),
+            )
+        ));
 
         return $treeBuilder;
     }
