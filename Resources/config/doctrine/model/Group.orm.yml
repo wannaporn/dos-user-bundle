@@ -1,5 +1,5 @@
 DoS\UserBundle\Model\Group:
-    type: entity
+    type: mappedSuperclass
     table: dos_user_group
 
     id:
