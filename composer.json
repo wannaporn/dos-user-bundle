@@ -11,9 +11,7 @@
     "minimum-stability": "dev",
     "require": {
         "hwi/oauth-bundle": "~0.3",
-        "sylius/rbac": "dev-master",
         "sylius/rbac-bundle": "dev-master",
-        "sylius/user": "dev-master",
         "sylius/user-bundle": "dev-master",
         "liverbool/dos-resource-bundle": "2.0.x-dev"
     },
