@@ -13,8 +13,9 @@
         "hwi/oauth-bundle": "~0.3",
         "sylius/rbac": "dev-master",
         "sylius/rbac-bundle": "dev-master",
-        "friendsofsymfony/user-bundle": "2.0.*@dev",
-        "liverbool/dos-resource-bundle": "dev-master"
+        "sylius/user": "dev-master",
+        "sylius/user-bundle": "dev-master",
+        "liverbool/dos-resource-bundle": "2.0.x-dev"
     },
     "require-dev": {
         "liil/kint": "1.0",
@@ -28,7 +29,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "master-dev"
+            "dev-master": "2.0-dev"
         }
     }
 }
