@@ -1,37 +1,8 @@
 parameters:
-    dos.listener.user_update.class: DoS\UserBundle\EventListener\UserUpdateListener
-    dos.listener.user_delete.class: DoS\UserBundle\EventListener\UserDeleteListener
-    dos.listener.user_mailer.class: DoS\UserBundle\EventListener\UserMailerListener
     dos.listener.user_acl.class: DoS\UserBundle\EventListener\UserAclListener
     dos.listener.user_aware.class: DoS\UserBundle\EventListener\UserAwareResourceListener
 
 services:
-    dos.listener.user_update:
-        class: %dos.listener.user_update.class%
-        arguments:
-            - @fos_user.user_manager
-        tags:
-            - { name: kernel.event_listener, event: dos.user.post_update, method: processUser }
-
-    dos.listener.user_delete:
-        class: %dos.listener.user_delete.class%
-        scope: request
-        arguments:
-            - @dos.user.security
-            - @router
-            - @session
-            - "route_backend_user_index"
-        tags:
-            - { name: kernel.event_listener, event: dos.user.pre_delete, method: deleteUser }
-
-    dos.listener.user_mailer:
-        class: %dos.listener.user_mailer.class%
-        arguments:
-            - @sylius.email_sender
-        tags:
-            - {name: kernel.event_listener, event: fos_user.registration.completed, method: sendUserConfirmationEmail}
-            - {name: kernel.event_listener, event: fos_user.registration.confirmed, method: sendUserConfirmationEmail}
-
     dos.listener.user_acl:
         class: %dos.listener.user_acl.class%
         arguments:
