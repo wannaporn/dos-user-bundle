@@ -2,59 +2,13 @@
 
 namespace DoS\UserBundle\Model;
 
+use Sylius\Component\User\Model\UserOAuthInterface as BaseUserOAuthInterface;
+
 /**
  * User OAuth account interface.
  */
-interface UserOAuthInterface extends UserAwareInterface
+interface UserOAuthInterface extends BaseUserOAuthInterface
 {
-    /**
-     * Get OAuth provider name.
-     *
-     * @return string
-     */
-    public function getProvider();
-
-    /**
-     * Set OAuth provider name.
-     *
-     * @param string $provider
-     *
-     * @return self
-     */
-    public function setProvider($provider);
-
-    /**
-     * Get OAuth identifier.
-     *
-     * @return string
-     */
-    public function getIdentifier();
-
-    /**
-     * Set OAuth identifier.
-     *
-     * @param string $identifier
-     *
-     * @return self
-     */
-    public function setIdentifier($identifier);
-
-    /**
-     * Get OAuth access token.
-     *
-     * @return string
-     */
-    public function getAccessToken();
-
-    /**
-     * Set OAuth access token.
-     *
-     * @param string $accessToken
-     *
-     * @return self
-     */
-    public function setAccessToken($accessToken);
-
     /**
      * @return string
      */

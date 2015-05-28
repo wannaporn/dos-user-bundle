@@ -2,83 +2,30 @@
 
 namespace DoS\UserBundle\OAuth;
 
-use FOS\UserBundle\Model\UserInterface as FOSUserInterface;
-use FOS\UserBundle\Model\UserManagerInterface;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
-use HWI\Bundle\OAuthBundle\Security\Core\User\FOSUBUserProvider;
-use Symfony\Component\Security\Core\User\UserInterface;
 use DoS\ResourceBundle\Doctrine\ORM\EntityRepository;
 use DoS\UserBundle\Model\UserOAuthInterface;
-use DoS\UserBundle\Model\UserInterface as CoreUserInterface;
+use DoS\UserBundle\Model\UserInterface as DoSUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Sylius\Bundle\UserBundle\OAuth\UserProvider as SyliusUserProvider;
+use Sylius\Component\User\Model\CustomerInterface;
 
 /**
  * Loading and ad-hoc creation of a user by an OAuth sign-in provider account.
  */
-class UserProvider extends FOSUBUserProvider
+class UserProvider extends SyliusUserProvider
 {
     /**
-     * @var EntityRepository
-     */
-    protected $oauthRepository;
-
-    /**
-     * @param UserManagerInterface $userManager
-     * @param EntityRepository     $oauthRepository
-     * @param array                $properties
-     */
-    public function __construct(
-        UserManagerInterface $userManager,
-        EntityRepository $oauthRepository,
-        array $properties = array()
-    ) {
-        $this->oauthRepository = $oauthRepository;
-        parent::__construct($userManager, $properties);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function loadUserByOAuthUserResponse(UserResponseInterface $response)
-    {
-        $oauth = $this->oauthRepository->findOneBy(array(
-            'provider' => $response->getResourceOwner()->getName(),
-            'identifier' => $response->getUsername(),
-        ));
-
-        if ($oauth instanceof UserOAuthInterface) {
-            return $oauth->getUser();
-        }
-
-        if (null !== $response->getEmail()) {
-            $user = $this->userManager->findUserByEmail($response->getEmail());
-            if (null !== $user) {
-                return $this->updateUserByOAuthUserResponse($user, $response);
-            }
-        }
-
-        return $this->createUserByOAuthUserResponse($response);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function connect(UserInterface $user, UserResponseInterface $response)
-    {
-        /* @var $user CoreUserInterface */
-        $this->updateUserByOAuthUserResponse($user, $response);
-    }
-
-    /**
-     * Ad-hoc creation of user.
-     *
      * @param UserResponseInterface|ResourceResponse $response
      *
-     * @return CoreUserInterface
+     * @return UserInterface
      */
     protected function createUserByOAuthUserResponse(UserResponseInterface $response)
     {
-        /** @var CoreUserInterface $user */
-        $user = $this->userManager->createUser();
+        /** @var DoSUserInterface $user */
+        $user = $this->userRepository->createNew();
+        /** @var CustomerInterface $customer */
+        $customer = $this->customerRepository->createNew();
 
         // set default values taken from OAuth sign-in provider account
         // todo: check security configuration provide by `fos....username_email`
@@ -86,8 +33,9 @@ class UserProvider extends FOSUBUserProvider
             throw new AccountNoEmailException;
         }
 
-        if (!$user->getEmail()) {
-            $user->setEmail($response->getEmail());
+        // set default values taken from OAuth sign-in provider account
+        if (null !== $email = $response->getEmail()) {
+            $customer->setEmail($email);
         }
 
         if (!$user->getUsername()) {
@@ -98,29 +46,21 @@ class UserProvider extends FOSUBUserProvider
         $user->setPlainPassword(substr(sha1($response->getAccessToken()), 0, 10));
 
         $user->setEnabled(true);
-
-        $user->setFirstName($response->getFirstName());
-        $user->setLastName($response->getLastName());
-        $user->setGender($response->getGender());
-        $user->setFullName($response->getRealName());
         $user->setDisplayName($response->getNickname());
         $user->setLocale($response->getLocale());
+        $user->setCustomer($customer);
+
+        $customer->setFirstName($response->getFirstName());
+        $customer->setLastName($response->getLastName());
+        $customer->setGender($response->getGender());
 
         return $this->updateUserByOAuthUserResponse($user, $response);
     }
 
     /**
-     * Attach OAuth sign-in provider account to existing user.
-     *
-     * @param FOSUserInterface      $user
-     * @param UserResponseInterface $response
-     *
-     * @return FOSUserInterface
+     * {@inheritdoc}
      */
-    protected function updateUserByOAuthUserResponse(
-        FOSUserInterface $user,
-        UserResponseInterface $response
-    ) {
+    protected function updateUserByOAuthUserResponse(UserInterface $user, UserResponseInterface $response) {
         /** @var UserOAuthInterface $oauth */
         $oauth = $this->oauthRepository->createNew();
         $oauth->setIdentifier($response->getUsername());
@@ -128,10 +68,11 @@ class UserProvider extends FOSUBUserProvider
         $oauth->setAccessToken($response->getAccessToken());
         $oauth->setProfilePicture($response->getProfilePicture());
 
-        /* @var $user CoreUserInterface */
+        /* @var DoSUserInterface $user */
         $user->addOAuthAccount($oauth);
 
-        $this->userManager->updateUser($user);
+        $this->userManager->persist($user);
+        $this->userManager->flush();
 
         return $user;
     }
