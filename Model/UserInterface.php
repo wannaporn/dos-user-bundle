@@ -2,7 +2,6 @@
 
 namespace DoS\UserBundle\Model;
 
-use Doctrine\Common\Collections\Collection;
 use DoS\ResourceBundle\Model\ImageInterface;
 use libphonenumber\PhoneNumber;
 use Sylius\Component\User\Model\UserInterface as BaseUserInterface;

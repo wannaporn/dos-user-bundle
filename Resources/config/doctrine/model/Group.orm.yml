@@ -2,13 +2,6 @@ DoS\UserBundle\Model\Group:
     type: mappedSuperclass
     table: dos_user_group
 
-    id:
-        id:
-            type: integer
-            column: id
-            generator:
-                strategy: AUTO
-
     fields:
         color:
             type: string

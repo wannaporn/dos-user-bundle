@@ -41,7 +41,7 @@ class Configuration extends AbstractResourceConfiguration
             'validation_groups' => array(
                 'user' => array('Default'),
                 'user_group' => array('Default'),
-            )
+            ),
         ));
 
         return $treeBuilder;

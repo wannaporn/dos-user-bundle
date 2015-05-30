@@ -3,7 +3,6 @@
 namespace DoS\UserBundle\OAuth;
 
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
-use DoS\ResourceBundle\Doctrine\ORM\EntityRepository;
 use DoS\UserBundle\Model\UserOAuthInterface;
 use DoS\UserBundle\Model\UserInterface as DoSUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -30,7 +29,7 @@ class UserProvider extends SyliusUserProvider
         // set default values taken from OAuth sign-in provider account
         // todo: check security configuration provide by `fos....username_email`
         if (null === $response->getEmail()) {
-            throw new AccountNoEmailException;
+            throw new AccountNoEmailException();
         }
 
         // set default values taken from OAuth sign-in provider account
@@ -60,7 +59,8 @@ class UserProvider extends SyliusUserProvider
     /**
      * {@inheritdoc}
      */
-    protected function updateUserByOAuthUserResponse(UserInterface $user, UserResponseInterface $response) {
+    protected function updateUserByOAuthUserResponse(UserInterface $user, UserResponseInterface $response)
+    {
         /** @var UserOAuthInterface $oauth */
         $oauth = $this->oauthRepository->createNew();
         $oauth->setIdentifier($response->getUsername());

@@ -11,7 +11,7 @@ class AccountNoEmailException extends AccountNotLinkedException
      */
     public function getMessageKey()
     {
-        return 'Not found email to completed registration. ' .
+        return 'Not found email to completed registration. '.
         'Check setting on your {{ resource_owner_name }} '.
         'to provide an email with API access.';
     }

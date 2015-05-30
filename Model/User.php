@@ -2,7 +2,6 @@
 
 namespace DoS\UserBundle\Model;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use libphonenumber\PhoneNumber;
 use Sylius\Component\User\Model\User as BaseUser;
 
@@ -34,7 +33,7 @@ class User extends BaseUser implements UserInterface
     protected $path;
 
     /**
-    /**
+     /**
      * @return PhoneNumber
      */
     public function getMobile()
