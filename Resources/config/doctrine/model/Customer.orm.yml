@@ -1,0 +1,3 @@
+DoS\UserBundle\Model\Customer:
+    type: mappedSuperclass
+    table: dos_customer
