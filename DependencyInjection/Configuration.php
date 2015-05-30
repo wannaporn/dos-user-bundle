@@ -37,6 +37,10 @@ class Configuration extends AbstractResourceConfiguration
                     'model' => 'DoS\UserBundle\Model\UserOAuth',
                     'interface' => 'DoS\UserBundle\Model\UserOAuthInterface',
                 ),
+                'customer' => array(
+                    'model' => 'DoS\UserBundle\Model\Customer',
+                    'interface' => 'DoS\UserBundle\Model\CustomerInterface',
+                ),
             ),
             'validation_groups' => array(
                 'user' => array('Default'),
