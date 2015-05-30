@@ -8,52 +8,8 @@ DoS\UserBundle\Model\User:
                 #maxSizeMessage: ui.trans.user.avatar.invalid_max_size
                 groups: [Profile]
 
-        firstName:
-            - NotBlank:
-                message: ui.trans.user.first_name.blank
-                groups: [Profile]
-
-            - Length:
-                min: 2
-                minMessage: ui.trans.user.first_name.min
-                max: 255
-                maxMessage: ui.trans.user.first_name.max
-                groups: [Profile]
-
-        lastName:
-            - NotBlank:
-                message: ui.trans.user.last_name.blank
-                groups: [Profile]
-
-            - Length:
-                min: 2
-                minMessage: ui.trans.user.last_name.min
-                max: 255
-                maxMessage: ui.trans.user.last_name.max
-                groups: [Profile]
-
         mobile:
             - Misd\PhoneNumberBundle\Validator\Constraints\PhoneNumber:
                 defaultRegion: TH
                 message: ui.trans.profile.mobile.invalid
                 groups: [Profile]
-
-        plainPassword:
-            - NotBlank:
-                message: ui.trans.user.last_name.blank
-                groups: [ProfileAdd]
-
-DoS\UserBundle\Model\Group:
-    properties:
-
-        name:
-            - NotBlank:
-                message: ui.trans.user.group.name.blank
-                groups: [Default]
-
-            - Length:
-                min: 2
-                minMessage: ui.trans.user.group.name.min
-                max: 255
-                maxMessage: ui.trans.user.group.name.max
-                groups: [Default]
