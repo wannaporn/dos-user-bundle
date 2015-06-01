@@ -4,4 +4,4 @@ parameters:
 services:
     dos.provider.user:
         class: %dos.provider.user.class%
-        parent: sylius.user_provider.name_or_email
+        parent: sylius.oauth.user_provider
