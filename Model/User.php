@@ -54,7 +54,14 @@ class User extends BaseUser implements UserInterface
      */
     public function getDisplayName()
     {
-        return $this->displayname;
+        $customer = $this->getCustomer();
+
+        return $this->displayname
+            ? $customer && trim($customer->getFullName())
+                ? $customer->getFullName()
+                : $this->username
+            : $this->username
+        ;
     }
 
     /**

@@ -51,7 +51,7 @@ class UserProvider extends SyliusUserProvider
 
         $customer->setFirstName($response->getFirstName());
         $customer->setLastName($response->getLastName());
-        $customer->setGender($response->getGender());
+        $customer->setGender($response->getGender() ?: CustomerInterface::UNKNOWN_GENDER);
 
         return $this->updateUserByOAuthUserResponse($user, $response);
     }
