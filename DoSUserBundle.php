@@ -4,6 +4,7 @@ namespace DoS\UserBundle;
 
 use DoS\ResourceBundle\DependencyInjection\AbstractResourceBundle;
 use DoS\UserBundle\DependencyInjection\Compiler;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class DoSUserBundle extends AbstractResourceBundle
 {
