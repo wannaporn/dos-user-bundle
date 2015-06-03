@@ -45,4 +45,26 @@ interface UserInterface extends BaseUserInterface, ImageInterface
      * @return null|string
      */
     public function getProfilePicture();
+
+    /**
+     * @param \DateTime|null $confirmedAt
+     *
+     * @return mixed
+     */
+    public function confirmed(\DateTime $confirmedAt = null);
+
+    /**
+     * @return bool
+     */
+    public function isConfirmed();
+
+    /**
+     * @return \DateTime
+     */
+    public function getConfirmedAt();
+
+    /**
+     * @param \DateTime|null $confirmedAt
+     */
+    public function setConfirmedAt(\DateTime $confirmedAt = null);
 }

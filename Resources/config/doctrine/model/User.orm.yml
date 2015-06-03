@@ -22,3 +22,8 @@ DoS\UserBundle\Model\User:
             type: string
             nullable: true
             column: path
+
+        confirmedAt:
+            type: datetime
+            nullable: true
+            column: confirmed_at

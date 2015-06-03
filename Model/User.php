@@ -33,6 +33,11 @@ class User extends BaseUser implements UserInterface
     protected $path;
 
     /**
+     * @var \DateTime
+     */
+    protected $confirmedAt;
+
+    /**
      /**
      * @return PhoneNumber
      */
@@ -156,5 +161,38 @@ class User extends BaseUser implements UserInterface
         }
 
         return;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getConfirmedAt()
+    {
+        return $this->confirmedAt;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setConfirmedAt(\DateTime $confirmedAt = null)
+    {
+        $this->confirmedAt = $confirmedAt;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function confirmed(\DateTime $confirmedAt = null)
+    {
+        $this->setConfirmedAt($confirmedAt ?: new \DateTime());
+        $this->setEnabled(true);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function isConfirmed()
+    {
+        return $this->confirmedAt || $this->enabled;
     }
 }
