@@ -1,6 +1,7 @@
 parameters:
     dos.listener.user_acl.class: DoS\UserBundle\EventListener\UserAclListener
     dos.listener.user_aware.class: DoS\UserBundle\EventListener\UserAwareResourceListener
+    dos.listener.default_username.class: DoS\UserBundle\EventListener\DefaultUsernameListener
 
 services:
     dos.listener.user_acl:

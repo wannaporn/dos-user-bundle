@@ -186,6 +186,8 @@ class User extends BaseUser implements UserInterface
     {
         $this->setConfirmedAt($confirmedAt ?: new \DateTime());
         $this->setEnabled(true);
+        $this->setConfirmationToken(null);
+        $this->setPasswordRequestedAt(null);
     }
 
     /**
