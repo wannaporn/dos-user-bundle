@@ -14,7 +14,7 @@ class Configuration extends AbstractResourceConfiguration
     {
         $treeBuilder = new TreeBuilder();
 
-        $this->setDefaults($treeBuilder->root('dos_user'), array(
+        $this->setDefaults($node = $treeBuilder->root('dos_user'), array(
             'classes' => array(
                 'user' => array(
                     'model' => 'DoS\UserBundle\Model\User',
@@ -47,6 +47,21 @@ class Configuration extends AbstractResourceConfiguration
                 'user_group' => array('Default'),
             ),
         ));
+
+        $node
+            ->children()
+                ->arrayNode('confirmation')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->scalarNode('type')->defaultNull()->cannotBeEmpty()->end()
+                        ->arrayNode('options')
+                            ->useAttributeAsKey('name')
+                            ->prototype('scalar')
+                        ->end()
+                    ->end()
+                ->end()
+            ->end()
+        ;
 
         return $treeBuilder;
     }
