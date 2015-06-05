@@ -2,7 +2,6 @@
 
 namespace DoS\UserBundle\Model;
 
-use libphonenumber\PhoneNumber;
 use Sylius\Component\User\Model\User as BaseUser;
 
 class User extends BaseUser implements UserInterface
@@ -11,11 +10,6 @@ class User extends BaseUser implements UserInterface
      * @var string
      */
     protected $locale;
-
-    /**
-     * @var PhoneNumber
-     */
-    protected $mobile;
 
     /**
      * @var string
@@ -36,23 +30,6 @@ class User extends BaseUser implements UserInterface
      * @var \DateTime
      */
     protected $confirmedAt;
-
-    /**
-     /**
-     * @return PhoneNumber
-     */
-    public function getMobile()
-    {
-        return $this->mobile;
-    }
-
-    /**
-     * @param PhoneNumber $mobile
-     */
-    public function setMobile(PhoneNumber $mobile = null)
-    {
-        $this->mobile = $mobile;
-    }
 
     /**
      * @return string

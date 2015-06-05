@@ -13,11 +13,6 @@ DoS\UserBundle\Model\User:
             nullable: true
             column: displayname
 
-        mobile:
-            type: phone_number
-            nullable: true
-            column: mobile
-
         path:
             type: string
             nullable: true

@@ -3,7 +3,6 @@
 namespace DoS\UserBundle\Model;
 
 use DoS\ResourceBundle\Model\ImageInterface;
-use libphonenumber\PhoneNumber;
 use Sylius\Component\User\Model\UserInterface as BaseUserInterface;
 
 /**
@@ -11,16 +10,6 @@ use Sylius\Component\User\Model\UserInterface as BaseUserInterface;
  */
 interface UserInterface extends BaseUserInterface, ImageInterface
 {
-    /**
-     * @return PhoneNumber
-     */
-    public function getMobile();
-
-    /**
-     * @param PhoneNumber $mobile
-     */
-    public function setMobile(PhoneNumber $mobile = null);
-
     /**
      * @return string
      */
