@@ -16,5 +16,6 @@ class DoSUserBundle extends AbstractResourceBundle
         parent::build($container);
 
         $container->addCompilerPass(new Compiler\SyliusOverridePass());
+        $container->addCompilerPass(new Compiler\ConfirmationPass());
     }
 }

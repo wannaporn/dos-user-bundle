@@ -48,6 +48,14 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
         $this->tokenProvider = $tokenProvider;
         $this->sender = $sender;
 
+        $this->resetOptions($options);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function resetOptions(array $options)
+    {
         $resolver = new OptionsResolver();
         $this->configureOptions($resolver);
 
@@ -55,7 +63,7 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
     }
 
     /**
-     * @param ConfirmationSubjectInterface $subject
+     * {@inheritdoc}
      */
     public function send(ConfirmationSubjectInterface $subject)
     {
@@ -70,10 +78,7 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
     }
 
     /**
-     * @param string $token
-     * @param array  $options
-     *
-     * @throws \Exception
+     * {@inheritdoc}
      */
     public function verify($token, array $options = array())
     {
@@ -220,5 +225,5 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
     /**
      * @return string
      */
-    abstract protected function getType();
+    abstract public function getType();
 }

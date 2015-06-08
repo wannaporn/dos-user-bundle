@@ -75,6 +75,7 @@ class Confirmation extends ConfirmationAbstract
 
         $resolver->setDefaults(array(
             'otp_class' => 'DoS\UserBundle\Model\OneTimePassword',
+            'channel_path' => 'customer.mobile',
         ));
     }
 
