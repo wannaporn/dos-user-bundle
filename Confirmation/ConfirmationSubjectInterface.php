@@ -10,6 +10,10 @@ interface ConfirmationSubjectInterface
 
     public function setConfirmationToken($token);
 
+    public function getConfirmationType();
+
+    public function setConfirmationType($type);
+
     /**
      * @return \DateTime
      */

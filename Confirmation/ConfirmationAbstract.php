@@ -56,6 +56,7 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
 
     public function send(ConfirmationSubjectInterface $subject)
     {
+        $subject->setConfirmationType($this->getType());
         $subject->confirmationRequest(
             $token = $this->tokenProvider->generateUniqueToken()
         );
@@ -178,4 +179,6 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
         ConfirmationSubjectInterface $subject,
         array $options = array()
     );
+
+    abstract protected function getType();
 }

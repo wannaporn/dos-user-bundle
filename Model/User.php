@@ -28,6 +28,11 @@ class User extends BaseUser implements UserInterface
     protected $path;
 
     /**
+     * @var string
+     */
+    protected $confirmationType;
+
+    /**
      * @var \DateTime
      */
     protected $confirmedAt;
@@ -180,7 +185,7 @@ class User extends BaseUser implements UserInterface
      */
     public function setEnabled($boolean)
     {
-        $this->enabled = (Boolean) $boolean;
+        $this->enabled = (Boolean)$boolean;
 
         if (!$this->isConfirmed()) {
             $this->enabled = false;
@@ -231,11 +236,17 @@ class User extends BaseUser implements UserInterface
         $this->setConfirmedAt($dateTime);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function isConfirmationConfirmed()
     {
         return $this->isConfirmed();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function confirmationRequest($token)
     {
         $this->setConfirmationToken($token);
@@ -243,8 +254,27 @@ class User extends BaseUser implements UserInterface
         $this->setEnabled(false);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function confirmationConfirm()
     {
         $this->confirmed();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getConfirmationType()
+    {
+        return $this->confirmationType;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setConfirmationType($confirmationType)
+    {
+        $this->confirmationType = $confirmationType;
     }
 }

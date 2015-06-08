@@ -18,6 +18,11 @@ DoS\UserBundle\Model\User:
             nullable: true
             column: path
 
+        confirmationType:
+            type: string
+            column: confirmation_type
+            nullable: true
+
         confirmedAt:
             type: datetime
             nullable: true
