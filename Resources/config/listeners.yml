@@ -1,4 +1,5 @@
 parameters:
+    dos.listener.user_confirmation.class: DoS\UserBundle\EventListener\UserConfirmationListener
     dos.listener.user_acl.class: DoS\UserBundle\EventListener\UserAclListener
     dos.listener.user_aware.class: DoS\UserBundle\EventListener\UserAwareResourceListener
     dos.listener.default_username.class: DoS\UserBundle\EventListener\DefaultUsernameListener
@@ -9,7 +10,7 @@ services:
         arguments:
             - @service_container
         tags:
-            - {name: doctrine.event_listener, event: postPersist, piority: -128}
+            - {name: doctrine.event_listener, event: postPersist, priority: -128}
 
     dos.listener.user_aware:
         class: %dos.listener.user_aware.class%
@@ -17,3 +18,10 @@ services:
             - @dos.user.security
         tags:
             - {name: doctrine.event_subscriber, connection: default}
+
+    dos.listener.user_confirmation:
+        class: %dos.listener.user_confirmation.class%
+        arguments:
+            - @dos.user.confirmation.factory
+        tags:
+            - {name: kernel.event_listener, event: sylius.customer.post_register, method: confirmUser, priority: -256}

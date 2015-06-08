@@ -114,4 +114,23 @@ class ConfirmationFactory
 
         return $instance;
     }
+
+    /**
+     * @param bool $invalidException
+     *
+     * @return ConfirmationInterface|null
+     * @throws \Exception
+     */
+    public function createActivedConfirmation($invalidException = true)
+    {
+        try {
+            return $this->create($this->activedService);
+        } catch (\Exception $e) {
+            if ($invalidException) {
+                throw $e;
+            }
+        }
+
+        return null;
+    }
 }

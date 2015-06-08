@@ -2,61 +2,34 @@
 
 namespace DoS\UserBundle\EventListener;
 
-use Doctrine\Common\EventSubscriber;
-use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
-use DoS\UserBundle\OAuth\Security;
-use DoS\UserBundle\Model\UserUpdaterAwareInterface;
-use DoS\UserBundle\Model\UserAwareInterface;
+use DoS\UserBundle\Confirmation\ConfirmationFactory;
 use DoS\UserBundle\Model\UserInterface;
+use Sylius\Component\Resource\Exception\UnexpectedTypeException;
+use Symfony\Component\EventDispatcher\GenericEvent;
 
-class UserConfirmationListener implements EventSubscriber
+class UserConfirmationListener
 {
     /**
-     * @var Security
+     * @var ConfirmationFactory
      */
-    protected $security;
+    protected $factory;
 
-    public function __construct(Security $security)
+    public function __construct(ConfirmationFactory $factory)
     {
-        $this->security = $security;
+        $this->factory = $factory;
     }
 
-    public function prePersist(LifecycleEventArgs $event)
+    public function confirmUser(GenericEvent $event)
     {
-        $object = $event->getObject();
+        /** @var UserInterface $subject */
+        $subject = $event->getSubject();
 
-        if ($object instanceof UserAwareInterface && !$object->getUser()) {
-            $object->setUser($this->getUser());
-            // init updater
-            $this->preUpdate($event);
+        if ($subject instanceof UserInterface) {
+            throw new UnexpectedTypeException($subject, UserInterface::class);
         }
-    }
 
-    public function preUpdate(LifecycleEventArgs $event)
-    {
-        $object = $event->getObject();
-
-        if ($object instanceof UserUpdaterAwareInterface && !$object->getUpdater()) {
-            $object->setUpdater($this->getUser());
+        if ($confirmation = $this->factory->createActivedConfirmation(false)) {
+            $confirmation->send($subject);
         }
-    }
-
-    /**
-     * @return UserInterface|null
-     */
-    private function getUser()
-    {
-        return $this->security->getUser();
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getSubscribedEvents()
-    {
-        return array(
-            'prePersist',
-            'preUpdate',
-        );
     }
 }
