@@ -3,12 +3,13 @@
 namespace DoS\UserBundle\Model;
 
 use DoS\ResourceBundle\Model\ImageInterface;
+use DoS\UserBundle\Confirmation\ConfirmationSubjectInterface;
 use Sylius\Component\User\Model\UserInterface as BaseUserInterface;
 
 /**
  * User interface.
  */
-interface UserInterface extends BaseUserInterface, ImageInterface
+interface UserInterface extends BaseUserInterface, ImageInterface, ConfirmationSubjectInterface
 {
     /**
      * @return string

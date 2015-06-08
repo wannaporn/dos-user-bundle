@@ -44,10 +44,10 @@ class UserProvider extends SyliusUserProvider
         // set random password to prevent issue with not nullable field & potential security hole
         $user->setPlainPassword(substr(sha1($response->getAccessToken()), 0, 10));
 
-        $user->setEnabled(true);
         $user->setDisplayName($response->getNickname());
         $user->setLocale($response->getLocale());
         $user->setCustomer($customer);
+        $user->confirmed();
 
         $customer->setFirstName($response->getFirstName());
         $customer->setLastName($response->getLastName());

@@ -3,6 +3,7 @@
 namespace DoS\UserBundle\Model;
 
 use Sylius\Component\User\Model\User as BaseUser;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class User extends BaseUser implements UserInterface
 {
@@ -42,8 +43,7 @@ class User extends BaseUser implements UserInterface
             ? $customer && trim($customer->getFullName())
                 ? $customer->getFullName()
                 : $this->username
-            : $this->username
-        ;
+            : $this->username;
     }
 
     /**
@@ -173,5 +173,78 @@ class User extends BaseUser implements UserInterface
     public function isConfirmed()
     {
         return $this->confirmedAt || $this->enabled;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setEnabled($boolean)
+    {
+        $this->enabled = (Boolean)$boolean;
+
+        if (!$this->isConfirmed()) {
+            $this->enabled = false;
+        }
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getConfirmationChannel($propertyPath)
+    {
+        $accessor = PropertyAccess::createPropertyAccessor();
+
+        return $accessor->getValue($this, $propertyPath);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getConfirmationRequestedAt()
+    {
+        return $this->getPasswordRequestedAt();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setConfirmationRequestedAt(\DateTime $dateTime = null)
+    {
+        $this->setPasswordRequestedAt($dateTime);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getConfirmationConfirmedAt()
+    {
+        return $this->getConfirmedAt();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setConfirmationConfirmedAt(\DateTime $dateTime = null)
+    {
+        $this->setConfirmedAt($dateTime);
+    }
+
+    public function isConfirmationConfirmed()
+    {
+        return $this->isConfirmed();
+    }
+
+    public function confirmationRequest($token)
+    {
+        $this->setConfirmationToken($token);
+        $this->setConfirmationRequestedAt(new \DateTime());
+        $this->setEnabled(false);
+    }
+
+    public function confirmationConfirm()
+    {
+        $this->confirmed();
     }
 }

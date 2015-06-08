@@ -13,3 +13,15 @@ DoS\UserBundle\Model\User:
                 defaultRegion: TH
                 message: ui.trans.profile.mobile.invalid
                 groups: [Profile]
+
+DoS\UserBundle\Model\OneTimePassword:
+    properties:
+        token:
+            - NotBlank:
+                message: ui.trans.user.otp.token.blank
+                groups: [Default]
+
+        verify:
+            - NotBlank:
+                message: ui.trans.user.otp.verify.blank
+                groups: [Default]

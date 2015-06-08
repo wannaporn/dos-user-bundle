@@ -11,9 +11,14 @@
     "minimum-stability": "dev",
     "require": {
         "hwi/oauth-bundle": "~0.3",
+        "sylius/storage": "0.14.x-dev",
         "sylius/rbac-bundle": "0.14.x-dev",
+        "liverbool/dos-mailer-bundle": "0.14.x-dev",
         "liverbool/dos-sylius-user-bundle": "0.14.x-dev",
-        "liverbool/dos-resource-bundle": "2.0.x-dev"
+        "liverbool/dos-resource-bundle": "2.0.x-dev",
+        "symfony/options-resolver": "~2.7 <3.0",
+        "symfony/psr-http-message-bridge": "~0.2",
+        "zendframework/zend-diactoros": "~1.0.3"
     },
     "require-dev": {
         "liil/kint": "1.0",
