@@ -3,7 +3,6 @@
 namespace DoS\UserBundle\Confirmation;
 
 use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\Common\Persistence\ObjectRepository;
 use DoS\UserBundle\Confirmation\Exception\InvalidTokenTimeException;
 use DoS\UserBundle\Confirmation\Exception\NotFoundTokenSubjectException;
 use Sylius\Component\Storage\StorageInterface;
@@ -71,7 +70,7 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
         $subject = $this->findTokenSubject($token);
 
         if (!$this->validateTimeAware($subject)) {
-            throw new InvalidTokenTimeException;
+            throw new InvalidTokenTimeException();
         }
 
         try {
@@ -96,7 +95,7 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
             return $token;
         }
 
-        return null;
+        return;
     }
 
     /**
@@ -109,7 +108,7 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
         $er = $this->manager->getRepository($this->options['subject_class']);
 
         if (!$subject = $er->findOneBy(array($this->options['token_property_path'] => $token))) {
-            throw new NotFoundTokenSubjectException;
+            throw new NotFoundTokenSubjectException();
         }
 
         return $subject;
@@ -139,25 +138,25 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
     protected function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            /**
+            /*
              * System user entity class.
              */
             'subject_class' => 'DoS\UserBundle\Model\User',
-            /**
+            /*
              * The user model property.
              */
             'token_property_path' => 'confirmationToken',
-            /**
+            /*
              * The user model property.
              */
             'token_send_template' => null,
-            /**
+            /*
              * Life time of valid token.
              * using \DateInterval::createFromDateString()
              * @link http://php.net/manual/en/dateinterval.createfromdatestring.php
              */
             'token_time_aware' => null,
-            /**
+            /*
              * Which the prpoerty path to using as channel.
              */
             'channel_path' => 'customer.email',

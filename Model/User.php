@@ -180,7 +180,7 @@ class User extends BaseUser implements UserInterface
      */
     public function setEnabled($boolean)
     {
-        $this->enabled = (Boolean)$boolean;
+        $this->enabled = (Boolean) $boolean;
 
         if (!$this->isConfirmed()) {
             $this->enabled = false;

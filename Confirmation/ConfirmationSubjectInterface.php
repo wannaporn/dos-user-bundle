@@ -8,7 +8,7 @@ interface ConfirmationSubjectInterface
 
     public function getConfirmationToken();
 
-    public function setConfirmationToken($token = null);
+    public function setConfirmationToken($token);
 
     /**
      * @return \DateTime
@@ -26,5 +26,4 @@ interface ConfirmationSubjectInterface
     public function confirmationRequest($token);
 
     public function confirmationConfirm();
-
 }

@@ -2,7 +2,6 @@
 
 namespace DoS\UserBundle\Model;
 
-use DoS\ResourceBundle\Model\TimestampableInterface;
 use DoS\UserBundle\Confirmation\ConfirmationSubjectInterface;
 
 class OneTimePassword implements OneTimePasswordInterface

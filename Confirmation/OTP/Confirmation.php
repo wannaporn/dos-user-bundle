@@ -14,7 +14,7 @@ class Confirmation extends ConfirmationAbstract
     protected function sendToken(ConfirmationSubjectInterface $subject, $token)
     {
         if (!$mobile = $subject->getConfirmationChannel($this->options['channel_path'])) {
-            throw new NotFoundChannelException;
+            throw new NotFoundChannelException();
         }
 
         $this->sender->send(
@@ -26,7 +26,7 @@ class Confirmation extends ConfirmationAbstract
         $verify = $this->tokenProvider->generateUniqueToken();
 
         /** @var OneTimePasswordInterface $otp */
-        $otp = new $this->options['otp_class'];
+        $otp = new $this->options['otp_class']();
         $otp->setSubject($subject);
         $otp->setToken($token);
         $otp->setVerify($verify);
@@ -37,15 +37,15 @@ class Confirmation extends ConfirmationAbstract
     protected function verifyToken(ConfirmationSubjectInterface $subject, array $options = array())
     {
         if (empty($options['verifier'])) {
-            throw new InvalidTokenVerifyException;
+            throw new InvalidTokenVerifyException();
         }
 
         if (!$otp = $this->findOtp($subject)) {
-            throw new InvalidTokenVerifyException;
+            throw new InvalidTokenVerifyException();
         }
 
         if ($otp->getVerify() !== $options['verifier']) {
-            throw new InvalidTokenVerifyException;
+            throw new InvalidTokenVerifyException();
         }
 
         $otp->setConfirmed(true);
@@ -65,7 +65,7 @@ class Confirmation extends ConfirmationAbstract
 
         return $er->findOneBy(array(
             'subject' => $subject,
-            'token' => $subject->getConfirmationToken()
+            'token' => $subject->getConfirmationToken(),
         ));
     }
 

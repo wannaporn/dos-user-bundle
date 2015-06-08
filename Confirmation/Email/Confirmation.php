@@ -14,7 +14,7 @@ class Confirmation extends ConfirmationAbstract
         $email = $subject->getConfirmationChannel($this->options['channel_path']);
 
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            throw new NotFoundChannelException;
+            throw new NotFoundChannelException();
         }
 
         $this->sender->send(
