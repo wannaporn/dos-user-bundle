@@ -54,6 +54,9 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
         $this->options = $resolver->resolve($options);
     }
 
+    /**
+     * @param ConfirmationSubjectInterface $subject
+     */
     public function send(ConfirmationSubjectInterface $subject)
     {
         $subject->setConfirmationType($this->getType());
@@ -66,6 +69,12 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
         $this->storage->setData(self::STORE_KEY, $token);
     }
 
+    /**
+     * @param string $token
+     * @param array  $options
+     *
+     * @throws \Exception
+     */
     public function verify($token, array $options = array())
     {
         $subject = $this->findTokenSubject($token);
@@ -84,6 +93,11 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
         $this->storeSubject($subject);
     }
 
+    /**
+     * @param bool $clear
+     *
+     * @return string|void
+     */
     public function getStoredToken($clear = false)
     {
         if ($this->storage->hasData(self::STORE_KEY)) {
@@ -115,6 +129,11 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
         return $subject;
     }
 
+    /**
+     * @param ConfirmationSubjectInterface $subject
+     *
+     * @return bool
+     */
     protected function validateTimeAware(ConfirmationSubjectInterface $subject)
     {
         if (null === $timeAware = $this->options['token_time_aware']) {
@@ -130,12 +149,18 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
         return $time->getTimestamp() > (new \DateTime())->getTimestamp();
     }
 
+    /**
+     * @param ConfirmationSubjectInterface $subject
+     */
     protected function storeSubject(ConfirmationSubjectInterface $subject)
     {
         $this->manager->persist($subject);
         $this->manager->flush();
     }
 
+    /**
+     * @param OptionsResolver $resolver
+     */
     protected function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
@@ -170,15 +195,30 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
         ));
     }
 
+    /**
+     * @param ConfirmationSubjectInterface $subject
+     * @param string                       $token
+     *
+     * @return void
+     */
     abstract protected function sendToken(
         ConfirmationSubjectInterface $subject,
         $token
     );
 
+    /**
+     * @param ConfirmationSubjectInterface $subject
+     * @param array                        $options
+     *
+     * @return true
+     */
     abstract protected function verifyToken(
         ConfirmationSubjectInterface $subject,
         array $options = array()
     );
 
+    /**
+     * @return string
+     */
     abstract protected function getType();
 }

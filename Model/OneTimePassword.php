@@ -7,6 +7,11 @@ use DoS\UserBundle\Confirmation\ConfirmationSubjectInterface;
 class OneTimePassword implements OneTimePasswordInterface
 {
     /**
+     * @var int
+     */
+    protected $id;
+
+    /**
      * @var ConfirmationSubjectInterface
      */
     protected $subject;
@@ -35,6 +40,14 @@ class OneTimePassword implements OneTimePasswordInterface
      * @var bool
      */
     protected $confirmed;
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * {@inheritdoc}
