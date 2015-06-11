@@ -11,10 +11,15 @@
     "minimum-stability": "dev",
     "require": {
         "hwi/oauth-bundle": "~0.3",
-        "sylius/rbac": "dev-master",
-        "sylius/rbac-bundle": "dev-master",
-        "friendsofsymfony/user-bundle": "2.0.*@dev",
-        "liverbool/dos-resource-bundle": "dev-master"
+        "sylius/storage": "0.14.x-dev",
+        "sylius/rbac-bundle": "0.14.x-dev",
+        "liverbool/dos-sylius-user-bundle": "0.14.x-dev",
+        "liverbool/dos-mailer-bundle": "2.0.x-dev",
+        "liverbool/dos-settings-bundle": "2.0.x-dev",
+        "liverbool/dos-resource-bundle": "2.0.x-dev",
+        "symfony/options-resolver": "~2.7 <3.0",
+        "symfony/psr-http-message-bridge": "~0.2",
+        "zendframework/zend-diactoros": "~1.0.3"
     },
     "require-dev": {
         "liil/kint": "1.0",
@@ -28,7 +33,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "master-dev"
+            "dev-master": "2.0-dev"
         }
     }
 }

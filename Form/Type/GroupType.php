@@ -28,6 +28,6 @@ class GroupType extends AbstractResourceType
      */
     public function getName()
     {
-        return 'dos_user_group';
+        return 'dos_group';
     }
 }

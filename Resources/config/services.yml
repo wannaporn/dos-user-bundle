@@ -6,6 +6,12 @@ parameters:
     dos.user.oauth.response.github.class: DoS\UserBundle\OAuth\GithubResponse
     dos.user.authorization_checker.toggleable.class: DoS\UserBundle\Authorization\ToggleableAuthorizationChecker
 
+    dos.user.confirmation.factory.class: DoS\UserBundle\Confirmation\ConfirmationFactory
+    dos.user.confirmation.email.class: DoS\UserBundle\Confirmation\Email\Confirmation
+    dos.user.confirmation.otp.class: DoS\UserBundle\Confirmation\OTP\Confirmation
+    dos.user.confirmation.sender.email.class: DoS\UserBundle\Confirmation\Email\Sender
+    dos.user.confirmation.sender.otp.class: DoS\UserBundle\Confirmation\OTP\Sender
+
 services:
     dos.user.security:
         class: %dos.user.security.class%
@@ -17,3 +23,35 @@ services:
         arguments:
             - @sylius.authorization_checker.default
             - @sylius.settings.manager
+
+    dos.user.confirmation.factory:
+        class: %dos.user.confirmation.factory.class%
+        arguments:
+            - @sylius.settings.manager
+
+    dos.user.confirmation.sender.email:
+        class: %dos.user.confirmation.sender.email.class%
+        parent: sylius.email_sender
+
+    dos.user.confirmation.sender.otp:
+        class: %dos.user.confirmation.sender.otp.class%
+
+    dos.user.confirmation.email:
+        class: %dos.user.confirmation.email.class%
+        arguments:
+            - @dos.manager.user
+            - @dos.user.confirmation.sender.email
+            - @sylius.storage.session
+            - @sylius.user.token_provider
+        tags:
+            - {name: dos.user.confirmation, alias: email}
+
+    dos.user.confirmation.otp:
+        class: %dos.user.confirmation.otp.class%
+        arguments:
+            - @dos.manager.user
+            - @dos.user.confirmation.sender.otp
+            - @sylius.storage.session
+            - @sylius.user.pin_provider
+        tags:
+            - {name: dos.user.confirmation, alias: otp}

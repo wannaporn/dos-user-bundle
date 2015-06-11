@@ -1,6 +1,5 @@
 DoS\UserBundle\Model\User:
     properties:
-
         file:
             - Image:
                 #mimeTypesMessage: ui.trans.user.avatar.invalid_mime_type
@@ -8,52 +7,23 @@ DoS\UserBundle\Model\User:
                 #maxSizeMessage: ui.trans.user.avatar.invalid_max_size
                 groups: [Profile]
 
-        firstName:
-            - NotBlank:
-                message: ui.trans.user.first_name.blank
-                groups: [Profile]
-
-            - Length:
-                min: 2
-                minMessage: ui.trans.user.first_name.min
-                max: 255
-                maxMessage: ui.trans.user.first_name.max
-                groups: [Profile]
-
-        lastName:
-            - NotBlank:
-                message: ui.trans.user.last_name.blank
-                groups: [Profile]
-
-            - Length:
-                min: 2
-                minMessage: ui.trans.user.last_name.min
-                max: 255
-                maxMessage: ui.trans.user.last_name.max
-                groups: [Profile]
+DoS\UserBundle\Model\Customer:
+    properties:
 
         mobile:
             - Misd\PhoneNumberBundle\Validator\Constraints\PhoneNumber:
                 defaultRegion: TH
-                message: ui.trans.profile.mobile.invalid
-                groups: [Profile]
+                message: ui.trans.customer.mobile.invalid
+                groups: [Default, registration]
 
-        plainPassword:
-            - NotBlank:
-                message: ui.trans.user.last_name.blank
-                groups: [ProfileAdd]
-
-DoS\UserBundle\Model\Group:
+DoS\UserBundle\Model\OneTimePassword:
     properties:
-
-        name:
+        token:
             - NotBlank:
-                message: ui.trans.user.group.name.blank
+                message: ui.trans.user.otp.token.blank
                 groups: [Default]
 
-            - Length:
-                min: 2
-                minMessage: ui.trans.user.group.name.min
-                max: 255
-                maxMessage: ui.trans.user.group.name.max
+        verify:
+            - NotBlank:
+                message: ui.trans.user.otp.verify.blank
                 groups: [Default]

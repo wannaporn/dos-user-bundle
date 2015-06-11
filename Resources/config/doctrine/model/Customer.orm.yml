@@ -1,0 +1,9 @@
+DoS\UserBundle\Model\Customer:
+    type: mappedSuperclass
+    table: dos_customer
+
+    fields:
+        mobile:
+            type: phone_number
+            nullable: true
+            column: mobile

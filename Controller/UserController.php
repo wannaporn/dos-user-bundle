@@ -21,7 +21,7 @@ class UserController extends ResourceController
     {
         /** @var UserInterface $resource */
         $resource = $this->findOr404($request);
-        $resource->setEnabled((bool)$request->query->get('state'));
+        $resource->setEnabled((bool) $request->query->get('state'));
         $this->domainManager->update($resource);
 
         return $this->redirectHandler->redirectToReferer();

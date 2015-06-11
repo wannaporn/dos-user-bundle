@@ -2,134 +2,28 @@ DoS\UserBundle\Model\User:
     type: mappedSuperclass
     table: dos_user
 
-    gedmo:
-        soft_deleteable:
-            field_name: deletedAt
-            time_aware: false
-
-    id:
-        id:
-            type: integer
-            column: id
-            generator:
-                strategy: AUTO
-
     fields:
-        currency:
-            type: string
-            length: 3
-            nullable: true
-
         locale:
             type: string
             length: 5
             nullable: true
-
-        firstName:
-            type: string
-            nullable: true
-            column: first_name
-
-        lastName:
-            type: string
-            nullable: true
-            column: last_name
-
-        fullname:
-            type: string
-            nullable: true
-            column: fullname
 
         displayname:
             type: string
             nullable: true
             column: displayname
 
-        mobile:
-            type: phone_number
-            nullable: true
-            column: mobile
-
-        gender:
-            type: string
-            nullable: true
-            column: gender
-            length: 10
-
         path:
             type: string
             nullable: true
             column: path
 
-        createdAt:
-            type: datetime
-            column: created_at
-            gedmo:
-                timestampable:
-                    on: create
-
-        updatedAt:
-            type: datetime
-            column: updated_at
-            gedmo:
-                timestampable:
-                    on: update
-
-        deletedAt:
-            type: datetime
-            column: deleted_at
+        confirmationType:
+            type: string
+            column: confirmation_type
             nullable: true
 
-    oneToOne:
-        billingAddress:
-            targetEntity: Sylius\Component\Addressing\Model\AddressInterface
-            joinColumn:
-                name: billing_address_id
-                onDelete: "SET NULL"
-
-        shippingAddress:
-            targetEntity: Sylius\Component\Addressing\Model\AddressInterface
-            joinColumn:
-                name: shipping_address_id
-                onDelete: "SET NULL"
-
-    oneToMany:
-        addresses:
-            mappedBy: user
-            targetEntity: Sylius\Component\Addressing\Model\AddressInterface
-            cascade: [all]
-
-        oauthAccounts:
-            mappedBy: user
-            targetEntity: DoS\UserBundle\Model\UserOAuthInterface
-            cascade: [all]
-
-    manyToMany:
-        groups:
-            targetEntity: DoS\UserBundle\Model\GroupInterface
-            cascade: [all]
-            joinTable:
-                name: dos_user_groups
-                joinColumns:
-                    user_id:
-                        referencedColumnName: id
-                        onDelete: CASCADE
-                inverseJoinColumns:
-                    group_id:
-                        referencedColumnName: id
-                        onDelete: CASCADE
-
-        authorizationRoles:
-            targetEntity: Sylius\Component\Rbac\Model\RoleInterface
-            joinTable:
-                name: dos_user_roles
-                joinColumns:
-                    user_id:
-                        referencedColumnName: id
-                        onDelete: CASCADE
-                        nullable: false
-                inverseJoinColumns:
-                    role_id:
-                        referencedColumnName: id
-                        onDelete: CASCADE
-                        nullable: false
+        confirmedAt:
+            type: datetime
+            nullable: true
+            column: confirmed_at

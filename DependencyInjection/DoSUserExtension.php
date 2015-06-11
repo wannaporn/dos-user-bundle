@@ -19,5 +19,8 @@ class DoSUserExtension extends AbstractResourceExtension
             self::CONFIGURE_VALIDATORS |
             self::CONFIGURE_FORMS
         );
+
+        $container->setParameter('dos.user.confirmation', $config['confirmation']);
+        $container->setParameter('dos.user.confirmation.actived', $config['confirmation']['actived']);
     }
 }

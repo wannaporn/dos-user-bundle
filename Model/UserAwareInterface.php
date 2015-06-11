@@ -2,22 +2,11 @@
 
 namespace DoS\UserBundle\Model;
 
+use Sylius\Component\User\Model\UserAwareInterface as BaseUserAwareInterface;
+
 /**
  * User aware interface.
  */
-interface UserAwareInterface
+interface UserAwareInterface extends BaseUserAwareInterface
 {
-    /**
-     * Get user.
-     *
-     * @return UserInterface
-     */
-    public function getUser();
-
-    /**
-     * Set user.
-     *
-     * @param UserInterface $user
-     */
-    public function setUser(UserInterface $user);
 }

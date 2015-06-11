@@ -2,7 +2,7 @@
 
 namespace DoS\UserBundle\Model;
 
-use FOS\UserBundle\Model\Group as BaseGroup;
+use Sylius\Component\User\Model\Group as BaseGroup;
 
 /**
  * Group model.
@@ -14,25 +14,16 @@ class Group extends BaseGroup implements GroupInterface
      */
     protected $color;
 
-    public function __construct()
-    {
-        $this->roles = array();
-    }
-
     /**
-     * @param mixed $color
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function setColor($color)
     {
         $this->color = $color;
-
-        return $this;
     }
 
     /**
-     * @return mixed
+     * {@inheritdoc}
      */
     public function getColor()
     {
