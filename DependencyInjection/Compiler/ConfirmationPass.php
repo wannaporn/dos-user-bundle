@@ -27,7 +27,7 @@ class ConfirmationPass implements CompilerPassInterface
                 if (array_key_exists($alias, $defaultOptions)) {
                     $container
                         ->findDefinition($id)
-                        ->replaceArgument(4, $defaultOptions[$alias])
+                        ->addMethodCall('resetOptions', array($defaultOptions[$alias]))
                     ;
                 }
             }

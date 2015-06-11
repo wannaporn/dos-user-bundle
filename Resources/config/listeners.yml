@@ -24,4 +24,5 @@ services:
         arguments:
             - @dos.user.confirmation.factory
         tags:
+            - {name: kernel.event_listener, event: sylius.customer.pre_register, method: disableUser, priority: -256}
             - {name: kernel.event_listener, event: sylius.customer.post_register, method: confirmUser, priority: -256}

@@ -63,7 +63,7 @@ class ConfirmationFactory
      */
     public function setActivedService($name)
     {
-        if (!$this->has($name)) {
+        if ($name && !$this->has($name)) {
             throw new \Exception(sprintf('Cannot set unregistered confirmation type "%s".', $name));
         }
 
@@ -97,6 +97,7 @@ class ConfirmationFactory
      * @param $name
      *
      * @return ConfirmationInterface
+     *
      * @throws \Exception
      */
     public function create($name)
@@ -119,6 +120,7 @@ class ConfirmationFactory
      * @param bool $invalidException
      *
      * @return ConfirmationInterface|null
+     *
      * @throws \Exception
      */
     public function createActivedConfirmation($invalidException = true)
@@ -131,6 +133,6 @@ class ConfirmationFactory
             }
         }
 
-        return null;
+        return;
     }
 }

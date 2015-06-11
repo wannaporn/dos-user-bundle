@@ -25,7 +25,15 @@ class Configuration extends AbstractResourceConfiguration
                         'default' => 'DoS\UserBundle\Form\Type\UserType',
                     ),
                 ),
-                'user_group' => array(
+                'user_oauth' => array(
+                    'model' => 'DoS\UserBundle\Model\UserOAuth',
+                    'interface' => 'DoS\UserBundle\Model\UserOAuthInterface',
+                ),
+                'customer' => array(
+                    'model' => 'DoS\UserBundle\Model\Customer',
+                    'interface' => 'DoS\UserBundle\Model\CustomerInterface',
+                ),
+                'group' => array(
                     'model' => 'DoS\UserBundle\Model\Group',
                     'interface' => 'DoS\UserBundle\Model\GroupInterface',
                     'form' => array(
@@ -33,9 +41,9 @@ class Configuration extends AbstractResourceConfiguration
                         'choice' => 'DoS\UserBundle\Form\Type\GroupChoiceType',
                     ),
                 ),
-                'user_oauth' => array(
-                    'model' => 'DoS\UserBundle\Model\UserOAuth',
-                    'interface' => 'DoS\UserBundle\Model\UserOAuthInterface',
+                'otp' => array(
+                    'model' => 'DoS\UserBundle\Model\OneTimePassword',
+                    'interface' => 'DoS\UserBundle\Model\OneTimePasswordInterface',
                 ),
                 'customer' => array(
                     'model' => 'DoS\UserBundle\Model\Customer',
@@ -47,8 +55,6 @@ class Configuration extends AbstractResourceConfiguration
                 ),
             ),
             'validation_groups' => array(
-                'user' => array('Default'),
-                'user_group' => array('Default'),
                 'otp' => array('Default'),
             ),
         ));
@@ -62,9 +68,19 @@ class Configuration extends AbstractResourceConfiguration
                             ->defaultNull()
                             ->cannotBeEmpty()
                         ->end()
+
                         ->arrayNode('types')
                             ->useAttributeAsKey('name')
-                            ->prototype('scalar')
+                            ->prototype('variable')
+                            /*->addDefaultsIfNotSet()
+                            ->children()
+                                ->arrayNode('email')
+                                    ->children()
+                                        ->scalarNode('subject_class')->cannotBeEmpty()->end()
+                                        ->scalarNode('xxx')->cannotBeEmpty()->end()
+                                    ->end()
+                                ->end()
+                            ->end()*/
                         ->end()
                     ->end()
                 ->end()

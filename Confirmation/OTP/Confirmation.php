@@ -11,6 +11,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class Confirmation extends ConfirmationAbstract
 {
+    /**
+     * {@inheritdoc}
+     */
     protected function sendToken(ConfirmationSubjectInterface $subject, $token)
     {
         if (!$mobile = $subject->getConfirmationChannel($this->options['channel_path'])) {
@@ -34,6 +37,9 @@ class Confirmation extends ConfirmationAbstract
         $this->manager->persist($otp);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function verifyToken(ConfirmationSubjectInterface $subject, array $options = array())
     {
         if (empty($options['verifier'])) {
@@ -69,6 +75,9 @@ class Confirmation extends ConfirmationAbstract
         ));
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);

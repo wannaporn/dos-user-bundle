@@ -9,6 +9,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class Confirmation extends ConfirmationAbstract
 {
+    /**
+     * {@inheritdoc}
+     */
     protected function sendToken(ConfirmationSubjectInterface $subject, $token)
     {
         $email = $subject->getConfirmationChannel($this->options['channel_path']);
@@ -24,11 +27,17 @@ class Confirmation extends ConfirmationAbstract
         );
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function verifyToken(ConfirmationSubjectInterface $subject, array $options = array())
     {
         return true;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);

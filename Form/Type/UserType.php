@@ -44,12 +44,12 @@ class UserType extends ProfileFormType
                 'label' => 'ui.trans.user.form.enabled',
             ))
             ->add('groups', 'dos_user_group_choice', array(
-                'label'    => 'ui.trans.user.form.groups',
+                'label' => 'ui.trans.user.form.groups',
                 'multiple' => true,
                 'required' => false,
             ))
             ->add('authorizationRoles', 'sylius_role_choice', array(
-                'label'    => 'sylius.form.user.roles',
+                'label' => 'sylius.form.user.roles',
                 'multiple' => true,
                 'expanded' => true,
                 'required' => false,
@@ -64,8 +64,8 @@ class UserType extends ProfileFormType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class'         => $this->dataClass,
-            'validation_groups'  => function (FormInterface $form) {
+            'data_class' => $this->dataClass,
+            'validation_groups' => function (FormInterface $form) {
                 $data = $form->getData();
                 $groups = array('Profile', 'Default');
                 if ($data && !$data->getId()) {
@@ -75,7 +75,7 @@ class UserType extends ProfileFormType
                 return $groups;
             },
             'cascade_validation' => true,
-            'intention'          => 'profile',
+            'intention' => 'profile',
         ));
     }
 
