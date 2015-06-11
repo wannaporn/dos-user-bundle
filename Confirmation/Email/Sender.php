@@ -7,5 +7,4 @@ use Sylius\Component\Mailer\Sender\Sender as MailSender;
 
 class Sender extends MailSender implements SenderInterface
 {
-
 }

@@ -203,8 +203,6 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
     /**
      * @param ConfirmationSubjectInterface $subject
      * @param string                       $token
-     *
-     * @return void
      */
     abstract protected function sendToken(
         ConfirmationSubjectInterface $subject,
