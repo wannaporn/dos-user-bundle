@@ -2,9 +2,10 @@
 
 namespace DoS\UserBundle\Controller;
 
+use DoS\UserBundle\Confirmation\ConfirmationInterface;
 use Sylius\Bundle\UserBundle\Controller\SecurityController as BaseSecurityController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 class SecurityController extends BaseSecurityController
 {
@@ -41,5 +42,28 @@ class SecurityController extends BaseSecurityController
         }
 
         return parent::loginAction($request);
+    }
+
+    public function confirmationAction(Request $request)
+    {
+        $confirmation = $this->getConfirmationService();
+        $token = $confirmation->getStoredToken(/*true*/);
+
+        if (!$token || !$subject = $confirmation->findSubject($token)) {
+            return $this->redirectToRoute($confirmation->getFailbackRoute());
+        }
+
+        return $this->render($confirmation->getTokenConfirmTemplate(), array(
+            'subject' => $subject,
+        ));
+    }
+
+    /**
+     * @return ConfirmationInterface|null
+     * @throws \Exception
+     */
+    protected function getConfirmationService()
+    {
+        return $this->get('dos.user.confirmation.factory')->createActivedConfirmation(true);
     }
 }

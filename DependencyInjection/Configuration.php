@@ -45,14 +45,6 @@ class Configuration extends AbstractResourceConfiguration
                     'model' => 'DoS\UserBundle\Model\OneTimePassword',
                     'interface' => 'DoS\UserBundle\Model\OneTimePasswordInterface',
                 ),
-                'customer' => array(
-                    'model' => 'DoS\UserBundle\Model\Customer',
-                    'interface' => 'DoS\UserBundle\Model\CustomerInterface',
-                ),
-                'otp' => array(
-                    'model' => 'DoS\UserBundle\Model\OneTimePassword',
-                    'interface' => 'DoS\UserBundle\Model\OneTimePasswordInterface',
-                ),
             ),
             'validation_groups' => array(
                 'otp' => array('Default'),

@@ -41,6 +41,6 @@ class ProfileType extends CustomerProfileType
      */
     public function getName()
     {
-        return 'dos_profile';
+        return 'dos_user_profile';
     }
 }

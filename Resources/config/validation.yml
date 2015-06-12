@@ -1,4 +1,10 @@
 DoS\UserBundle\Model\User:
+    constraints:
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
+            message: ui.trans.user.username.unique
+            fields: [username]
+            groups: [Default, registration]
+
     properties:
         file:
             - Image:
@@ -9,6 +15,7 @@ DoS\UserBundle\Model\User:
 
 DoS\UserBundle\Model\Customer:
     properties:
+
         mobile:
             - Misd\PhoneNumberBundle\Validator\Constraints\PhoneNumber:
                 defaultRegion: TH

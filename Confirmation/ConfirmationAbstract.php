@@ -7,6 +7,7 @@ use DoS\UserBundle\Confirmation\Exception\InvalidTokenTimeException;
 use DoS\UserBundle\Confirmation\Exception\NotFoundTokenSubjectException;
 use Sylius\Component\Storage\StorageInterface;
 use Sylius\Component\User\Security\TokenProviderInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 abstract class ConfirmationAbstract implements ConfirmationInterface
@@ -36,6 +37,11 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
      */
     protected $options = array();
 
+    /**
+     * @var bool
+     */
+    protected $isValid = true;
+
     public function __construct(
         ObjectManager $manager,
         SenderInterface $sender,
@@ -54,12 +60,68 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
     /**
      * {@inheritdoc}
      */
+    public function getTokenSendTemplate()
+    {
+        return $this->options['token_send_template'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTokenVerifyTemplate()
+    {
+        return $this->options['token_verify_template'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTokenConfirmTemplate()
+    {
+        return $this->options['token_confirm_template'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getConfirmRoute()
+    {
+        return $this->options['routing_confirmation'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFailbackRoute()
+    {
+        return $this->options['routing_failback'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTokenTimeAware()
+    {
+        return $this->options['token_time_aware'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function resetOptions(array $options)
     {
         $resolver = new OptionsResolver();
         $this->configureOptions($resolver);
 
         $this->options = $resolver->resolve($options);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setValid($valid)
+    {
+        $this->isValid = $valid;
     }
 
     /**
@@ -74,7 +136,6 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
 
         $this->sendToken($subject, $token);
         $this->storeSubject($subject);
-        $this->storage->setData(self::STORE_KEY, $token);
     }
 
     /**
@@ -82,7 +143,7 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
      */
     public function verify($token, array $options = array())
     {
-        $subject = $this->findTokenSubject($token);
+        $subject = $this->findSubject($token);
 
         if (!$this->validateTimeAware($subject)) {
             throw new InvalidTokenTimeException();
@@ -99,9 +160,7 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
     }
 
     /**
-     * @param bool $clear
-     *
-     * @return string|void
+     * {@inheritdoc}
      */
     public function getStoredToken($clear = false)
     {
@@ -119,11 +178,40 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
     }
 
     /**
-     * @param $token
-     *
-     * @return ConfirmationSubjectInterface
+     * {@inheritdoc}
      */
-    protected function findTokenSubject($token)
+    public function getConstraint(FormInterface $form)
+    {
+        $path = $this->getObjectPathChannel();
+
+        foreach ($form->getErrors(true) as $error) {
+
+            if ($error->getOrigin()->getName() === $path
+                && get_class($error->getCause()->getConstraint()) === $this->options['channel_constraint_class']
+            ) {
+                $this->isValid = false;
+
+                return $error;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getObjectPathChannel()
+    {
+        $paths = explode('.', $this->options['channel_path']);
+
+        return $paths[count($paths) - 1];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findSubject($token)
     {
         $er = $this->manager->getRepository($this->options['subject_class']);
 
@@ -159,8 +247,13 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
      */
     protected function storeSubject(ConfirmationSubjectInterface $subject)
     {
+        if (!$this->isValid) {
+            return;
+        }
+
         $this->manager->persist($subject);
         $this->manager->flush();
+        $this->storage->setData(self::STORE_KEY, $subject->getConfirmationToken());
     }
 
     /**
@@ -168,41 +261,59 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
      */
     protected function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
-            /*
-             * System user entity class.
-             */
-            'subject_class' => 'DoS\UserBundle\Model\User',
-            /*
-             * The user model property.
-             */
-            'token_property_path' => 'confirmationToken',
-            /*
-             * The user model property.
-             */
-            'token_send_template' => null,
-            /*
-             * Life time of valid token.
-             * using \DateInterval::createFromDateString()
-             * @link http://php.net/manual/en/dateinterval.createfromdatestring.php
-             */
-            'token_time_aware' => null,
-            /*
-             * Which the prpoerty path to using as channel.
-             */
-            'channel_path' => 'customer.email',
-        ));
+        $resolver->setDefaults(
+            array(
+                /*
+                 * System user entity class.
+                 */
+                'subject_class' => 'DoS\UserBundle\Model\User',
+                /*
+                 * The user model property.
+                 */
+                'token_property_path' => 'confirmationToken',
+                /*
+                 * The sent template.
+                 */
+                'token_send_template' => null,
+                /*
+                 * The sent template.
+                 */
+                'token_confirm_template' => null,
+                /*
+                 * The verify template.
+                 */
+                'token_verify_template' => null,
+                /*
+                 * Life time of valid token.
+                 * using \DateInterval::createFromDateString()
+                 * @link http://php.net/manual/en/dateinterval.createfromdatestring.php
+                 */
+                'token_time_aware' => null,
+                /*
+                 * Which the prpoerty path to using as channel.
+                 */
+                'channel_path' => 'customer.email',
+                /*
+                 * What's error constraint we used for catch exception.
+                 */
+                'channel_constraint_class' => 'Sylius\Bundle\UserBundle\Validator\Constraints\RegisteredUser',
+                'routing_failback' => 'route_homepage',
+                'routing_confirmation' => null,
+            )
+        );
 
-        $resolver->setRequired(array(
-            'subject_class',
-            'token_property_path',
-            'token_send_template',
-        ));
+        $resolver->setRequired(
+            array(
+                'subject_class',
+                'token_property_path',
+                'token_send_template',
+            )
+        );
     }
 
     /**
      * @param ConfirmationSubjectInterface $subject
-     * @param string                       $token
+     * @param string $token
      */
     abstract protected function sendToken(
         ConfirmationSubjectInterface $subject,
@@ -211,7 +322,7 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
 
     /**
      * @param ConfirmationSubjectInterface $subject
-     * @param array                        $options
+     * @param array $options
      *
      * @return true
      */

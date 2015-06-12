@@ -3,6 +3,9 @@ ui.trans:
         mobile:
             invalid: เบอร์มือถือไม่ถูกต้อง
 
+    email:
+        registered: อีเมล์นี้มีอยู่ในระบบแล้ว ไม่สามารถใช้ลงทะเบียนได้อีก
+
     user:
         first_name:
             blank: กรุณาระบุชื่อของคุณ

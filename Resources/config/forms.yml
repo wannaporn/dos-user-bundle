@@ -1,7 +1,8 @@
 parameters:
     dos.form.type.user_search.class: DoS\UserBundle\Form\Type\UserSearchType
-    dos.form.type.user_reistration.class: DoS\UserBundle\Form\Type\RegistrationFormType
-    dos.form.type.user_profile.class: DoS\UserBundle\Form\Type\ProfileFormType
+    dos.form.type.user_reistration.class: DoS\UserBundle\Form\Type\RegistrationType
+    dos.form.type.user_profile.class: DoS\UserBundle\Form\Type\ProfileType
+    dos.form.listener.user_confirmation.class: DoS\UserBundle\Form\EventListener\ConfirmationFormListener
 
 services:
     dos.form.type.user_search:
@@ -17,6 +18,9 @@ services:
         class: %dos.form.type.user_reistration.class%
         arguments:
             - %dos.model.user.class%
+            - %sylius.validation_group.user_registration%
+            - @sylius.repository.customer
+            - @dos.form.listener.user_confirmation
         tags:
             - {name: form.type, alias: dos_user_registration}
 
@@ -24,5 +28,12 @@ services:
         class: %dos.form.type.user_profile.class%
         arguments:
             - %dos.model.user.class%
+            - %sylius.validation_group.customer_profile%
         tags:
             - {name: form.type, alias: dos_user_profile}
+
+    dos.form.listener.user_confirmation:
+        class: %dos.form.listener.user_confirmation.class%
+        arguments:
+            - @dos.user.confirmation.factory
+            - @request_stack

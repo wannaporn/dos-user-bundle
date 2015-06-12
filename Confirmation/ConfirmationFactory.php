@@ -123,7 +123,7 @@ class ConfirmationFactory
      *
      * @throws \Exception
      */
-    public function createActivedConfirmation($invalidException = true)
+    public function createActivedConfirmation($invalidException = false)
     {
         try {
             return $this->create($this->activedService);
