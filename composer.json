@@ -17,9 +17,8 @@
         "liverbool/dos-mailer-bundle": "2.0.x-dev",
         "liverbool/dos-settings-bundle": "2.0.x-dev",
         "liverbool/dos-resource-bundle": "2.0.x-dev",
-        "symfony/options-resolver": "~2.7 <3.0",
-        "symfony/psr-http-message-bridge": "~0.2",
-        "zendframework/zend-diactoros": "~1.0.3"
+        "symfony/form": "~2.7 <3.0",
+        "symfony/options-resolver": "~2.7 <3.0"
     },
     "require-dev": {
         "liil/kint": "1.0",

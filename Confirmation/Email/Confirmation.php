@@ -38,17 +38,6 @@ class Confirmation extends ConfirmationAbstract
     /**
      * {@inheritdoc}
      */
-    protected function configureOptions(OptionsResolver $resolver)
-    {
-        parent::configureOptions($resolver);
-
-        $resolver->setDefaults(array(
-        ));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getType()
     {
         return 'email';
