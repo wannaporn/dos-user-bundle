@@ -31,6 +31,9 @@
     "autoload-dev": {
         "psr-4": { "DoS\\UserBundle\\spec\\": "spec/" }
     },
+    "config": {
+        "bin-dir": "bin"
+    },
     "extra": {
         "branch-alias": {
             "dev-master": "2.0-dev"
