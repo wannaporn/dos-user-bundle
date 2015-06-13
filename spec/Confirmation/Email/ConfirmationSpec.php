@@ -53,6 +53,7 @@ class ConfirmationSpec extends ObjectBehavior
         $subject->confirmationRequest('foobar')->shouldBeCalled();
         $subject->getConfirmationChannel('customer.email')->shouldBeCalled()->willReturn('a_invalid_email');
 
-        $this->shouldThrow('DoS\UserBundle\Confirmation\Exception\NotFoundChannelException')->duringSend($subject);
+        $this->shouldThrow('DoS\UserBundle\Confirmation\Exception\NotFoundChannelException')
+            ->duringSend($subject);
     }
 }
