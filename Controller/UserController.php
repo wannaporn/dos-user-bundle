@@ -4,8 +4,6 @@ namespace DoS\UserBundle\Controller;
 
 use DoS\UserBundle\Confirmation\ConfirmationInterface;
 use DoS\UserBundle\Confirmation\Exception\ConfirmationException;
-use DoS\UserBundle\Confirmation\Exception\InvalidTokenVerifyException;
-use DoS\UserBundle\Confirmation\Exception\TokenConfirmedException;
 use DoS\UserBundle\Model\UserInterface;
 use Sylius\Bundle\UserBundle\Controller\UserController as BaseUserController;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,7 +21,7 @@ class UserController extends BaseUserController
     {
         /** @var UserInterface $resource */
         $resource = $this->findOr404($request);
-        $resource->setEnabled((bool)$request->query->get('state'));
+        $resource->setEnabled((bool) $request->query->get('state'));
         $this->domainManager->update($resource);
 
         return $this->redirectHandler->redirectToReferer();
@@ -36,7 +34,6 @@ class UserController extends BaseUserController
      */
     public function resetPasswordAction(Request $request)
     {
-
     }
 
     /**
@@ -98,6 +95,7 @@ class UserController extends BaseUserController
 
     /**
      * @return ConfirmationInterface|null
+     *
      * @throws \Exception
      */
     protected function getConfirmationService()

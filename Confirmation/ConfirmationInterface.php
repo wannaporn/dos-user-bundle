@@ -28,7 +28,7 @@ interface ConfirmationInterface
 
     /**
      * @param string $token
-     * @param array $options
+     * @param array  $options
      *
      * @return ConfirmationSubjectInterface
      *
@@ -45,6 +45,7 @@ interface ConfirmationInterface
 
     /**
      * @param FormInterface $form
+     *
      * @return null|FormError|FormErrorIterator
      */
     public function getConstraint(FormInterface $form);
@@ -76,6 +77,7 @@ interface ConfirmationInterface
 
     /**
      * @param ConfirmationSubjectInterface $subject
+     *
      * @return \DateTime|null
      */
     public function getTokenTimeAware(ConfirmationSubjectInterface $subject);
