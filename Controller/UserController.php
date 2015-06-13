@@ -43,7 +43,7 @@ class UserController extends BaseUserController
      */
     public function searchAction(Request $request)
     {
-        return parent::indexAction($request);
+        return $this->indexAction($request);
     }
 
     protected function trans($key, $parameters = array(), $domain = null)
@@ -51,7 +51,7 @@ class UserController extends BaseUserController
         return $this->get('translator')->trans($key, $parameters, $domain);
     }
 
-    public function confirmationAction(Request $request)
+    public function confirmationAction()
     {
         $confirmation = $this->getConfirmationService();
         $token = $confirmation->getStoredToken(/*true*/);

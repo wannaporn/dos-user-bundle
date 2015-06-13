@@ -340,7 +340,7 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
      * @param ConfirmationSubjectInterface $subject
      * @param array                        $options
      *
-     * @return true
+     * @return bool
      */
     abstract protected function verifyToken(
         ConfirmationSubjectInterface $subject,
