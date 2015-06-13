@@ -58,6 +58,9 @@ ui.trans:
                 header: สวัสดี %user%
                 body: "รหัสผ่านของคุณถูกเปลี่ยนแปลงเรียบร้อยแล้ว นี่คือรหัสใหม่ของคุณ: <strong>%password%</strong>"
 
+        confirmation:
+            invalid_token: Token สำหรับการยืนยันไม่ถูกต้อง
+
     group:
         no_results: ยังไม่มีกลุ่มผู้ใช้
         id: ID

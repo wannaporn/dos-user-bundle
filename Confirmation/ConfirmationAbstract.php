@@ -100,14 +100,6 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
     /**
      * {@inheritdoc}
      */
-    public function getTokenTimeAware()
-    {
-        return $this->options['token_time_aware'];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function resetOptions(array $options)
     {
         $resolver = new OptionsResolver();
@@ -155,8 +147,12 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
             throw $e;
         }
 
+        $subject->confirmationConfirm();
+
         $this->storage->removeData(self::STORE_KEY);
         $this->storeSubject($subject);
+
+        return $subject;
     }
 
     /**
@@ -229,17 +225,29 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
      */
     protected function validateTimeAware(ConfirmationSubjectInterface $subject)
     {
-        if (null === $timeAware = $this->options['token_time_aware']) {
+        if (null === $time = $this->getTokenTimeAware($subject)) {
             return true;
         }
 
+        return $time->getTimestamp() > (new \DateTime())->getTimestamp();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTokenTimeAware(ConfirmationSubjectInterface $subject)
+    {
+        if (null === $timeAware = $this->options['token_time_aware']) {
+            return null;
+        }
+
         if (!$time = $subject->getConfirmationRequestedAt()) {
-            return false;
+            return null;
         }
 
         $time->add(\DateInterval::createFromDateString($timeAware));
 
-        return $time->getTimestamp() > (new \DateTime())->getTimestamp();
+        return $time;
     }
 
     /**
@@ -297,7 +305,13 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
                  * What's error constraint we used for catch exception.
                  */
                 'channel_constraint_class' => 'Sylius\Bundle\UserBundle\Validator\Constraints\RegisteredUser',
+                /**
+                 * Using when not found any route.
+                 */
                 'routing_failback' => 'route_homepage',
+                /**
+                 * Using for redirection when duplicated registration.
+                 */
                 'routing_confirmation' => null,
             )
         );
@@ -307,6 +321,9 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
                 'subject_class',
                 'token_property_path',
                 'token_send_template',
+                'token_verify_template',
+                'token_confirm_template',
+                'routing_confirmation',
             )
         );
     }

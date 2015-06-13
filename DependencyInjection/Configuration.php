@@ -30,6 +30,7 @@ class Configuration extends AbstractResourceConfiguration
                     'interface' => 'DoS\UserBundle\Model\UserOAuthInterface',
                 ),
                 'customer' => array(
+                    'controller' => 'DoS\UserBundle\Controller\CustomerController',
                     'model' => 'DoS\UserBundle\Model\Customer',
                     'interface' => 'DoS\UserBundle\Model\CustomerInterface',
                 ),

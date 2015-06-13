@@ -30,6 +30,8 @@ interface ConfirmationInterface
      * @param string $token
      * @param array $options
      *
+     * @return ConfirmationSubjectInterface
+     *
      * @throws \Exception
      */
     public function verify($token, array $options = array());
@@ -73,9 +75,10 @@ interface ConfirmationInterface
     public function getFailbackRoute();
 
     /**
-     * @return string
+     * @param ConfirmationSubjectInterface $subject
+     * @return \DateTime|null
      */
-    public function getTokenTimeAware();
+    public function getTokenTimeAware(ConfirmationSubjectInterface $subject);
 
     /**
      * @param $token
