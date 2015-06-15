@@ -25,6 +25,5 @@ services:
             - @dos.user.confirmation.factory
             - @router
         tags:
-            - {name: kernel.event_listener, event: dos.customer.pre_register, method: disableUser, priority: -256}
             - {name: kernel.event_listener, event: dos.customer.post_register, method: confirmRequest, priority: -256}
             - {name: kernel.event_listener, event: kernel.response, method: redirectToConfirmation }

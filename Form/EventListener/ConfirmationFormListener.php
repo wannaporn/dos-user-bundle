@@ -56,10 +56,6 @@ class ConfirmationFormListener implements EventSubscriberInterface
         /** @var UserInterface $user */
         $user = $customer->getUser();
 
-        if ($user->isEnabled()) {
-            return;
-        }
-
         $confirmation->send($user);
 
         $this->requestStack->getCurrentRequest()->headers->set(
