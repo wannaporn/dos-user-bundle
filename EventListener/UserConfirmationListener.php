@@ -29,19 +29,6 @@ class UserConfirmationListener
         $this->router = $router;
     }
 
-    public function disableUser(GenericEvent $event)
-    {
-        /** @var CustomerInterface $subject */
-        $subject = $event->getSubject();
-        $user = $subject->getUser();
-
-        if (!$user instanceof UserInterface) {
-            throw new UnexpectedTypeException($user, UserInterface::class);
-        }
-
-        $user->setEnabled(false);
-    }
-
     public function confirmRequest(GenericEvent $event)
     {
         /** @var CustomerInterface $subject */

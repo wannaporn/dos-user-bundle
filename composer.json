@@ -10,6 +10,7 @@
     ],
     "minimum-stability": "dev",
     "require": {
+        "doctrine/orm": "~2.2,>=2.2.3,<2.5",
         "hwi/oauth-bundle": "~0.3",
         "liverbool/dos-sylius-user-bundle": "0.14.x-dev",
         "liverbool/dos-mailer-bundle": "2.0.x-dev",
