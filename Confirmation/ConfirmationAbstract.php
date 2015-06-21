@@ -181,7 +181,6 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
         $path = $this->getChannelObjectPath();
 
         foreach ($form->getErrors(true) as $error) {
-
             $class = get_class($error->getCause()->getConstraint());
             $classConstraint = 'Sylius\Bundle\UserBundle\Validator\Constraints\RegisteredUser';
             $classConfig = $this->options['channel_constraint_class'];
@@ -195,7 +194,7 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
             }
         }
 
-        return null;
+        return;
     }
 
     /**
@@ -242,11 +241,11 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
     public function getTokenTimeAware(ConfirmationSubjectInterface $subject)
     {
         if (null === $timeAware = $this->options['token_time_aware']) {
-            return null;
+            return;
         }
 
         if (!$time = $subject->getConfirmationRequestedAt()) {
-            return null;
+            return;
         }
 
         $time->add(\DateInterval::createFromDateString($timeAware));
@@ -332,11 +331,11 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
                  * What's error constraint we used for catch exception.
                  */
                 'channel_constraint_class' => 'Sylius\Bundle\UserBundle\Validator\Constraints\RegisteredUser',
-                /**
+                /*
                  * Using when not found any route.
                  */
                 'routing_failback' => 'route_homepage',
-                /**
+                /*
                  * Using for redirection when duplicated registration.
                  */
                 'routing_confirmation' => null,
@@ -357,7 +356,7 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
 
     /**
      * @param ConfirmationSubjectInterface $subject
-     * @param string $token
+     * @param string                       $token
      */
     abstract protected function sendToken(
         ConfirmationSubjectInterface $subject,
@@ -366,7 +365,7 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
 
     /**
      * @param ConfirmationSubjectInterface $subject
-     * @param array $options
+     * @param array                        $options
      *
      * @return true
      */

@@ -6,7 +6,6 @@ use Doctrine\Common\Persistence\ObjectManager;
 use DoS\UserBundle\Confirmation\ConfirmationSubjectInterface;
 use DoS\UserBundle\Confirmation\SenderInterface;
 use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
 use Sylius\Component\Storage\StorageInterface;
 use Sylius\Component\User\Security\TokenProviderInterface;
 
