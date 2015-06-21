@@ -181,8 +181,13 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
         $path = $this->getChannelObjectPath();
 
         foreach ($form->getErrors(true) as $error) {
+
+            $class = get_class($error->getCause()->getConstraint());
+            $classConstraint = 'Sylius\Bundle\UserBundle\Validator\Constraints\RegisteredUser';
+            $classConfig = $this->options['channel_constraint_class'];
+
             if ($error->getOrigin()->getName() === $path
-                && get_class($error->getCause()->getConstraint()) === $this->options['channel_constraint_class']
+                && ($class === $classConfig || in_array($classConstraint, class_parents($class)))
             ) {
                 $this->isValid = false;
 
@@ -190,7 +195,7 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
             }
         }
 
-        return;
+        return null;
     }
 
     /**
@@ -237,11 +242,11 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
     public function getTokenTimeAware(ConfirmationSubjectInterface $subject)
     {
         if (null === $timeAware = $this->options['token_time_aware']) {
-            return;
+            return null;
         }
 
         if (!$time = $subject->getConfirmationRequestedAt()) {
-            return;
+            return null;
         }
 
         $time->add(\DateInterval::createFromDateString($timeAware));
@@ -261,6 +266,28 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
         $this->manager->persist($subject);
         $this->manager->flush();
         $this->storage->setData(self::STORE_KEY, $subject->getConfirmationToken());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function canResend(ConfirmationSubjectInterface $subject)
+    {
+        if ($subject->isConfirmationConfirmed()) {
+            return false;
+        }
+
+        if (null === $timeAware = $this->options['token_resend_time_aware']) {
+            return true;
+        }
+
+        if (!$time = $subject->getConfirmationRequestedAt()) {
+            return false;
+        }
+
+        $time->add(\DateInterval::createFromDateString($timeAware));
+
+        return $time->getTimestamp() >= (new \DateTime())->getTimestamp();
     }
 
     /**
@@ -296,6 +323,7 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
                  * @link http://php.net/manual/en/dateinterval.createfromdatestring.php
                  */
                 'token_time_aware' => null,
+                'token_resend_time_aware' => null,
                 /*
                  * Which the prpoerty path to using as channel.
                  */
@@ -304,11 +332,11 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
                  * What's error constraint we used for catch exception.
                  */
                 'channel_constraint_class' => 'Sylius\Bundle\UserBundle\Validator\Constraints\RegisteredUser',
-                /*
+                /**
                  * Using when not found any route.
                  */
                 'routing_failback' => 'route_homepage',
-                /*
+                /**
                  * Using for redirection when duplicated registration.
                  */
                 'routing_confirmation' => null,
@@ -329,7 +357,7 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
 
     /**
      * @param ConfirmationSubjectInterface $subject
-     * @param string                       $token
+     * @param string $token
      */
     abstract protected function sendToken(
         ConfirmationSubjectInterface $subject,
@@ -338,9 +366,9 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
 
     /**
      * @param ConfirmationSubjectInterface $subject
-     * @param array                        $options
+     * @param array $options
      *
-     * @return bool
+     * @return true
      */
     abstract protected function verifyToken(
         ConfirmationSubjectInterface $subject,
