@@ -24,13 +24,12 @@ class TwigExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            new \Twig_SimpleFunction('ui_confirmation_constraint', array($this, 'getConstraint')),
+            new \Twig_SimpleFunction('ui_confirmation_constraint', array($this, 'getConstraint'))
         );
     }
 
     /**
      * @param FormView $formView
-     *
      * @return null|FormError|FormErrorIterator
      */
     public function getConstraint(FormView $formView)
@@ -42,7 +41,7 @@ class TwigExtension extends \Twig_Extension
             return $actived->getConstraint($errors->getForm());
         }
 
-        return;
+        return null;
     }
 
     /**

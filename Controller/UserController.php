@@ -4,6 +4,8 @@ namespace DoS\UserBundle\Controller;
 
 use DoS\UserBundle\Confirmation\ConfirmationInterface;
 use DoS\UserBundle\Confirmation\Exception\ConfirmationException;
+use DoS\UserBundle\Confirmation\Exception\InvalidTokenVerifyException;
+use DoS\UserBundle\Confirmation\Exception\TokenConfirmedException;
 use DoS\UserBundle\Model\UserInterface;
 use Sylius\Bundle\UserBundle\Controller\UserController as BaseUserController;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,7 +23,7 @@ class UserController extends BaseUserController
     {
         /** @var UserInterface $resource */
         $resource = $this->findOr404($request);
-        $resource->setEnabled((bool) $request->query->get('state'));
+        $resource->setEnabled((bool)$request->query->get('state'));
         $this->domainManager->update($resource);
 
         return $this->redirectHandler->redirectToReferer();
@@ -34,6 +36,7 @@ class UserController extends BaseUserController
      */
     public function resetPasswordAction(Request $request)
     {
+
     }
 
     /**
@@ -43,7 +46,7 @@ class UserController extends BaseUserController
      */
     public function searchAction(Request $request)
     {
-        return $this->indexAction($request);
+        return parent::indexAction($request);
     }
 
     protected function trans($key, $parameters = array(), $domain = null)
@@ -51,13 +54,36 @@ class UserController extends BaseUserController
         return $this->get('translator')->trans($key, $parameters, $domain);
     }
 
-    public function confirmationAction()
+    public function resendAction(Request $request)
     {
         $confirmation = $this->getConfirmationService();
-        $token = $confirmation->getStoredToken(/*true*/);
+        $token = $request->get('token') ?: $confirmation->getStoredToken();
+        $subject = $confirmation->findSubject($token);
+
+        // TODO: may find subject by `email`, `mobile` ??
+
+        try {
+            if ($confirmation->canResend($subject)) {
+                $confirmation->send($subject);
+            }
+        } catch (\Exception $e) {
+            \Kint::dump($e);exit;
+        }
+
+        return $this->redirectToRoute($confirmation->getConfirmRoute());
+
+        //return $this->confirmationAction($request);
+    }
+
+    public function confirmationAction(Request $request)
+    {
+        $confirmation = $this->getConfirmationService();
+        $token = $confirmation->getStoredToken(/*TODO: true*/);
         $view = $this->view(null, 200)->setTemplate($confirmation->getTokenConfirmTemplate());
 
         $data = array(
+            'error' => false,
+            'token' => $token,
             'type' => $confirmation->getType(),
         );
 
@@ -80,6 +106,7 @@ class UserController extends BaseUserController
 
         $data = array(
             'error' => false,
+            'token' => $token,
             'type' => $confirmation->getType(),
         );
 
@@ -95,7 +122,6 @@ class UserController extends BaseUserController
 
     /**
      * @return ConfirmationInterface|null
-     *
      * @throws \Exception
      */
     protected function getConfirmationService()

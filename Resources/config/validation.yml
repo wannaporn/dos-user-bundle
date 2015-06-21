@@ -14,8 +14,12 @@ DoS\UserBundle\Model\User:
                 groups: [Profile]
 
 DoS\UserBundle\Model\Customer:
-    properties:
+    constraints:
+        - Sylius\Bundle\UserBundle\Validator\Constraints\RegisteredUser:
+            message: ui.trans.profile.registered
+            groups: [registration]
 
+    properties:
         mobile:
             - Misd\PhoneNumberBundle\Validator\Constraints\PhoneNumber:
                 defaultRegion: TH

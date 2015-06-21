@@ -19,7 +19,8 @@ class RegistrationType extends CustomerRegistrationType
         array $validationGroups = array(),
         RepositoryInterface $customerRepository,
         ConfirmationFormListener $confirmationListener
-    ) {
+    )
+    {
         parent::__construct($dataClass, $validationGroups, $customerRepository);
 
         $this->confirmationListener = $confirmationListener;

@@ -5,6 +5,7 @@ namespace DoS\UserBundle\Confirmation\Email;
 use DoS\UserBundle\Confirmation\ConfirmationAbstract;
 use DoS\UserBundle\Confirmation\ConfirmationSubjectInterface;
 use DoS\UserBundle\Confirmation\Exception\NotFoundChannelException;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class Confirmation extends ConfirmationAbstract
 {
