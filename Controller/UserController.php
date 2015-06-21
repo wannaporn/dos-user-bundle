@@ -64,8 +64,6 @@ class UserController extends BaseUserController
                 $confirmation->send($subject);
             }
         } catch (\Exception $e) {
-            \Kint::dump($e);
-            exit;
         }
 
         return $this->redirectToRoute($confirmation->getConfirmRoute());
