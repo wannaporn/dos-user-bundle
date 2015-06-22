@@ -21,7 +21,7 @@ class UserController extends BaseUserController
     {
         /** @var UserInterface $resource */
         $resource = $this->findOr404($request);
-        $resource->setEnabled((bool) $request->query->get('state'));
+        $resource->setEnabled((bool)$request->query->get('state'));
         $this->domainManager->update($resource);
 
         return $this->redirectHandler->redirectToReferer();
@@ -53,17 +53,40 @@ class UserController extends BaseUserController
 
     public function resendAction(Request $request)
     {
-        $confirmation = $this->getConfirmationService();
-        $token = $request->get('token') ?: $confirmation->getStoredToken();
-        $subject = $confirmation->findSubject($token);
+        $token = $request->get('token');
+        $email = $request->get('email');
+        $mobile = $request->get('mobile');
+        $username = $request->get('username');
 
-        // TODO: may find subject by `email`, `mobile` ??
+        $confirmation = $this->getConfirmationService();
+        $customerEr = $this->get('dos.repository.customer');
+        $userEr = $this->get('dos.repository.user');
+
+        switch (true) {
+            case !empty($email):
+                $subject = $customerEr->findOneBy(array('email' => $email));
+                break;
+
+            case !empty($mobile):
+                $subject = $customerEr->findOneBy(array('mobile' => $mobile));
+                break;
+
+            case !empty($username):
+                $subject = $userEr->findOneBy(array('username' => $username));
+                break;
+
+            default:
+                $token = $token ?: $confirmation->getStoredToken();
+                $subject = $confirmation->findSubject($token);
+                break;
+        }
 
         try {
             if ($confirmation->canResend($subject)) {
                 $confirmation->send($subject);
             }
         } catch (\Exception $e) {
+            // Nothing to do.
         }
 
         return $this->redirectToRoute($confirmation->getConfirmRoute());
