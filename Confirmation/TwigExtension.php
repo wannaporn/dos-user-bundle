@@ -25,6 +25,7 @@ class TwigExtension extends \Twig_Extension
     {
         return array(
             new \Twig_SimpleFunction('ui_confirmation_constraint', array($this, 'getConstraint')),
+            new \Twig_SimpleFunction('ui_confirmation_type', array($this, 'getActivedType')),
         );
     }
 
@@ -40,6 +41,21 @@ class TwigExtension extends \Twig_Extension
             $errors = $formView->vars['errors'];
 
             return $actived->getConstraint($errors->getForm());
+        }
+
+        return;
+    }
+
+    /**
+     * @param FormView $formView
+     *
+     * @return null|FormError|FormErrorIterator
+     */
+    public function getActivedType(FormView $formView)
+    {
+        if ($actived = $this->factory->createActivedConfirmation(false)) {
+
+            return $actived->getType();
         }
 
         return;
