@@ -11,12 +11,12 @@
     "minimum-stability": "dev",
     "require": {
         "hwi/oauth-bundle": "~0.3",
-        "liverbool/dos-sylius-user-bundle": "0.14.x-dev",
+        "liverbool/dos-sylius-user-bundle": "0.15.x-dev",
         "liverbool/dos-mailer-bundle": "2.0.x-dev",
         "liverbool/dos-settings-bundle": "2.0.x-dev",
         "liverbool/dos-resource-bundle": "2.0.x-dev",
-        "sylius/storage": "0.14.x-dev",
-        "sylius/rbac-bundle": "0.14.x-dev",
+        "sylius/storage": "0.15.x-dev",
+        "sylius/rbac-bundle": "0.15.x-dev",
         "symfony/form": "~2.7 <3.0"
     },
     "require-dev": {

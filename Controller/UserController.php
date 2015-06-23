@@ -104,8 +104,6 @@ class UserController extends BaseUserController
         }
 
         return $this->redirectToRoute($confirmation->getConfirmRoute(), $error);
-
-        //return $this->confirmationAction($request);
     }
 
     public function confirmationAction(Request $request)
