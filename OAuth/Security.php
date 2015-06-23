@@ -65,7 +65,7 @@ class Security
     {
         $token = $this->getToken();
 
-        if ($token instanceof TokenInterface) {
+        if ($token instanceof TokenInterface && $token->isAuthenticated()) {
             return $token->getUser();
         }
 
