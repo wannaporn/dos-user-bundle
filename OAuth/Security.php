@@ -3,6 +3,7 @@
 namespace DoS\UserBundle\OAuth;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -66,6 +67,10 @@ class Security
         $token = $this->getToken();
 
         if ($token instanceof TokenInterface) {
+            if ($token instanceof AnonymousToken || $token->getUser() === 'anon.') {
+                return;
+            }
+
             return $token->getUser();
         }
 

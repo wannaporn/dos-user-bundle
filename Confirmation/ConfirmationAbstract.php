@@ -3,6 +3,7 @@
 namespace DoS\UserBundle\Confirmation;
 
 use Doctrine\Common\Persistence\ObjectManager;
+use DoS\UserBundle\Confirmation\Exception\InvalidTokenResendTimeException;
 use DoS\UserBundle\Confirmation\Exception\InvalidTokenTimeException;
 use DoS\UserBundle\Confirmation\Exception\NotFoundTokenSubjectException;
 use Sylius\Component\Storage\StorageInterface;
@@ -100,6 +101,22 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
     /**
      * {@inheritdoc}
      */
+    public function getTokenResendTimeAware()
+    {
+        return $this->options['token_resend_time_aware'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTargetChannel()
+    {
+        return $this->options['channel_path'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function resetOptions(array $options)
     {
         $resolver = new OptionsResolver();
@@ -178,10 +195,9 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
      */
     public function getConstraint(FormInterface $form)
     {
-        $path = $this->getChannelObjectPath();
+        $path = $this->getObjectPath();
 
         foreach ($form->getErrors(true) as $error) {
-
             $class = get_class($error->getCause()->getConstraint());
             $classConstraint = 'Sylius\Bundle\UserBundle\Validator\Constraints\RegisteredUser';
             $classConfig = $this->options['channel_constraint_class'];
@@ -195,13 +211,13 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
             }
         }
 
-        return null;
+        return;
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
-    protected function getChannelObjectPath()
+    public function getObjectPath()
     {
         $paths = explode('.', $this->options['channel_path']);
 
@@ -242,11 +258,11 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
     public function getTokenTimeAware(ConfirmationSubjectInterface $subject)
     {
         if (null === $timeAware = $this->options['token_time_aware']) {
-            return null;
+            return;
         }
 
         if (!$time = $subject->getConfirmationRequestedAt()) {
-            return null;
+            return;
         }
 
         $time->add(\DateInterval::createFromDateString($timeAware));
@@ -271,7 +287,7 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
     /**
      * {@inheritdoc}
      */
-    public function canResend(ConfirmationSubjectInterface $subject)
+    public function canResend(ConfirmationSubjectInterface $subject, $throwException = false)
     {
         if ($subject->isConfirmationConfirmed()) {
             return false;
@@ -287,7 +303,17 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
 
         $time->add(\DateInterval::createFromDateString($timeAware));
 
-        return $time->getTimestamp() >= (new \DateTime())->getTimestamp();
+        $valid = $time->getTimestamp() >= (new \DateTime())->getTimestamp();
+
+        if (false === $valid && $throwException === true) {
+            $exception = new InvalidTokenResendTimeException();
+            $exception->setTime($time);
+            $exception->setTimeAware($timeAware);
+
+            throw $exception;
+        }
+
+        return $valid;
     }
 
     /**
@@ -332,11 +358,11 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
                  * What's error constraint we used for catch exception.
                  */
                 'channel_constraint_class' => 'Sylius\Bundle\UserBundle\Validator\Constraints\RegisteredUser',
-                /**
+                /*
                  * Using when not found any route.
                  */
                 'routing_failback' => 'route_homepage',
-                /**
+                /*
                  * Using for redirection when duplicated registration.
                  */
                 'routing_confirmation' => null,
@@ -357,7 +383,7 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
 
     /**
      * @param ConfirmationSubjectInterface $subject
-     * @param string $token
+     * @param string                       $token
      */
     abstract protected function sendToken(
         ConfirmationSubjectInterface $subject,
@@ -366,7 +392,7 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
 
     /**
      * @param ConfirmationSubjectInterface $subject
-     * @param array $options
+     * @param array                        $options
      *
      * @return true
      */

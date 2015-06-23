@@ -28,14 +28,15 @@ interface ConfirmationInterface
 
     /**
      * @param ConfirmationSubjectInterface $subject
+     * @param boolean $throwException
      *
      * @return bool
      */
-    public function canResend(ConfirmationSubjectInterface $subject);
+    public function canResend(ConfirmationSubjectInterface $subject, $throwException = false);
 
     /**
      * @param string $token
-     * @param array $options
+     * @param array  $options
      *
      * @return ConfirmationSubjectInterface
      *
@@ -52,6 +53,7 @@ interface ConfirmationInterface
 
     /**
      * @param FormInterface $form
+     *
      * @return null|FormError|FormErrorIterator
      */
     public function getConstraint(FormInterface $form);
@@ -60,6 +62,12 @@ interface ConfirmationInterface
      * @return string
      */
     public function getTokenSendTemplate();
+
+    /**
+     * @return string
+     * @see http://php.net/manual/en/dateinterval.createfromdatestring.php
+     */
+    public function getTokenResendTimeAware();
 
     /**
      * @return string
@@ -74,6 +82,16 @@ interface ConfirmationInterface
     /**
      * @return string
      */
+    public function getTargetChannel();
+
+    /**
+     * @return string
+     */
+    public function getObjectPath();
+
+    /**
+     * @return string
+     */
     public function getConfirmRoute();
 
     /**
@@ -83,6 +101,7 @@ interface ConfirmationInterface
 
     /**
      * @param ConfirmationSubjectInterface $subject
+     *
      * @return \DateTime|null
      */
     public function getTokenTimeAware(ConfirmationSubjectInterface $subject);

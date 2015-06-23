@@ -35,6 +35,9 @@ services:
 
     dos.user.confirmation.sender.otp:
         class: %dos.user.confirmation.sender.otp.class%
+        arguments:
+            - @dos.sms.sender
+            - @twig
 
     dos.user.confirmation.email:
         class: %dos.user.confirmation.email.class%

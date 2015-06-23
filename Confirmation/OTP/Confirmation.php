@@ -20,13 +20,13 @@ class Confirmation extends ConfirmationAbstract
             throw new NotFoundChannelException();
         }
 
+        $verify = $this->tokenProvider->generateUniqueToken();
+
         $this->sender->send(
             $this->options['token_send_template'],
             array($mobile),
-            array('subject' => $subject, 'token' => $token)
+            array('subject' => $subject, 'token' => $token, 'verify' => $verify)
         );
-
-        $verify = $this->tokenProvider->generateUniqueToken();
 
         /** @var OneTimePasswordInterface $otp */
         $otp = new $this->options['otp_class']();

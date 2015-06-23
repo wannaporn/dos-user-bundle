@@ -4,13 +4,14 @@ namespace DoS\UserBundle\Controller;
 
 use DoS\UserBundle\Confirmation\ConfirmationInterface;
 use DoS\UserBundle\Confirmation\Exception\ConfirmationException;
-use DoS\UserBundle\Confirmation\Exception\InvalidTokenVerifyException;
-use DoS\UserBundle\Confirmation\Exception\TokenConfirmedException;
+use DoS\UserBundle\Model\CustomerInterface;
 use DoS\UserBundle\Model\UserInterface;
+use libphonenumber\PhoneNumberUtil;
 use Sylius\Bundle\UserBundle\Controller\UserController as BaseUserController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class UserController extends BaseUserController
 {
@@ -36,7 +37,6 @@ class UserController extends BaseUserController
      */
     public function resetPasswordAction(Request $request)
     {
-
     }
 
     /**
@@ -56,23 +56,54 @@ class UserController extends BaseUserController
 
     public function resendAction(Request $request)
     {
+        $token = $request->get('token');
+        $email = $request->get('email');
+        $mobile = $request->get('mobile');
+        $username = $request->get('username');
+
         $confirmation = $this->getConfirmationService();
-        $token = $request->get('token') ?: $confirmation->getStoredToken();
-        $subject = $confirmation->findSubject($token);
+        $customerEr = $this->get('dos.repository.customer');
+        $userEr = $this->get('dos.repository.user');
 
-        // TODO: may find subject by `email`, `mobile` ??
+        switch (true) {
+            case !empty($email):
+                $subject = $customerEr->findOneBy(array('email' => $email));
+                break;
 
-        try {
-            if ($confirmation->canResend($subject)) {
-                $confirmation->send($subject);
-            }
-        } catch (\Exception $e) {
-            \Kint::dump($e);exit;
+            case !empty($mobile):
+                $number = PhoneNumberUtil::getInstance()->parse($mobile, 'TH');
+                $subject = $customerEr->findOneBy(array('mobile' => $number));
+                break;
+
+            case !empty($username):
+                $subject = $userEr->findOneBy(array('username' => $username));
+                break;
+
+            default:
+                $token = $token ?: $confirmation->getStoredToken();
+                $subject = $confirmation->findSubject($token);
+                break;
         }
 
-        return $this->redirectToRoute($confirmation->getConfirmRoute());
+        $error = array();
 
-        //return $this->confirmationAction($request);
+        try {
+            if (empty($subject)) {
+                throw new NotFoundHttpException('Not found subject for confirmation.');
+            }
+
+            if ($subject instanceof CustomerInterface) {
+                $subject = $subject->getUser();
+            }
+
+            $confirmation->canResend($subject, true);
+            $confirmation->send($subject);
+        } catch (\Exception $e) {
+            // Nothing to do.
+            $error['message'] = $e->getMessage();
+        }
+
+        return $this->redirectToRoute($confirmation->getConfirmRoute(), $error);
     }
 
     public function confirmationAction(Request $request)
@@ -122,6 +153,7 @@ class UserController extends BaseUserController
 
     /**
      * @return ConfirmationInterface|null
+     *
      * @throws \Exception
      */
     protected function getConfirmationService()
