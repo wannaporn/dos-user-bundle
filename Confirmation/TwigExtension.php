@@ -43,7 +43,7 @@ class TwigExtension extends \Twig_Extension
      */
     public function getConstraint(FormView $formView)
     {
-        if ($this->service) {
+        if ($this->service = $this->factory->createActivedConfirmation(false)) {
             /** @var FormErrorIterator $errors */
             $errors = $formView->vars['errors'];
 
