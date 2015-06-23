@@ -47,11 +47,9 @@ class TwigExtension extends \Twig_Extension
     }
 
     /**
-     * @param FormView $formView
-     *
-     * @return null|FormError|FormErrorIterator
+     * @return null|string
      */
-    public function getActivedType(FormView $formView)
+    public function getActivedType()
     {
         if ($actived = $this->factory->createActivedConfirmation(false)) {
 
