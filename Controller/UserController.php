@@ -5,10 +5,12 @@ namespace DoS\UserBundle\Controller;
 use DoS\UserBundle\Confirmation\ConfirmationInterface;
 use DoS\UserBundle\Confirmation\Exception\ConfirmationException;
 use DoS\UserBundle\Model\UserInterface;
+use libphonenumber\PhoneNumberUtil;
 use Sylius\Bundle\UserBundle\Controller\UserController as BaseUserController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class UserController extends BaseUserController
 {
@@ -68,7 +70,8 @@ class UserController extends BaseUserController
                 break;
 
             case !empty($mobile):
-                $subject = $customerEr->findOneBy(array('mobile' => $mobile));
+                $number = PhoneNumberUtil::getInstance()->parse($mobile, 'TH');
+                $subject = $customerEr->findOneBy(array('mobile' => $number));
                 break;
 
             case !empty($username):
@@ -81,14 +84,21 @@ class UserController extends BaseUserController
                 break;
         }
 
+        $error = array();
+
         try {
+            if (empty($subject)) {
+                throw new NotFoundHttpException('Not found subject for confirmation.');
+            }
+
             $confirmation->canResend($subject, true);
             $confirmation->send($subject);
         } catch (\Exception $e) {
             // Nothing to do.
+            $error['message'] = $e->getMessage();
         }
 
-        return $this->redirectToRoute($confirmation->getConfirmRoute());
+        return $this->redirectToRoute($confirmation->getConfirmRoute(), $error);
 
         //return $this->confirmationAction($request);
     }
