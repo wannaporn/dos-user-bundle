@@ -82,6 +82,11 @@ interface ConfirmationInterface
     /**
      * @return string
      */
+    public function getTargetChannel();
+
+    /**
+     * @return string
+     */
     public function getConfirmRoute();
 
     /**

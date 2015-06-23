@@ -108,6 +108,14 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
     /**
      * {@inheritdoc}
      */
+    public function getTargetChannel()
+    {
+        return $this->options['channel_path'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function resetOptions(array $options)
     {
         $resolver = new OptionsResolver();
