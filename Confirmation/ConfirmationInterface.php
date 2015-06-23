@@ -87,6 +87,11 @@ interface ConfirmationInterface
     /**
      * @return string
      */
+    public function getObjectPath();
+
+    /**
+     * @return string
+     */
     public function getConfirmRoute();
 
     /**

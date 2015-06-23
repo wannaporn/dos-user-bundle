@@ -194,7 +194,7 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
      */
     public function getConstraint(FormInterface $form)
     {
-        $path = $this->getChannelObjectPath();
+        $path = $this->getObjectPath();
 
         foreach ($form->getErrors(true) as $error) {
             $class = get_class($error->getCause()->getConstraint());
@@ -214,9 +214,9 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
-    protected function getChannelObjectPath()
+    public function getObjectPath()
     {
         $paths = explode('.', $this->options['channel_path']);
 

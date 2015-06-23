@@ -21,7 +21,6 @@ class TwigExtension extends \Twig_Extension
     public function __construct(ConfirmationFactory $factory)
     {
         $this->factory = $factory;
-        $this->service = $factory->createActivedConfirmation(false);
     }
 
     /**
@@ -33,6 +32,7 @@ class TwigExtension extends \Twig_Extension
             new \Twig_SimpleFunction('ui_confirmation_type', array($this, 'getActivedType')),
             new \Twig_SimpleFunction('ui_confirmation_constraint', array($this, 'getConstraint')),
             new \Twig_SimpleFunction('ui_confirmation_target_path', array($this, 'getTargetChannel')),
+            new \Twig_SimpleFunction('ui_confirmation_object_path', array($this, 'getObjectPath')),
         );
     }
 
@@ -58,7 +58,7 @@ class TwigExtension extends \Twig_Extension
      */
     public function getActivedType()
     {
-        if ($this->service) {
+        if ($this->service = $this->factory->createActivedConfirmation(false)) {
             return $this->service->getType();
         }
 
@@ -70,8 +70,20 @@ class TwigExtension extends \Twig_Extension
      */
     public function getTargetChannel()
     {
-        if ($this->service) {
+        if ($this->service = $this->factory->createActivedConfirmation(false)) {
             return $this->service->getTargetChannel();
+        }
+
+        return;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getObjectPath()
+    {
+        if ($this->service = $this->factory->createActivedConfirmation(false)) {
+            return $this->service->getObjectPath();
         }
 
         return;
