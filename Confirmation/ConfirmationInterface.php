@@ -28,10 +28,11 @@ interface ConfirmationInterface
 
     /**
      * @param ConfirmationSubjectInterface $subject
+     * @param boolean $throwException
      *
      * @return bool
      */
-    public function canResend(ConfirmationSubjectInterface $subject);
+    public function canResend(ConfirmationSubjectInterface $subject, $throwException = false);
 
     /**
      * @param string $token
@@ -61,6 +62,12 @@ interface ConfirmationInterface
      * @return string
      */
     public function getTokenSendTemplate();
+
+    /**
+     * @return string
+     * @see http://php.net/manual/en/dateinterval.createfromdatestring.php
+     */
+    public function getTokenResendTimeAware();
 
     /**
      * @return string

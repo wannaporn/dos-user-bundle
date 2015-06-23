@@ -82,9 +82,8 @@ class UserController extends BaseUserController
         }
 
         try {
-            if ($confirmation->canResend($subject)) {
-                $confirmation->send($subject);
-            }
+            $confirmation->canResend($subject, true);
+            $confirmation->send($subject);
         } catch (\Exception $e) {
             // Nothing to do.
         }

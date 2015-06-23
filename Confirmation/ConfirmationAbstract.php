@@ -100,6 +100,14 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
     /**
      * {@inheritdoc}
      */
+    public function getTokenResendTimeAware()
+    {
+        return $this->options['token_resend_time_aware'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function resetOptions(array $options)
     {
         $resolver = new OptionsResolver();
@@ -270,7 +278,7 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
     /**
      * {@inheritdoc}
      */
-    public function canResend(ConfirmationSubjectInterface $subject)
+    public function canResend(ConfirmationSubjectInterface $subject, $throwException = false)
     {
         if ($subject->isConfirmationConfirmed()) {
             return false;
@@ -286,7 +294,17 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
 
         $time->add(\DateInterval::createFromDateString($timeAware));
 
-        return $time->getTimestamp() >= (new \DateTime())->getTimestamp();
+        $valid = $time->getTimestamp() >= (new \DateTime())->getTimestamp();
+
+        if (false === $valid && $throwException === true) {
+            $exception = new InvalidTokenResendTimeException();
+            $exception->setTime($time);
+            $exception->setTimeAware($timeAware);
+
+            throw $exception;
+        }
+
+        return $valid;
     }
 
     /**
