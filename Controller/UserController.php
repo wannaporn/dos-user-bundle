@@ -4,6 +4,7 @@ namespace DoS\UserBundle\Controller;
 
 use DoS\UserBundle\Confirmation\ConfirmationInterface;
 use DoS\UserBundle\Confirmation\Exception\ConfirmationException;
+use DoS\UserBundle\Model\CustomerInterface;
 use DoS\UserBundle\Model\UserInterface;
 use libphonenumber\PhoneNumberUtil;
 use Sylius\Bundle\UserBundle\Controller\UserController as BaseUserController;
@@ -89,6 +90,10 @@ class UserController extends BaseUserController
         try {
             if (empty($subject)) {
                 throw new NotFoundHttpException('Not found subject for confirmation.');
+            }
+
+            if ($subject instanceof CustomerInterface) {
+                $subject = $subject->getUser();
             }
 
             $confirmation->canResend($subject, true);
