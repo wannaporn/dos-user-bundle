@@ -3,6 +3,7 @@
 namespace DoS\UserBundle\Confirmation;
 
 use Doctrine\Common\Persistence\ObjectManager;
+use DoS\UserBundle\Confirmation\Exception\InvalidTokenResendTimeException;
 use DoS\UserBundle\Confirmation\Exception\InvalidTokenTimeException;
 use DoS\UserBundle\Confirmation\Exception\NotFoundTokenSubjectException;
 use Sylius\Component\Storage\StorageInterface;
