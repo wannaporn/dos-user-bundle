@@ -16,6 +16,7 @@
         "liverbool/dos-resource-bundle": "0.15.*@dev",
         "sylius/storage": "0.15.*@dev",
         "sylius/rbac-bundle": "0.15.*@dev",
+        "sylius/user": "0.15.*@dev",
         "sylius/user-bundle": "0.15.*@dev",
         "symfony/form": "~2.7"
     },
