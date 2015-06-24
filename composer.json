@@ -17,7 +17,7 @@
         "sylius/storage": "0.15.*@dev",
         "sylius/rbac-bundle": "0.15.*@dev",
         "sylius/user-bundle": "0.15.*@dev",
-        "symfony/form": "~2.7 <3.0"
+        "symfony/form": "~2.7"
     },
     "require-dev": {
         "liil/kint": "1.0",
