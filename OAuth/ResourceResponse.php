@@ -13,7 +13,7 @@ class ResourceResponse extends PathUserResponse
     {
         parent::setResponse($response);
 
-        if ($this->response) {
+        if (count($this->response)) {
             $keys = array_keys($this->response);
             $this->setPaths(array_combine($keys, $keys));
         }

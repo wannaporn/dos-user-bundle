@@ -10,6 +10,7 @@
     ],
     "minimum-stability": "dev",
     "require": {
+        "doctrine/orm": "~2.4",
         "hwi/oauth-bundle": "~0.3",
         "liverbool/dos-mailer-bundle": "0.15.*@dev",
         "liverbool/dos-settings-bundle": "0.15.*@dev",
@@ -17,7 +18,8 @@
         "sylius/storage": "0.15.*@dev",
         "sylius/rbac-bundle": "0.15.*@dev",
         "sylius/user-bundle": "0.15.*@dev",
-        "symfony/form": "~2.7"
+        "symfony/form": "~2.7",
+        "symfony/validator": "~2.7"
     },
     "require-dev": {
         "liil/kint": "1.0",

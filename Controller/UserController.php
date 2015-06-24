@@ -49,7 +49,7 @@ class UserController extends BaseUserController
      */
     public function searchAction(Request $request)
     {
-        return parent::indexAction($request);
+        return $this->indexAction($request);
     }
 
     /**
@@ -110,11 +110,9 @@ class UserController extends BaseUserController
     }
 
     /**
-     * @param Request $request
-     * 
      * @return Response
      */
-    public function confirmationAction(Request $request)
+    public function confirmationAction()
     {
         $confirmation = $this->getConfirmationService();
         $token = $confirmation->getStoredToken(/*TODO: true*/);

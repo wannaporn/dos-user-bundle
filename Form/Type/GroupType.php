@@ -19,7 +19,6 @@ class GroupType extends AbstractResourceType
             ->add('name', 'text', array(
                 'label' => 'ui.trans.group.form.name',
             ))
-            //->add('color', 'text', array('label' => 'ui.trans.colors.form.label', 'required' => false))
         ;
     }
 
