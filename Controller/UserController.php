@@ -16,6 +16,18 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class UserController extends BaseUserController
 {
     /**
+     * @param $key
+     * @param array $parameters
+     * @param null  $domain
+     *
+     * @return string
+     */
+    private function trans($key, $parameters = array(), $domain = null)
+    {
+        return $this->get('translator')->trans($key, $parameters, $domain);
+    }
+
+    /**
      * @param Request $request
      *
      * @return RedirectResponse
@@ -24,19 +36,10 @@ class UserController extends BaseUserController
     {
         /** @var UserInterface $resource */
         $resource = $this->findOr404($request);
-        $resource->setEnabled((bool)$request->query->get('state'));
+        $resource->setEnabled((bool) $request->query->get('state'));
         $this->domainManager->update($resource);
 
         return $this->redirectHandler->redirectToReferer();
-    }
-
-    /**
-     * @param Request $request
-     *
-     * @return RedirectResponse
-     */
-    public function resetPasswordAction(Request $request)
-    {
     }
 
     /**
@@ -49,11 +52,11 @@ class UserController extends BaseUserController
         return parent::indexAction($request);
     }
 
-    protected function trans($key, $parameters = array(), $domain = null)
-    {
-        return $this->get('translator')->trans($key, $parameters, $domain);
-    }
-
+    /**
+     * @param Request $request
+     *
+     * @return RedirectResponse
+     */
     public function resendAction(Request $request)
     {
         $token = $request->get('token');

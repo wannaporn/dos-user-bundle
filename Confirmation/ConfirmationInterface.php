@@ -28,7 +28,7 @@ interface ConfirmationInterface
 
     /**
      * @param ConfirmationSubjectInterface $subject
-     * @param boolean $throwException
+     * @param bool                         $throwException
      *
      * @return bool
      */
@@ -65,6 +65,7 @@ interface ConfirmationInterface
 
     /**
      * @return string
+     *
      * @see http://php.net/manual/en/dateinterval.createfromdatestring.php
      */
     public function getTokenResendTimeAware();
