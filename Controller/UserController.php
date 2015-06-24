@@ -109,6 +109,11 @@ class UserController extends BaseUserController
         return $this->redirectToRoute($confirmation->getConfirmRoute(), $error);
     }
 
+    /**
+     * @param Request $request
+     * 
+     * @return Response
+     */
     public function confirmationAction(Request $request)
     {
         $confirmation = $this->getConfirmationService();
@@ -132,6 +137,12 @@ class UserController extends BaseUserController
         return $this->handleView($view->setData($data));
     }
 
+    /**
+     * @param Request $request
+     * @param string $token
+     *
+     * @return Response
+     */
     public function verificationAction(Request $request, $token)
     {
         $confirmation = $this->getConfirmationService();
