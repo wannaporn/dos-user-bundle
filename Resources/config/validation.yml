@@ -3,7 +3,7 @@ DoS\UserBundle\Model\User:
         - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
             message: ui.trans.user.username.unique
             fields: [username]
-            groups: [Default, registration]
+            groups: [dos, dos_registration]
 
     properties:
         file:
@@ -11,29 +11,29 @@ DoS\UserBundle\Model\User:
                 #mimeTypesMessage: ui.trans.user.avatar.invalid_mime_type
                 maxSize: 10M
                 #maxSizeMessage: ui.trans.user.avatar.invalid_max_size
-                groups: [Profile]
+                groups: [dos]
 
 DoS\UserBundle\Model\Customer:
     constraints:
         - Sylius\Bundle\UserBundle\Validator\Constraints\RegisteredUser:
             message: ui.trans.profile.registered
-            groups: [registration]
+            groups: [dos_registration]
 
     properties:
         mobile:
             - Misd\PhoneNumberBundle\Validator\Constraints\PhoneNumber:
                 defaultRegion: TH
                 message: ui.trans.customer.mobile.invalid
-                groups: [Default, registration]
+                groups: [dos]
 
 DoS\UserBundle\Model\OneTimePassword:
     properties:
         token:
             - NotBlank:
                 message: ui.trans.user.otp.token.blank
-                groups: [Default]
+                groups: [dos]
 
         verify:
             - NotBlank:
                 message: ui.trans.user.otp.verify.blank
-                groups: [Default]
+                groups: [dos]

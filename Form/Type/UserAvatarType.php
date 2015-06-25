@@ -1,22 +1,20 @@
 <?php
 
-namespace DoS\UserBundle\Form\Type;
+namespace Sylius\Bundle\UserBundle\Form\Type;
 
-use Sylius\Bundle\UserBundle\Form\Type\GroupType as BaseGroupType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Sylius\Bundle\ResourceBundle\Form\Type\AbstractResourceType;
 
-class GroupType extends BaseGroupType
+class UserAvatarType extends AbstractResourceType
 {
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        parent::buildForm($builder, $options);
-
         $builder
-            ->add('color', 'text', array(
-                'label' => 'ui.trans.group.form.color.label',
+            ->add('file', 'file', array(
+                'label' => 'ui.trans.user.form.avatar',
                 'required' => false,
             ))
         ;
@@ -27,6 +25,6 @@ class GroupType extends BaseGroupType
      */
     public function getName()
     {
-        return 'dos_group';
+        return 'dos_user_avatar';
     }
 }

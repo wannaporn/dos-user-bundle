@@ -40,6 +40,6 @@ class RegistrationType extends CustomerRegistrationType
      */
     public function getName()
     {
-        return 'dos_user_registration';
+        return 'dos_registration';
     }
 }

@@ -14,10 +14,7 @@ class ProfileType extends CustomerProfileType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('file', 'file', array(
-                'label' => 'ui.trans.profile.form.avatar',
-                'required' => false,
-            ))
+            ->add('user', 'dos_user_avatar')
             ->add('mobile', 'tel', array(
                 'label' => 'ui.trans.profile.form.mobile',
                 'required' => false,

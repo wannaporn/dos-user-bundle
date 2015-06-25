@@ -48,7 +48,9 @@ class Configuration extends AbstractResourceConfiguration
                 ),
             ),
             'validation_groups' => array(
-                'otp' => array('Default'),
+                'registration' => array('dos', 'dos_registration', 'sylius', 'sylius_user_registration'),
+                'user_avatar' => array('dos'),
+                'otp' => array('dos'),
             ),
         ));
 
@@ -65,15 +67,6 @@ class Configuration extends AbstractResourceConfiguration
                         ->arrayNode('types')
                             ->useAttributeAsKey('name')
                             ->prototype('variable')
-                            /*->addDefaultsIfNotSet()
-                            ->children()
-                                ->arrayNode('email')
-                                    ->children()
-                                        ->scalarNode('subject_class')->cannotBeEmpty()->end()
-                                        ->scalarNode('xxx')->cannotBeEmpty()->end()
-                                    ->end()
-                                ->end()
-                            ->end()*/
                         ->end()
                     ->end()
                 ->end()
