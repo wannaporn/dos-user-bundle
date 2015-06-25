@@ -15,7 +15,7 @@ services:
     dos.listener.user_aware:
         class: %dos.listener.user_aware.class%
         arguments:
-            - @service_container
+            - @dos.user.security
         tags:
             - {name: doctrine.event_subscriber, connection: default}
 
