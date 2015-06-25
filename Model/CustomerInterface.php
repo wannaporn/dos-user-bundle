@@ -16,4 +16,9 @@ interface CustomerInterface extends BaseCustomerInterface
      * @param PhoneNumber $mobile
      */
     public function setMobile(PhoneNumber $mobile = null);
+
+    /**
+     * @return UserInterface
+     */
+    public function getUser();
 }
