@@ -2,21 +2,24 @@
 
 namespace DoS\UserBundle\Form\Type;
 
-use Sylius\Bundle\UserBundle\Form\Type\CustomerProfileType;
+use Sylius\Bundle\UserBundle\Form\Type\CustomerProfileType as BaseCustomerProfileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class ProfileType extends CustomerProfileType
+class CustomerProfileType extends BaseCustomerProfileType
 {
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        parent::buildForm($builder, $options);
+
         $builder
             ->add('user', 'dos_user_avatar')
+
             ->add('mobile', 'tel', array(
-                'label' => 'ui.trans.profile.form.mobile',
+                'label' => 'ui.trans.customer.form.mobile',
                 'required' => false,
                 'default_region' => $options['phone_default_region'],
             ))
@@ -38,6 +41,6 @@ class ProfileType extends CustomerProfileType
      */
     public function getName()
     {
-        return 'dos_user_profile';
+        return 'dos_customer_profile';
     }
 }

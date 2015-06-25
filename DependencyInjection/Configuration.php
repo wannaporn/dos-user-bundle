@@ -49,6 +49,7 @@ class Configuration extends AbstractResourceConfiguration
             ),
             'validation_groups' => array(
                 'registration' => array('dos', 'dos_registration', 'sylius', 'sylius_user_registration'),
+                'profile' => array('dos', 'sylius', 'sylius_customer_profile'),
                 'user_avatar' => array('dos'),
                 'otp' => array('dos'),
             ),

@@ -17,7 +17,7 @@ DoS\UserBundle\Model\Customer:
     constraints:
         - Sylius\Bundle\UserBundle\Validator\Constraints\RegisteredUser:
             message: ui.trans.profile.registered
-            groups: [dos_registration]
+            groups: [dos, dos_registration]
 
     properties:
         mobile:

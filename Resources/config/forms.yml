@@ -26,13 +26,13 @@ services:
         tags:
             - {name: form.type, alias: dos_user_avatar}
 
-    dos.form.type.user_profile:
-        class: DoS\UserBundle\Form\Type\ProfileType
+    dos.form.type.customer_profile:
+        class: DoS\UserBundle\Form\Type\CustomerProfileType
         arguments:
             - %dos.model.user.class%
-            - %sylius.validation_group.customer_profile%
+            - %sylius.validation_group.profile%
         tags:
-            - {name: form.type, alias: dos_user_profile}
+            - {name: form.type, alias: dos_customer_profile}
 
     dos.form.listener.user_confirmation:
         class: DoS\UserBundle\Form\EventListener\ConfirmationFormListener
