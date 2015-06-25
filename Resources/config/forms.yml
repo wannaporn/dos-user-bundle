@@ -19,7 +19,7 @@ services:
             - {name: form.type, alias: dos_registration}
 
     dos.form.type.user_avatar:
-        class: DoS\UserBundle\Form\Type\UserAvatar
+        class: DoS\UserBundle\Form\Type\UserAvatarType
         arguments:
             - %dos.model.user.class%
             - %dos.validation_group.user_avatar%
@@ -30,7 +30,7 @@ services:
         class: DoS\UserBundle\Form\Type\CustomerProfileType
         arguments:
             - %dos.model.user.class%
-            - %sylius.validation_group.profile%
+            - %dos.validation_group.profile%
         tags:
             - {name: form.type, alias: dos_customer_profile}
 

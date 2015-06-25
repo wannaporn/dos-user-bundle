@@ -1,6 +1,6 @@
 <?php
 
-namespace Sylius\Bundle\UserBundle\Form\Type;
+namespace DoS\UserBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use Sylius\Bundle\ResourceBundle\Form\Type\AbstractResourceType;
