@@ -11,7 +11,7 @@ services:
     dos.form.type.user_reistration:
         class: DoS\UserBundle\Form\Type\RegistrationType
         arguments:
-            - %dos.model.user.class%
+            - %dos.model.customer.class%
             - %dos.validation_group.registration%
             - @dos.repository.customer
             - @dos.form.listener.user_confirmation
