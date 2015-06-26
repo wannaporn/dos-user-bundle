@@ -46,12 +46,16 @@ class UserConfirmationListener
     {
         $customer = $args->getObject();
 
-        if (!$customer instanceof CustomerInterface) {
-            throw new UnexpectedTypeException($customer, CustomerInterface::class);
+        if (null === $customer || !$customer instanceof CustomerInterface) {
+            return;
+        }
+
+        if (!$user = $customer->getUser()) {
+            return;
         }
 
         if ($confirmation = $this->getFactory()->createActivedConfirmation()) {
-            $confirmation->send($customer->getUser());
+            $confirmation->send($user);
         }
     }
 
