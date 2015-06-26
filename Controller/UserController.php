@@ -137,7 +137,7 @@ class UserController extends BaseUserController
 
     /**
      * @param Request $request
-     * @param string $token
+     * @param string  $token
      *
      * @return Response
      */

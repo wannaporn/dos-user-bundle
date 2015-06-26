@@ -7,7 +7,6 @@ use DoS\UserBundle\Confirmation\ConfirmationFactory;
 use DoS\UserBundle\Model\CustomerInterface;
 use Sylius\Component\Resource\Exception\UnexpectedTypeException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\Routing\RouterInterface;
