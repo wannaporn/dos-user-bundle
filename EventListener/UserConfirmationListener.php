@@ -2,9 +2,9 @@
 
 namespace DoS\UserBundle\EventListener;
 
+use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use DoS\UserBundle\Confirmation\ConfirmationFactory;
 use DoS\UserBundle\Model\CustomerInterface;
-use DoS\UserBundle\Model\UserInterface;
 use Sylius\Component\Resource\Exception\UnexpectedTypeException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
@@ -40,21 +40,27 @@ class UserConfirmationListener
         return $this->container->get('router');
     }
 
-    public function confirmRequest(GenericEvent $event)
+    /**
+     * @param LifecycleEventArgs $args
+     */
+    public function postPersist(LifecycleEventArgs $args)
     {
-        /** @var CustomerInterface $subject */
-        $subject = $event->getSubject();
-        $user = $subject->getUser();
+        $customer = $args->getObject();
 
-        if (!$user instanceof UserInterface) {
-            throw new UnexpectedTypeException($user, UserInterface::class);
+        if (!$customer instanceof CustomerInterface) {
+            throw new UnexpectedTypeException($customer, CustomerInterface::class);
         }
 
         if ($confirmation = $this->getFactory()->createActivedConfirmation()) {
-            $confirmation->send($user);
+            $confirmation->send($customer->getUser());
         }
     }
 
+    /**
+     * @param FilterResponseEvent $event
+     *
+     * @throws \Exception
+     */
     public function redirectToConfirmation(FilterResponseEvent $event)
     {
         if (!$event->isMasterRequest()) {
