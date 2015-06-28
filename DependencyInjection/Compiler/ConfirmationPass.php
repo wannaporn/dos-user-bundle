@@ -16,7 +16,7 @@ class ConfirmationPass implements CompilerPassInterface
 
         $definition = $container->findDefinition('dos.user.confirmation.factory');
         $taggedServices = $container->findTaggedServiceIds('dos.user.confirmation');
-        $defaultOptions = $container->getParameter('dos.user.confirmation')['types'];
+        $defaultOptions = $container->getParameter('dos.user.confirmation');
 
         foreach ($taggedServices as $id => $tags) {
             foreach ($tags as $attributes) {
@@ -24,10 +24,10 @@ class ConfirmationPass implements CompilerPassInterface
                 $alias = $attributes['alias'];
                 $definition->addMethodCall('add', array($def));
 
-                if (array_key_exists($alias, $defaultOptions)) {
+                if (array_key_exists($alias, $defaultOptions['types'])) {
                     $container
                         ->findDefinition($id)
-                        ->addMethodCall('resetOptions', array($defaultOptions[$alias]))
+                        ->addMethodCall('resetOptions', array($defaultOptions['types'][$alias]))
                     ;
                 }
             }
