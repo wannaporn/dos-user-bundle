@@ -39,6 +39,7 @@ class DoSUserExtension extends AbstractResourceExtension implements PrependExten
                 ),
                 'user' => array(
                     'model' => $config['classes']['user']['model'],
+                    'controller' => $config['classes']['user']['controller'],
                 ),
                 'user_oauth' => array(
                     'model' => $config['classes']['user_oauth']['model'],

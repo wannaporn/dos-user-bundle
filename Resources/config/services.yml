@@ -12,6 +12,8 @@ parameters:
     dos.user.confirmation.sender.email.class: DoS\UserBundle\Confirmation\Email\Sender
     dos.user.confirmation.sender.otp.class: DoS\UserBundle\Confirmation\OTP\Sender
 
+    dos.controller.security.class: DoS\UserBundle\Controller\SecurityController
+
 services:
     dos.user.security:
         class: %dos.user.security.class%

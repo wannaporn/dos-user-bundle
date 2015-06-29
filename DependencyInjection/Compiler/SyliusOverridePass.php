@@ -16,6 +16,7 @@ class SyliusOverridePass implements CompilerPassInterface
         ;
 
         $container->setParameter('sylius.listener.default_username.class', $class);
+        $container->setParameter('sylius.controller.security.class', '%dos.controller.security.class%');
 
         $container->getDefinition('validator.unique.registered_user')
             ->setClass('DoS\UserBundle\Validator\Constraints\RegisteredUserValidator')
