@@ -144,7 +144,12 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
         );
 
         $this->sendToken($subject, $token);
-        $this->storeSubject($subject);
+
+        if (!$this->isValid) {
+            return;
+        }
+
+        $this->storage->setData(self::STORE_KEY, $subject->getConfirmationToken());
     }
 
     /**
@@ -167,7 +172,8 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
         $subject->confirmationConfirm();
 
         $this->storage->removeData(self::STORE_KEY);
-        $this->storeSubject($subject);
+        $this->manager->persist($subject);
+        $this->manager->flush();
 
         return $subject;
     }
@@ -268,20 +274,6 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
         $time->add(\DateInterval::createFromDateString($timeAware));
 
         return $time;
-    }
-
-    /**
-     * @param ConfirmationSubjectInterface $subject
-     */
-    protected function storeSubject(ConfirmationSubjectInterface $subject)
-    {
-        if (!$this->isValid) {
-            return;
-        }
-
-        $this->manager->persist($subject);
-        $this->manager->flush();
-        $this->storage->setData(self::STORE_KEY, $subject->getConfirmationToken());
     }
 
     /**

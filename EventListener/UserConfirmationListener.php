@@ -42,7 +42,7 @@ class UserConfirmationListener
     /**
      * @param LifecycleEventArgs $args
      */
-    public function postPersist(LifecycleEventArgs $args)
+    public function prePersist(LifecycleEventArgs $args)
     {
         $customer = $args->getObject();
 
