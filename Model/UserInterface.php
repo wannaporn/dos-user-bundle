@@ -12,6 +12,11 @@ use Sylius\Component\User\Model\UserInterface as BaseUserInterface;
 interface UserInterface extends BaseUserInterface, ImageInterface, ConfirmationSubjectInterface
 {
     /**
+     * @return bool
+     */
+    public function isLocked();
+
+    /**
      * @return string
      */
     public function getDisplayName();

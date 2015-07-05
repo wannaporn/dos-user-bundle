@@ -38,6 +38,14 @@ class User extends BaseUser implements UserInterface
     protected $confirmedAt;
 
     /**
+     * @return bool
+     */
+    public function isLocked()
+    {
+        return $this->locked;
+    }
+
+    /**
      * @return string
      */
     public function getDisplayName()
