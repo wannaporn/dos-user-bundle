@@ -4,7 +4,7 @@ route_backend_permission_index:
     defaults:
         _controller: sylius.controller.permission:indexAction
         _sylius:
-            template: ui:package/backend/Permission:index.html.twig
+            template: ui:backend/Permission:index.html.twig
             paginate: false
             sorting:
                 left: asc
@@ -15,16 +15,16 @@ route_backend_permission_create:
     defaults:
         _controller: sylius.controller.permission:createAction
         _sylius:
-            template: ui:package/backend/Permission:create.html.twig
+            template: ui:backend/Permission:create.html.twig
             redirect: route_backend_permission_index
 
 route_backend_permission_update:
     path: /{id}/edit
-    methods: [GET, PUT]
+    methods: [GET, PUT, PATCH]
     defaults:
         _controller: sylius.controller.permission:updateAction
         _sylius:
-            template: ui:package/backend/Permission:update.html.twig
+            template: ui:backend/Permission:update.html.twig
             redirect: route_backend_permission_index
 
 route_backend_permission_delete:

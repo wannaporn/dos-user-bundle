@@ -2,17 +2,17 @@ route_backend_group_index:
     path: /
     methods: [GET]
     defaults:
-        _controller: dos.controller.user_group:indexAction
+        _controller: sylius.controller.user_group:indexAction
         _sylius:
-            template: ui:package/backend/UserGroup:index.html.twig
+            template: ui:backend/UserGroup:index.html.twig
 
 route_backend_group_create:
     path: /new
     methods: [GET, POST]
     defaults:
-        _controller: dos.controller.user_group:createAction
+        _controller: sylius.controller.user_group:createAction
         _sylius:
-            template: ui:package/backend/UserGroup:create.html.twig
+            template: ui:backend/UserGroup:create.html.twig
             redirect: route_backend_group_index
             sortable: true
 
@@ -22,9 +22,9 @@ route_backend_group_update:
     requirements:
         id: \d+
     defaults:
-        _controller: dos.controller.user_group:updateAction
+        _controller: sylius.controller.user_group:updateAction
         _sylius:
-            template: ui:package/backend/UserGroup:update.html.twig
+            template: ui:backend/UserGroup:update.html.twig
             redirect: route_backend_group_index
 
 route_backend_group_delete:
@@ -33,7 +33,6 @@ route_backend_group_delete:
     requirements:
         id: \d+
     defaults:
-        _controller: dos.controller.user_group:deleteAction
+        _controller: sylius.controller.user_group:deleteAction
         _sylius:
-            template: ui:package/backend/Misc:delete.html.twig
             redirect: route_backend_group_index

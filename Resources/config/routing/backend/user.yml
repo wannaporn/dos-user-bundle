@@ -2,9 +2,9 @@ route_backend_user_index:
     path: /
     methods: [GET]
     defaults:
-        _controller: dos.controller.user:indexAction
+        _controller: sylius.controller.user:indexAction
         _sylius:
-            template: ui:package/backend/User:index.html.twig
+            template: ui:backend/User:index.html.twig
             method: createFilterPaginator
             arguments: [$criteria, $sorting, $deleted]
             sortable: true
@@ -13,9 +13,9 @@ route_backend_user_create:
     path: /new
     methods: [GET, POST]
     defaults:
-        _controller: dos.controller.user:createAction
+        _controller: sylius.controller.user:createAction
         _sylius:
-            template: ui:package/backend/User:create.html.twig
+            template: ui:backend/User:create.html.twig
             redirect: route_backend_user_update
 
 route_backend_user_update:
@@ -24,9 +24,9 @@ route_backend_user_update:
     requirements:
         id: \d+
     defaults:
-        _controller: dos.controller.user:updateAction
+        _controller: sylius.controller.user:updateAction
         _sylius:
-            template: ui:package/backend/User:update.html.twig
+            template: ui:backend/User:update.html.twig
             redirect: referer
             method: findForDetailsPage
             arguments: [$id]
@@ -37,7 +37,7 @@ route_backend_user_change_state:
     requirements:
         id: \d+
     defaults:
-        _controller: dos.controller.user:changeStateAction
+        _controller: sylius.controller.user:changeStateAction
 
 route_backend_user_reset_password:
     path: /{id}/reset-password
@@ -45,10 +45,10 @@ route_backend_user_reset_password:
     requirements:
         id: \d+
     defaults:
-        _controller: dos.controller.user:resetPasswordAction
+        _controller: sylius.controller.user:resetPasswordAction
         _sylius:
             redirect: referer
-            template: ui:package/backend/User:resetPassword.html.twig
+            template: ui:backend/User:resetPassword.html.twig
 
 route_backend_user_delete:
     path: /{id}
@@ -56,6 +56,6 @@ route_backend_user_delete:
     requirements:
         id: \d+
     defaults:
-        _controller: dos.controller.user:deleteAction
+        _controller: sylius.controller.user:deleteAction
         _sylius:
             redirect: route_backend_user_index

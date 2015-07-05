@@ -4,7 +4,7 @@ route_backend_role_index:
     defaults:
         _controller: sylius.controller.role:indexAction
         _sylius:
-            template: ui:package/backend/Role:index.html.twig
+            template: ui:backend/Role:index.html.twig
             paginate: false
             sorting:
                 left: asc
@@ -15,16 +15,16 @@ route_backend_role_create:
     defaults:
         _controller: sylius.controller.role:createAction
         _sylius:
-            template: ui:package/backend/Role:create.html.twig
+            template: ui:backend/Role:create.html.twig
             redirect: route_backend_role_index
 
 route_backend_role_update:
     path: /{id}/edit
-    methods: [GET, PUT]
+    methods: [GET, PUT, PATCH]
     defaults:
         _controller: sylius.controller.role:updateAction
         _sylius:
-            template: ui:package/backend/Role:update.html.twig
+            template: ui:backend/Role:update.html.twig
             redirect: route_backend_role_index
 
 route_backend_role_delete:
