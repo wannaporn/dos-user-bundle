@@ -11,7 +11,6 @@ DoS\UserBundle\Model\User:
         displayname:
             expose: true
             type: string
-
-        email:
-            expose: true
-            type: string
+            accessor:
+                getter: getDisplayname
+                setter: setDisplayName
