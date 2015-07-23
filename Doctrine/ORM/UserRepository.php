@@ -2,14 +2,14 @@
 
 namespace DoS\UserBundle\Doctrine\ORM;
 
-use DoS\ResourceBundle\Doctrine\ORM\EntityRepository;
 use DoS\UserBundle\Model\UserInterface;
 use Pagerfanta\PagerfantaInterface;
+use Sylius\Bundle\UserBundle\Doctrine\ORM\UserRepository as BaseUserRepository;
 
 /**
  * User repository.
  */
-class UserRepository extends EntityRepository
+class UserRepository extends BaseUserRepository
 {
     /**
      * Create filter paginator.
@@ -151,5 +151,15 @@ class UserRepository extends EntityRepository
         ;
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * @param UserInterface|null $user
+     *
+     * @return UserInterface|null
+     */
+    public function findUserByUser(UserInterface $user = null)
+    {
+        return $user;
     }
 }

@@ -28,8 +28,9 @@ route_backend_user_update:
         _sylius:
             template: ui:backend/User:update.html.twig
             redirect: referer
-            method: findForDetailsPage
-            arguments: [$id]
+            repository:
+                method: findForDetailsPage
+                arguments: [$id]
 
 route_backend_user_change_state:
     path: /{id}/change-state
