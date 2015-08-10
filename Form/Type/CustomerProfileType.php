@@ -32,6 +32,8 @@ class CustomerProfileType extends BaseCustomerProfileType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
+        parent::setDefaultOptions($resolver);
+
         $resolver->setDefaults(array(
             'phone_default_region' => 'TH',
         ));
