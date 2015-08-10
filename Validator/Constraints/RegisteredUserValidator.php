@@ -9,8 +9,8 @@ use Symfony\Component\Validator\ConstraintValidator;
 class RegisteredUserValidator extends ConstraintValidator
 {
     public $message;
-    public $messageEmail;
-    public $messageMobile;
+    public $emailMessage;
+    public $mobileMessage;
 
     /**
      * @var RepositoryInterface
@@ -37,7 +37,7 @@ class RegisteredUserValidator extends ConstraintValidator
                 && null !== $existingEmail->getUser()
                 && $existingEmail->getId() !== $customer->getId()
             ) {
-                $this->context->addViolationAt('email', $constraint->messageEmail ?: $constraint->message, array(), null);
+                $this->context->addViolationAt('email', $constraint->emailMessage ?: $constraint->message, array(), null);
             }
         }
 
@@ -48,7 +48,7 @@ class RegisteredUserValidator extends ConstraintValidator
                 && null !== $existingMobile->getUser()
                 && $existingMobile->getId() !== $customer->getId()
             ) {
-                $this->context->addViolationAt('mobile', $constraint->messageMobile ?: $con->messageMobile, array(), null);
+                $this->context->addViolationAt('mobile', $constraint->mobileMessage ?: $con->message, array(), null);
             }
         }
     }
