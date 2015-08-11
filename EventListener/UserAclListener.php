@@ -22,7 +22,7 @@ class UserAclListener
 
     public function postPersist(LifecycleEventArgs $args)
     {
-        if (!$this->container->has('problematic.acl_manager')) {
+        if (!$this->container->has('oneup_acl.manager')) {
             return;
         }
 
@@ -30,7 +30,7 @@ class UserAclListener
 
         // explicitly
         if ($object instanceof UserAclOwnerAwareInterface && $object->getAclOwner()) {
-            $this->container->get('problematic.acl_manager')
+            $this->container->get('oneup_acl.manager')
                 ->addObjectPermission($object, MaskBuilder::MASK_OWNER, $object->getAclOwner())
             ;
         }
@@ -39,7 +39,7 @@ class UserAclListener
         if ($object instanceof UserAwareInterface
             && !$object instanceof UserAclOwnerAwareInterface
             && $object->getUser()) {
-            $this->container->get('problematic.acl_manager')
+            $this->container->get('oneup_acl.manager')
                 ->addObjectPermission($object, MaskBuilder::MASK_OWNER, $object->getUser())
             ;
         }
