@@ -30,7 +30,7 @@ class SecurityController extends BaseSecurityController
      */
     protected function checkAlreadyLogin(Request $request)
     {
-        if ($this->get('dos.user.security')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+        if ($this->get('dos.user.security')->isLoggedIn()) {
             if ($this->alreadyLoginUrl) {
                 return $this->redirect($this->alreadyLoginUrl);
             }

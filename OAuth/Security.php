@@ -87,4 +87,12 @@ class Security
     {
         return $this->getAuthenChecker()->isGranted($attributes, $object);
     }
+
+    /**
+     * @return bool
+     */
+    public function isLoggedIn()
+    {
+        return $this->isGranted('IS_AUTHENTICATED_REMEMBERED');
+    }
 }
