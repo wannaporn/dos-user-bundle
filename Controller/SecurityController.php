@@ -14,6 +14,16 @@ class SecurityController extends BaseSecurityController
     protected $alreadyLoginRoute;
 
     /**
+     * @var string
+     */
+    protected $alreadyLoginUrl;
+
+    /**
+     * @var string
+     */
+    protected $firewallName = 'main';
+
+    /**
      * @param Request $request
      *
      * @return RedirectResponse|void
@@ -21,11 +31,15 @@ class SecurityController extends BaseSecurityController
     protected function checkAlreadyLogin(Request $request)
     {
         if ($this->get('dos.user.security')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            if ($this->alreadyLoginUrl) {
+                return $this->redirect($this->alreadyLoginUrl);
+            }
+
             if ($this->alreadyLoginRoute) {
                 return $this->redirectToRoute($this->alreadyLoginRoute);
             }
 
-            return $this->redirect($request->getUriForPath('/'));
+            return $this->redirect($request->headers->get('referer', $request->getUriForPath('/')));
         }
 
         return;
@@ -38,6 +52,11 @@ class SecurityController extends BaseSecurityController
     {
         if ($response = $this->checkAlreadyLogin($request)) {
             return $response;
+        }
+
+        $key = sprintf('_security.%s.target_path', $this->firewallName);
+        if (!$request->getSession()->has($key)) {
+            $request->getSession()->set($key, $request->headers->get('referer'));
         }
 
         return parent::loginAction($request);
