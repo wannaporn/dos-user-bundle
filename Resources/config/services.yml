@@ -60,3 +60,10 @@ services:
             - @sylius.user.pin_provider
         tags:
             - {name: dos.user.confirmation, alias: otp}
+
+    dos.user.validator.registration:
+        class: DoS\UserBundle\Validator\Constraints\RegisteredUserValidator
+        arguments:
+            - @dos.repository.customer
+        tags:
+            - { name: validator.constraint_validator, alias: dos_user_registration_validator }
