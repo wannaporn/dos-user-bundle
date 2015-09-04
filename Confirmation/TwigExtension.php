@@ -2,6 +2,7 @@
 
 namespace DoS\UserBundle\Confirmation;
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormErrorIterator;
 use Symfony\Component\Form\FormView;
@@ -9,18 +10,21 @@ use Symfony\Component\Form\FormView;
 class TwigExtension extends \Twig_Extension
 {
     /**
-     * @var ConfirmationFactory
-     */
-    protected $factory;
-
-    /**
      * @var ConfirmationInterface
      */
     protected $service;
 
-    public function __construct(ConfirmationFactory $factory)
+    public function __construct(ContainerInterface $container)
     {
-        $this->factory = $factory;
+        $this->container = $container;
+    }
+
+    /**
+     * @return ConfirmationFactory
+     */
+    private function getFactory()
+    {
+        return $this->container->get('dos.user.confirmation.factory');
     }
 
     /**
@@ -43,7 +47,7 @@ class TwigExtension extends \Twig_Extension
      */
     public function getConstraint(FormView $formView)
     {
-        if ($this->service = $this->factory->createActivedConfirmation(false)) {
+        if ($this->service = $this->getFactory()->createActivedConfirmation(false)) {
             /** @var FormErrorIterator $errors */
             $errors = $formView->vars['errors'];
 
@@ -58,7 +62,7 @@ class TwigExtension extends \Twig_Extension
      */
     public function getActivedType()
     {
-        if ($this->service = $this->factory->createActivedConfirmation(false)) {
+        if ($this->service = $this->getFactory()->createActivedConfirmation(false)) {
             return $this->service->getType();
         }
 
@@ -70,7 +74,7 @@ class TwigExtension extends \Twig_Extension
      */
     public function getTargetChannel()
     {
-        if ($this->service = $this->factory->createActivedConfirmation(false)) {
+        if ($this->service = $this->getFactory()->createActivedConfirmation(false)) {
             return $this->service->getTargetChannel();
         }
 
@@ -82,7 +86,7 @@ class TwigExtension extends \Twig_Extension
      */
     public function getObjectPath()
     {
-        if ($this->service = $this->factory->createActivedConfirmation(false)) {
+        if ($this->service = $this->getFactory()->createActivedConfirmation(false)) {
             return $this->service->getObjectPath();
         }
 

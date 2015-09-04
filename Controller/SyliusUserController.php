@@ -17,7 +17,7 @@ class SyliusUserController extends UserController
     private function checkRedirection($response)
     {
         if ($response instanceof RedirectResponse) {
-            return $response->setTargetUrl($this->generateUrl($this->config->getRedirectReferer()));
+            return $response->setTargetUrl($this->generateUrl($this->config->getRedirectRoute('config_me')));
         }
 
         return $response;
@@ -29,10 +29,10 @@ class SyliusUserController extends UserController
     protected function generateResetPasswordRequestUrl($token)
     {
         if (is_numeric($token)) {
-            return $this->generateUrl($this->config->getRedirectReferer());
+            return $this->generateUrl($this->config->getRedirectRoute('config_me'));
         }
 
-        return $this->generateUrl($this->config->getRedirectReferer());
+        return $this->generateUrl($this->config->getRedirectRoute('config_me'));
     }
 
     /**
@@ -40,6 +40,7 @@ class SyliusUserController extends UserController
      */
     protected function handleResetPasswordRequest(TokenProviderInterface $generator, UserInterface $user, $senderEvent)
     {
+        // TODO: check time before re-submit request, should be time aware to send request
         return $this->checkRedirection(parent::handleResetPasswordRequest($generator, $user, $senderEvent));
     }
 

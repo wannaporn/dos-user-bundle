@@ -13,6 +13,6 @@ services:
     dos.user.twig.user_confirmation:
         class: %dos.user.twig.user_confirmation.class%
         arguments:
-            - @dos.user.confirmation.factory
+            - @service_container
         tags:
             - {name: twig.extension}

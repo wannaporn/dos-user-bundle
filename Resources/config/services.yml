@@ -33,7 +33,8 @@ services:
 
     dos.user.confirmation.sender.email:
         class: %dos.user.confirmation.sender.email.class%
-        parent: sylius.email_sender
+        arguments:
+            - @sylius.email_sender
 
     dos.user.confirmation.sender.otp:
         class: %dos.user.confirmation.sender.otp.class%

@@ -18,3 +18,7 @@ route_user_security_logout:
     methods: [GET, POST]
     defaults:
         _controller: sylius.controller.security:logoutAction
+
+# provent not found route
+sylius_route_security:
+    resource: "@SyliusUserBundle/Resources/config/routing/security.yml"
