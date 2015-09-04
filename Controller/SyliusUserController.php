@@ -1,6 +1,6 @@
 <?php
 
-namespace Dos\UserBundle\Controller;
+namespace DoS\UserBundle\Controller;
 
 use Sylius\Bundle\UserBundle\Controller\UserController;
 use Sylius\Component\User\Model\UserInterface;
