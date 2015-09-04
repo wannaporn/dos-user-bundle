@@ -7,13 +7,12 @@ use DoS\UserBundle\Confirmation\Exception\ConfirmationException;
 use DoS\UserBundle\Model\CustomerInterface;
 use DoS\UserBundle\Model\UserInterface;
 use libphonenumber\PhoneNumberUtil;
-use Sylius\Bundle\UserBundle\Controller\UserController as BaseUserController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class UserController extends BaseUserController
+class UserController extends SyliusUserController
 {
     /**
      * @param $key
