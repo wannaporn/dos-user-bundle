@@ -1,0 +1,27 @@
+route_account_profile_show:
+    path: /
+    methods: [GET]
+    defaults:
+        _controller: sylius.controller.customer:showProfileAction
+        _sylius:
+            template: ui:security:showProfile.html.twig
+
+route_account_profile_update:
+    path: /profile/edit
+    methods: [GET, POST]
+    defaults:
+        _controller: sylius.controller.customer:updateProfileAction
+        _sylius:
+            form: sylius_customer_profile
+            template: ui:security:updateProfile.html.twig
+            redirect: route_account_profile_show
+
+route_account_change_password:
+    path: /change-password
+    methods: [GET, POST]
+    defaults:
+        _controller: sylius.controller.user:changePasswordAction
+        _sylius:
+            form: sylius_user_change_password
+            template: ui:security:changePassword.html.twig
+            redirect: route_account_profile_show
