@@ -150,6 +150,9 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
             return;
         }
 
+        $this->manager->persist($subject);
+        $this->manager->flush();
+
         $this->storage->setData(self::STORE_KEY, $subject->getConfirmationToken());
     }
 

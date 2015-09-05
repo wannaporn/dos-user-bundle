@@ -24,5 +24,5 @@ services:
         arguments:
             - @service_container
         tags:
-            - {name: doctrine.event_listener, event: prePersist, priority: -256}
+            - {name: kernel.event_listener, event: sylius.customer.post_register, method: sendConfirmation, priority: -256}
             - {name: kernel.event_listener, event: kernel.response, method: redirectToConfirmation}

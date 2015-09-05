@@ -114,7 +114,7 @@ class UserController extends SyliusUserController
     public function confirmationAction()
     {
         $confirmation = $this->getConfirmationService();
-        $token = $confirmation->getStoredToken(/*TODO: true*/);
+        $token = $confirmation->getStoredToken(true);
         $view = $this->view(null, 200)->setTemplate($confirmation->getTokenConfirmTemplate());
 
         $data = array(

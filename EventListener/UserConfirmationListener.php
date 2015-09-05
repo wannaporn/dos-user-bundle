@@ -2,10 +2,9 @@
 
 namespace DoS\UserBundle\EventListener;
 
-use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use DoS\UserBundle\Confirmation\ConfirmationFactory;
 use DoS\UserBundle\Model\CustomerInterface;
-use Sylius\Component\Resource\Exception\UnexpectedTypeException;
+use Sylius\Component\Resource\Event\ResourceEvent;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
@@ -40,11 +39,11 @@ class UserConfirmationListener
     }
 
     /**
-     * @param LifecycleEventArgs $args
+     * @param ResourceEvent $event
      */
-    public function prePersist(LifecycleEventArgs $args)
+    public function sendConfirmation(ResourceEvent $event)
     {
-        $customer = $args->getObject();
+        $customer = $event->getSubject();
 
         if (null === $customer || !$customer instanceof CustomerInterface) {
             return;
