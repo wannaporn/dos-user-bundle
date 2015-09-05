@@ -285,4 +285,20 @@ class User extends BaseUser implements UserInterface
     {
         $this->confirmationType = $confirmationType;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function confirmationDisableAccess()
+    {
+        $this->enabled = false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function confirmationEnableAccess()
+    {
+        $this->enabled = true;
+    }
 }

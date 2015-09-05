@@ -138,6 +138,7 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
      */
     public function send(ConfirmationSubjectInterface $subject)
     {
+        $subject->confirmationDisableAccess();
         $subject->setConfirmationType($this->getType());
         $subject->confirmationRequest(
             $token = $this->tokenProvider->generateUniqueToken()
@@ -170,6 +171,7 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
         }
 
         $subject->confirmationConfirm();
+        $subject->confirmationEnableAccess();
 
         $this->storage->removeData(self::STORE_KEY);
         $this->manager->persist($subject);

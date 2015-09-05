@@ -30,4 +30,6 @@ interface ConfirmationSubjectInterface
     public function confirmationRequest($token);
 
     public function confirmationConfirm();
+    public function confirmationDisableAccess();
+    public function confirmationEnableAccess();
 }
