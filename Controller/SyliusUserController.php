@@ -40,7 +40,6 @@ class SyliusUserController extends UserController
      */
     protected function handleResetPasswordRequest(TokenProviderInterface $generator, UserInterface $user, $senderEvent)
     {
-        // TODO: check time before re-submit request, should be time aware to send request
         return $this->checkRedirection(parent::handleResetPasswordRequest($generator, $user, $senderEvent));
     }
 

@@ -22,7 +22,6 @@ services:
     dos.listener.user_confirmation:
         class: %dos.listener.user_confirmation.class%
         arguments:
-            - @service_container
+            - @dos.user.confirmation.factory
         tags:
             - {name: kernel.event_listener, event: sylius.customer.post_register, method: sendConfirmation, priority: -256}
-            - {name: kernel.event_listener, event: kernel.response, method: redirectToConfirmation}

@@ -10,32 +10,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 class RegistrationType extends CustomerRegistrationType
 {
     /**
-     * @var ConfirmationFormListener
-     */
-    protected $confirmationListener;
-
-    public function __construct(
-        $dataClass,
-        array $validationGroups = array(),
-        RepositoryInterface $customerRepository,
-        ConfirmationFormListener $confirmationListener
-    ) {
-        parent::__construct($dataClass, $validationGroups, $customerRepository);
-
-        $this->confirmationListener = $confirmationListener;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function buildForm(FormBuilderInterface $builder, array $options)
-    {
-        parent::buildForm($builder, $options);
-
-        $builder->addEventSubscriber($this->confirmationListener);
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function getName()

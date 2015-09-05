@@ -5,6 +5,7 @@ namespace DoS\UserBundle\Confirmation;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormErrorIterator;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 interface ConfirmationInterface
 {
@@ -28,21 +29,25 @@ interface ConfirmationInterface
 
     /**
      * @param ConfirmationSubjectInterface $subject
-     * @param bool                         $throwException
      *
      * @return bool
      */
-    public function canResend(ConfirmationSubjectInterface $subject, $throwException = false);
+    public function canResend(ConfirmationSubjectInterface $subject);
 
     /**
+     * @param Request $request
      * @param string $token
-     * @param array  $options
      *
-     * @return ConfirmationSubjectInterface
-     *
-     * @throws \Exception
+     * @return FormInterface
      */
-    public function verify($token, array $options = array());
+    public function verify(Request $request, $token);
+
+    /**
+     * @param Request $request
+     *
+     * @return FormInterface
+     */
+    public function resend(Request $request);
 
     /**
      * @param bool $clear
@@ -72,13 +77,20 @@ interface ConfirmationInterface
 
     /**
      * @return string
+     * @deprecated
      */
     public function getTokenConfirmTemplate();
 
     /**
      * @return string
+     * @deprecated
      */
     public function getTokenVerifyTemplate();
+
+    /**
+     * @return string
+     */
+    public function getConfirmationResendTemplate();
 
     /**
      * @return string
@@ -105,17 +117,34 @@ interface ConfirmationInterface
      *
      * @return \DateTime|null
      */
-    public function getTokenTimeAware(ConfirmationSubjectInterface $subject);
+    public function getTokenTimeAware(ConfirmationSubjectInterface $subject = null);
 
     /**
      * @param $token
      *
      * @return ConfirmationSubjectInterface
      */
-    public function findSubject($token);
+    public function findSubjectWithToken($token);
+
+    /**
+     * @param $value
+     *
+     * @return ConfirmationSubjectInterface
+     */
+    public function findSubject($value);
 
     /**
      * @return string
      */
     public function getType();
+
+    /**
+     * @return FormInterface
+     */
+    public function createResendForm();
+
+    /**
+     * @return FormInterface
+     */
+    public function createVerifyForm();
 }

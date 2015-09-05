@@ -4,9 +4,13 @@ namespace DoS\UserBundle\Confirmation\OTP;
 
 use DoS\UserBundle\Confirmation\ConfirmationAbstract;
 use DoS\UserBundle\Confirmation\ConfirmationSubjectInterface;
-use DoS\UserBundle\Confirmation\Exception\InvalidTokenVerifyException;
 use DoS\UserBundle\Confirmation\Exception\NotFoundChannelException;
+use DoS\UserBundle\Confirmation\Model\OtpResend;
+use DoS\UserBundle\Confirmation\Model\OtpVerification;
+use DoS\UserBundle\Confirmation\Model\VerificationInterface;
 use DoS\UserBundle\Model\OneTimePasswordInterface;
+use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class Confirmation extends ConfirmationAbstract
@@ -40,24 +44,42 @@ class Confirmation extends ConfirmationAbstract
     /**
      * {@inheritdoc}
      */
-    protected function verifyToken(ConfirmationSubjectInterface $subject, array $options = array())
+    public function verify(Request $request, $token)
     {
-        if (empty($options['verifier'])) {
-            throw new InvalidTokenVerifyException();
+        $form = $this->createVerifyForm();
+
+        /** @var VerificationInterface $data */
+        $data = $form->getData();
+        $data->setToken($token);
+
+        if (in_array($request->getMethod(), array('POST', 'PUT', 'PATCH'))) {
+            $form->submit($request, !$request->isMethod('PATCH'));
+
+            $data->setSubject($this->findSubjectWithToken($data->getToken()));
+
+            if (!$form->isValid()) {
+                return $form;
+            }
+
+            if (!$this->validateTimeAware($subject = $data->getSubject())) {
+                $form->addError(new FormError('ui.trans.user.confirmation.verify.invalid_time'));
+            }
+
+            if (!$otp = $this->findOtp($data->getSubject())) {
+                $form->addError(new FormError('ui.trans.user.confirmation.verify.invalid_token'));
+            }
+
+            if ($otp->getVerify() !== $data->getVerifyValue()) {
+                $form->addError(new FormError('ui.trans.user.confirmation.verify.invalid_otp'));
+            }
+
+            if (!$form->getErrors(true)->count()) {
+                $otp->setConfirmed(true);
+                $this->successVerify($subject);
+            }
         }
 
-        if (!$otp = $this->findOtp($subject)) {
-            throw new InvalidTokenVerifyException();
-        }
-
-        if ($otp->getVerify() !== $options['verifier']) {
-            throw new InvalidTokenVerifyException();
-        }
-
-        $otp->setConfirmed(true);
-        $this->manager->persist($otp);
-
-        return true;
+        return $form;
     }
 
     /**
@@ -85,7 +107,25 @@ class Confirmation extends ConfirmationAbstract
         $resolver->setDefaults(array(
             'otp_class' => 'DoS\UserBundle\Model\OneTimePassword',
             'channel_path' => 'customer.mobile',
+            'token_resend_form' => 'dos_resend_confirmation_otp',
+            'token_verify_form' => 'dos_verification_otp',
         ));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getResendModel()
+    {
+        return new OtpResend();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getVerifyModel()
+    {
+        return new OtpVerification();
     }
 
     /**

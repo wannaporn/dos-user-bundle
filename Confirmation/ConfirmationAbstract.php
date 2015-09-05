@@ -3,12 +3,19 @@
 namespace DoS\UserBundle\Confirmation;
 
 use Doctrine\Common\Persistence\ObjectManager;
+use DoS\UserBundle\Confirmation\Exception\ConfirmationException;
 use DoS\UserBundle\Confirmation\Exception\InvalidTokenResendTimeException;
 use DoS\UserBundle\Confirmation\Exception\InvalidTokenTimeException;
+use DoS\UserBundle\Confirmation\Exception\NotFoundChannelException;
 use DoS\UserBundle\Confirmation\Exception\NotFoundTokenSubjectException;
+use DoS\UserBundle\Confirmation\Model\ResendInterface;
+use DoS\UserBundle\Confirmation\Model\VerificationInterface;
 use Sylius\Component\Storage\StorageInterface;
 use Sylius\Component\User\Security\TokenProviderInterface;
+use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 abstract class ConfirmationAbstract implements ConfirmationInterface
@@ -34,6 +41,11 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
     protected $sender;
 
     /**
+     * @var FormFactoryInterface
+     */
+    protected $formFactory;
+
+    /**
      * @var array
      */
     protected $options = array();
@@ -48,12 +60,14 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
         SenderInterface $sender,
         StorageInterface $storage,
         TokenProviderInterface $tokenProvider,
+        FormFactoryInterface $formFactory,
         array $options = array()
     ) {
         $this->manager = $manager;
         $this->storage = $storage;
         $this->tokenProvider = $tokenProvider;
         $this->sender = $sender;
+        $this->formFactory = $formFactory;
 
         $this->resetOptions($options);
     }
@@ -80,6 +94,14 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
     public function getTokenConfirmTemplate()
     {
         return $this->options['token_confirm_template'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getConfirmationResendTemplate()
+    {
+        return $this->options['token_resend_template'];
     }
 
     /**
@@ -159,28 +181,38 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
     /**
      * {@inheritdoc}
      */
-    public function verify($token, array $options = array())
+    public function resend(Request $request)
     {
-        $subject = $this->findSubject($token);
+        $form = $this->createResendForm();
+        $data = $form->getData();
 
-        if (!$this->validateTimeAware($subject)) {
-            throw new InvalidTokenTimeException();
+        if (in_array($request->getMethod(), array('POST', 'PUT', 'PATCH'))) {
+            $form->submit($request, !$request->isMethod('PATCH'));
+            $data->setSubject($this->findSubject($data->getSubjectValue()));
+
+            if (!$form->isValid()) {
+                return $form;
+            }
+
+            try {
+                $this->canResend($data->getSubject());
+                $this->send($data->getSubject());
+            } catch (\Exception $e) {
+                $form->addError(new FormError($e->getMessage()));
+            }
         }
 
-        try {
-            $this->verifyToken($subject, $options);
-        } catch (\Exception $e) {
-            throw $e;
-        }
+        return $form;
+    }
 
+    protected function successVerify(ConfirmationSubjectInterface $subject)
+    {
         $subject->confirmationConfirm();
         $subject->confirmationEnableAccess();
 
         $this->storage->removeData(self::STORE_KEY);
         $this->manager->persist($subject);
         $this->manager->flush();
-
-        return $subject;
     }
 
     /**
@@ -238,12 +270,34 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
     /**
      * {@inheritdoc}
      */
-    public function findSubject($token)
+    public function findSubjectWithToken($token)
     {
+        if (empty($token)) {
+            return null;
+        }
+
         $er = $this->manager->getRepository($this->options['subject_class']);
 
         if (!$subject = $er->findOneBy(array($this->options['token_property_path'] => $token))) {
-            throw new NotFoundTokenSubjectException();
+            return null;
+        }
+
+        return $subject;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findSubject($value)
+    {
+        if (empty($value)) {
+            return null;
+        }
+
+        $er = $this->manager->getRepository($this->options['subject_class']);
+
+        if (!$subject = $er->findOneBy(array($this->getObjectPath() => $value))) {
+            return null;
         }
 
         return $subject;
@@ -266,9 +320,9 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
     /**
      * {@inheritdoc}
      */
-    public function getTokenTimeAware(ConfirmationSubjectInterface $subject)
+    public function getTokenTimeAware(ConfirmationSubjectInterface $subject = null)
     {
-        if (null === $timeAware = $this->options['token_time_aware']) {
+        if (null === $subject || null === $timeAware = $this->options['token_time_aware']) {
             return;
         }
 
@@ -284,7 +338,7 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
     /**
      * {@inheritdoc}
      */
-    public function canResend(ConfirmationSubjectInterface $subject, $throwException = false)
+    public function canResend(ConfirmationSubjectInterface $subject)
     {
         if ($subject->isConfirmationConfirmed()) {
             return false;
@@ -302,7 +356,7 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
 
         $valid = $time->getTimestamp() >= (new \DateTime())->getTimestamp();
 
-        if (false === $valid && $throwException === true) {
+        if (false === $valid) {
             $exception = new InvalidTokenResendTimeException();
             $exception->setTime($time);
             $exception->setTimeAware($timeAware);
@@ -311,6 +365,22 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
         }
 
         return $valid;
+    }
+
+    public function createResendForm()
+    {
+        return $this->formFactory->create(
+            $this->options['token_resend_form'],
+            $this->getResendModel()
+        );
+    }
+
+    public function createVerifyForm()
+    {
+        return $this->formFactory->create(
+            $this->options['token_verify_form'],
+            $this->getVerifyModel()
+        );
     }
 
     /**
@@ -341,11 +411,24 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
                  */
                 'token_verify_template' => null,
                 /*
+                 * The resend template.
+                 */
+                'token_resend_template' => null,
+                /*
+                 * The resend form.
+                 */
+                'token_resend_form' => null,
+                /*
+                 * The verify form.
+                 */
+                'token_verify_form' => null,
+                /*
                  * Life time of valid token.
                  * using \DateInterval::createFromDateString()
                  * @link http://php.net/manual/en/dateinterval.createfromdatestring.php
                  */
                 'token_time_aware' => null,
+
                 'token_resend_time_aware' => null,
                 /*
                  * Which the prpoerty path to using as channel.
@@ -373,9 +456,20 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
                 'token_send_template',
                 'token_verify_template',
                 'token_confirm_template',
+                'token_resend_template',
                 'routing_confirmation',
+                'token_resend_form',
+                'token_verify_form',
             )
         );
+    }
+
+    /**
+     * @return string
+     */
+    public function getFormType()
+    {
+        return 'text';
     }
 
     /**
@@ -388,18 +482,17 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
     );
 
     /**
-     * @param ConfirmationSubjectInterface $subject
-     * @param array                        $options
-     *
-     * @return bool
-     */
-    abstract protected function verifyToken(
-        ConfirmationSubjectInterface $subject,
-        array $options = array()
-    );
-
-    /**
      * @return string
      */
     abstract public function getType();
+
+    /**
+     * @return ResendInterface
+     */
+    abstract public function getResendModel();
+
+    /**
+     * @return VerificationInterface
+     */
+    abstract public function getVerifyModel();
 }

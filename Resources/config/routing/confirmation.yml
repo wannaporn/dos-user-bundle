@@ -1,0 +1,20 @@
+route_user_confirmation_confirm:
+    path: /confirm
+    defaults:
+        _controller: sylius.controller.user:confirmationAction
+        _sylius:
+            template: ui:confirmation:confirm.html.twig
+
+route_user_confirmation_resend:
+    path: /resend
+    defaults:
+        _controller: sylius.controller.user:confirmationResendAction
+        _sylius:
+            template: ui:confirmation:resend.html.twig
+
+route_user_confirmation_verify:
+    path: /verify/{token}
+    defaults:
+        _controller: sylius.controller.user:verificationAction
+        _sylius:
+            template: ui:confirmation:verify.html.twig

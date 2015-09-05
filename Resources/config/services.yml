@@ -49,16 +49,13 @@ services:
             - @dos.user.confirmation.sender.email
             - @sylius.storage.session
             - @sylius.user.token_provider
+            - @form.factory
         tags:
             - {name: dos.user.confirmation, alias: email}
 
     dos.user.confirmation.otp:
         class: %dos.user.confirmation.otp.class%
-        arguments:
-            - @dos.manager.user
-            - @dos.user.confirmation.sender.otp
-            - @sylius.storage.session
-            - @sylius.user.pin_provider
+        parent: dos.user.confirmation.email
         tags:
             - {name: dos.user.confirmation, alias: otp}
 

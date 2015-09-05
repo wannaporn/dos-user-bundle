@@ -5,37 +5,17 @@ namespace DoS\UserBundle\EventListener;
 use DoS\UserBundle\Confirmation\ConfirmationFactory;
 use DoS\UserBundle\Model\CustomerInterface;
 use Sylius\Component\Resource\Event\ResourceEvent;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
-use Symfony\Component\Routing\RouterInterface;
 
 class UserConfirmationListener
 {
     /**
-     * @var ContainerInterface
+     * @var ConfirmationFactory
      */
-    protected $container;
+    protected $factory;
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(ConfirmationFactory $factory)
     {
-        $this->container = $container;
-    }
-
-    /**
-     * @return ConfirmationFactory
-     */
-    protected function getFactory()
-    {
-        return $this->container->get('dos.user.confirmation.factory');
-    }
-
-    /**
-     * @return RouterInterface
-     */
-    protected function getRouter()
-    {
-        return $this->container->get('router');
+        $this->factory = $factory;
     }
 
     /**
@@ -53,31 +33,8 @@ class UserConfirmationListener
             return;
         }
 
-        if ($confirmation = $this->getFactory()->createActivedConfirmation()) {
+        if ($confirmation = $this->factory->createActivedConfirmation()) {
             $confirmation->send($user);
-        }
-    }
-
-    /**
-     * @param FilterResponseEvent $event
-     *
-     * @throws \Exception
-     */
-    public function redirectToConfirmation(FilterResponseEvent $event)
-    {
-        if (!$event->isMasterRequest()) {
-            return;
-        }
-
-        $confirmation = $this->getFactory()->createActivedConfirmation();
-        $headers = $event->getRequest()->headers;
-
-        if ($confirmation && $key = $headers->get($confirmation::REDIRECT_HEADER_KEY)) {
-            $headers->remove($confirmation::REDIRECT_HEADER_KEY);
-
-            $event->setResponse(
-                new RedirectResponse($this->getRouter()->generate($key))
-            );
         }
     }
 }
