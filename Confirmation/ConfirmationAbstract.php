@@ -290,7 +290,7 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
 
         $time->add(\DateInterval::createFromDateString($timeAware));
 
-        $valid = $time->getTimestamp() >= (new \DateTime())->getTimestamp();
+        $valid = $time->getTimestamp() <= (new \DateTime())->getTimestamp();
 
         if (false === $valid) {
             $exception = new InvalidTokenResendTimeException();
