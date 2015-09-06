@@ -46,6 +46,7 @@ services:
         class: %dos.user.confirmation.email.class%
         arguments:
             - @dos.manager.user
+            - @dos.repository.user
             - @dos.user.confirmation.sender.email
             - @sylius.storage.session
             - @sylius.user.token_provider

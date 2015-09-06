@@ -50,7 +50,7 @@ class EmailResend implements ResendInterface
     /**
      * {@inheritdoc}
      */
-    public function setSubject(ConfirmationSubjectInterface $subject)
+    public function setSubject(ConfirmationSubjectInterface $subject = null)
     {
         $this->subject = $subject;
     }

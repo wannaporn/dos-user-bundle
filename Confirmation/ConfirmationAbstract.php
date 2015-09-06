@@ -26,6 +26,11 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
     protected $manager;
 
     /**
+     * @var ConfirmationSubjectFinderInterface
+     */
+    protected $finder;
+
+    /**
      * @var StorageInterface
      */
     protected $storage;
@@ -57,6 +62,7 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
 
     public function __construct(
         ObjectManager $manager,
+        ConfirmationSubjectFinderInterface $finder,
         SenderInterface $sender,
         StorageInterface $storage,
         TokenProviderInterface $tokenProvider,
@@ -64,6 +70,7 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
         array $options = array()
     ) {
         $this->manager = $manager;
+        $this->finder = $finder;
         $this->storage = $storage;
         $this->tokenProvider = $tokenProvider;
         $this->sender = $sender;
@@ -294,10 +301,10 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
             return null;
         }
 
-        $er = $this->manager->getRepository($this->options['subject_class']);
-
-        if (!$subject = $er->findOneBy(array($this->getObjectPath() => $value))) {
-            return null;
+        try {
+            $subject = $this->finder->findConfirmationSubject($this->options['channel_path'], $value);
+        } catch (\Exception $e) {
+            $subject = null;
         }
 
         return $subject;

@@ -7,6 +7,7 @@ route_user_confirmation_confirm:
 
 route_user_confirmation_resend:
     path: /resend
+    methods: [GET, POST]
     defaults:
         _controller: sylius.controller.user:confirmationResendAction
         _sylius:

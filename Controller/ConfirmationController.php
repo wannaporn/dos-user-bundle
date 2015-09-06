@@ -34,7 +34,7 @@ class ConfirmationController extends SyliusUserController
     public function confirmationResendAction(Request $request)
     {
         $confirmation = $this->getConfirmationService();
-        $form = $confirmation->createResendForm();
+        $form = $confirmation->resend($request);
 
         $view = $this->view(array(
             'type' => $confirmation->getType(),

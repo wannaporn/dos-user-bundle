@@ -2,18 +2,20 @@
 
 namespace DoS\UserBundle\Doctrine\ORM;
 
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\QueryBuilder;
+use DoS\ResourceBundle\Doctrine\ORM\EntityRepository;
+use DoS\UserBundle\Confirmation\ConfirmationSubjectFinderInterface;
 use DoS\UserBundle\Model\UserInterface;
 use Pagerfanta\PagerfantaInterface;
-use Sylius\Bundle\UserBundle\Doctrine\ORM\UserRepository as BaseUserRepository;
+use Sylius\Component\User\Repository\UserRepositoryInterface;
 
 /**
  * User repository.
  */
-class UserRepository extends BaseUserRepository
+class UserRepository extends EntityRepository implements ConfirmationSubjectFinderInterface, UserRepositoryInterface
 {
     /**
-     * Create filter paginator.
-     *
      * @param array $criteria
      * @param array $sorting
      * @param bool  $deleted
@@ -23,40 +25,20 @@ class UserRepository extends BaseUserRepository
     public function createFilterPaginator($criteria = array(), $sorting = array(), $deleted = false)
     {
         $queryBuilder = parent::getCollectionQueryBuilder();
-        $expr = $queryBuilder->expr();
 
         if ($deleted) {
             $this->_em->getFilters()->disable('softdeleteable');
         }
 
         if (isset($criteria['query'])) {
-            /*if (is_numeric($criteria['query']) && $criteria['query'][0] != '0') {
-                $number = $criteria['query'];
-
-                if (strlen($number) < 9) {
-                    $number = substr('000000000' . $number, -9);
-                }
-
-                $queryBuilder
-                    ->andWhere('o.number = :number')
-                    ->setParameter('number', $number)
-                ;
-            } else {*/
-                $where = $expr->orX(
-                    //$expr->like('o.number', ':query'),
-                    $expr->like('o.username', ':query'),
-                    $expr->like('o.email', ':query'),
-                    $expr->like('o.firstName', ':query'),
-                    $expr->like('o.lastName', ':query')
-                );
-
             $queryBuilder
-                    ->andWhere($where)
-                    ->setParameter('query', '%'.$criteria['query'].'%')
-                ;
-            /*}*/
-
-            unset($criteria['query']);
+                ->leftJoin($this->getAlias().'.customer', 'customer')
+                ->where('customer.emailCanonical LIKE :query')
+                ->orWhere('customer.firstName LIKE :query')
+                ->orWhere('customer.lastName LIKE :query')
+                ->orWhere($this->getAlias().'.username LIKE :query')
+                ->setParameter('query', '%'.$criteria['query'].'%')
+            ;
         }
 
         if (isset($criteria['enabled'])) {
@@ -81,7 +63,7 @@ class UserRepository extends BaseUserRepository
     /**
      * Get the user data for the details page.
      *
-     * @param int $id
+     * @param integer $id
      *
      * @return null|UserInterface
      */
@@ -91,7 +73,9 @@ class UserRepository extends BaseUserRepository
 
         $queryBuilder = $this->getQueryBuilder();
         $queryBuilder
-            ->andWhere($queryBuilder->expr()->eq('o.id', ':id'))
+            ->leftJoin($this->getAlias().'.customer', 'customer')
+            ->addSelect('customer')
+            ->where($queryBuilder->expr()->eq($this->getAlias().'.id', ':id'))
             ->setParameter('id', $id)
         ;
 
@@ -115,6 +99,7 @@ class UserRepository extends BaseUserRepository
     public function countBetweenDates(\DateTime $from, \DateTime $to, $status = null)
     {
         $queryBuilder = $this->getCollectionQueryBuilderBetweenDates($from, $to);
+
         if (null !== $status) {
             $queryBuilder
                 ->andWhere('o.status = :status')
@@ -129,6 +114,69 @@ class UserRepository extends BaseUserRepository
         ;
     }
 
+    /**
+     * @param array $configuration
+     *
+     * @return array
+     */
+    public function getRegistrationStatistic(array $configuration = array())
+    {
+        $groupBy = '';
+
+        foreach ($configuration['groupBy'] as $groupByArray) {
+            $groupBy = $groupByArray.'(date)'.' '.$groupBy;
+        }
+
+        $groupBy = substr($groupBy, 0, -1);
+        $groupBy = str_replace(' ', ', ', $groupBy);
+
+        $queryBuilder = $this->getEntityManager()->getConnection()->createQueryBuilder();
+
+        $queryBuilder
+            ->select('DATE(u.created_at) as date', ' count(u.id) as user_total')
+            ->from('sylius_user', 'u')
+            ->where($queryBuilder->expr()->gte('u.created_at', ':from'))
+            ->andWhere($queryBuilder->expr()->lte('u.created_at', ':to'))
+            ->setParameter('from', $configuration['start']->format('Y-m-d H:i:s'))
+            ->setParameter('to', $configuration['end']->format('Y-m-d H:i:s'))
+            ->groupBy($groupBy)
+            ->orderBy($groupBy)
+        ;
+
+        return $queryBuilder
+            ->execute()
+            ->fetchAll();
+    }
+
+    /**
+     * @param string $email
+     *
+     * @return mixed
+     *
+     * @throws NonUniqueResultException
+     */
+    public function findOneByEmail($email)
+    {
+        $queryBuilder = $this->getQueryBuilder();
+
+        $queryBuilder
+            ->leftJoin($this->getAlias().'.customer', 'customer')
+            ->andWhere($queryBuilder->expr()->eq('customer.emailCanonical', ':email'))
+            ->setParameter('email', $email)
+        ;
+
+        return $queryBuilder
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
+    /**
+     * @param \DateTime $from
+     * @param \DateTime $to
+     *
+     * @return QueryBuilder
+     */
     protected function getCollectionQueryBuilderBetweenDates(\DateTime $from, \DateTime $to)
     {
         $queryBuilder = $this->getCollectionQueryBuilder();
@@ -161,5 +209,36 @@ class UserRepository extends BaseUserRepository
     public function findUserByUser(UserInterface $user = null)
     {
         return $user;
+    }
+
+    /**
+     * @param $propertyPath
+     * @param $value
+     * @return mixed
+     * @throws NonUniqueResultException
+     */
+    public function findConfirmationSubject($propertyPath, $value)
+    {
+        $queryBuilder = $this->getQueryBuilder();
+        $paths = explode('.', $propertyPath);
+
+        // support only 1 step join
+        if (count($paths) > 1) {
+            $queryBuilder
+                ->join($this->getPropertyName($paths[0]), '_p1')
+                ->where('_p1.' . $paths[1] . ' = :value')
+                ->setParameter('value', $value)
+            ;
+        } else {
+            $queryBuilder
+                ->where($this->getPropertyName($propertyPath) . ' = :value')
+                ->setParameter('value', $value)
+            ;
+        }
+
+        return $queryBuilder
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
     }
 }

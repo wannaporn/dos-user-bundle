@@ -18,5 +18,5 @@ interface ResendInterface
     /**
      * @param ConfirmationSubjectInterface $subject
      */
-    public function setSubject(ConfirmationSubjectInterface $subject);
+    public function setSubject(ConfirmationSubjectInterface $subject = null);
 }
