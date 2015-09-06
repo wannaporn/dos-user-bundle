@@ -144,9 +144,12 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
             && $form->handleRequest($request)->isValid()) {
             try {
                 $this->canResend($data->getSubject());
-                $this->send($data->getSubject());
             } catch (\Exception $e) {
                 $form->addError(new FormError($e->getMessage()));
+            }
+
+            if (!$form->getErrors(true)->count()) {
+                $this->send($data->getSubject());
             }
         }
 
@@ -338,6 +341,10 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
                  */
                 'token_verify_form' => null,
                 /*
+                 * The template to send confirmation token.
+                 */
+                'token_send_template' => null,
+                /*
                  * Life time of valid token.
                  * using \DateInterval::createFromDateString()
                  * @link http://php.net/manual/en/dateinterval.createfromdatestring.php
@@ -356,6 +363,7 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
                 'token_property_path',
                 'token_resend_form',
                 'token_verify_form',
+                'token_send_template',
             )
         );
     }
