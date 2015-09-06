@@ -3,18 +3,13 @@
 namespace DoS\UserBundle\Confirmation;
 
 use Doctrine\Common\Persistence\ObjectManager;
-use DoS\UserBundle\Confirmation\Exception\ConfirmationException;
 use DoS\UserBundle\Confirmation\Exception\InvalidTokenResendTimeException;
-use DoS\UserBundle\Confirmation\Exception\InvalidTokenTimeException;
-use DoS\UserBundle\Confirmation\Exception\NotFoundChannelException;
-use DoS\UserBundle\Confirmation\Exception\NotFoundTokenSubjectException;
 use DoS\UserBundle\Confirmation\Model\ResendInterface;
 use DoS\UserBundle\Confirmation\Model\VerificationInterface;
 use Sylius\Component\Storage\StorageInterface;
 use Sylius\Component\User\Security\TokenProviderInterface;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -77,54 +72,6 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
         $this->formFactory = $formFactory;
 
         $this->resetOptions($options);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getTokenSendTemplate()
-    {
-        return $this->options['token_send_template'];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getTokenVerifyTemplate()
-    {
-        return $this->options['token_verify_template'];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getTokenConfirmTemplate()
-    {
-        return $this->options['token_confirm_template'];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getConfirmationResendTemplate()
-    {
-        return $this->options['token_resend_template'];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getConfirmRoute()
-    {
-        return $this->options['routing_confirmation'];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getFailbackRoute()
-    {
-        return $this->options['routing_failback'];
     }
 
     /**
@@ -193,14 +140,8 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
         $form = $this->createResendForm();
         $data = $form->getData();
 
-        if (in_array($request->getMethod(), array('POST', 'PUT', 'PATCH'))) {
-            $form->submit($request, !$request->isMethod('PATCH'));
-            $data->setSubject($this->findSubject($data->getSubjectValue()));
-
-            if (!$form->isValid()) {
-                return $form;
-            }
-
+        if (in_array($request->getMethod(), array('POST', 'PUT', 'PATCH'))
+            && $form->handleRequest($request)->isValid()) {
             try {
                 $this->canResend($data->getSubject());
                 $this->send($data->getSubject());
@@ -243,30 +184,6 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
     /**
      * {@inheritdoc}
      */
-    public function getConstraint(FormInterface $form)
-    {
-        $path = $this->getObjectPath();
-
-        foreach ($form->getErrors(true) as $error) {
-            $class = get_class($error->getCause()->getConstraint());
-            $classConstraint = 'Sylius\Bundle\UserBundle\Validator\Constraints\RegisteredUser';
-            $classConfig = $this->options['channel_constraint_class'];
-
-            if ($error->getOrigin()->getName() === $path
-                && ($class === $classConfig || in_array($classConstraint, class_parents($class)))
-            ) {
-                $this->isValid = false;
-
-                return $error;
-            }
-        }
-
-        return;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getObjectPath()
     {
         $paths = explode('.', $this->options['channel_path']);
@@ -283,10 +200,10 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
             return null;
         }
 
-        $er = $this->manager->getRepository($this->options['subject_class']);
-
-        if (!$subject = $er->findOneBy(array($this->options['token_property_path'] => $token))) {
-            return null;
+        try {
+            $subject = $this->finder->findConfirmationSubject($this->options['token_property_path'], $token);
+        } catch (\Exception $e) {
+            $subject = null;
         }
 
         return $subject;
@@ -308,6 +225,18 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
         }
 
         return $subject;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSubjectValue(ConfirmationSubjectInterface $subject = null)
+    {
+        if (!$subject) {
+            return;
+        }
+
+        return $subject->getConfirmationChannel($this->options['channel_path']);
     }
 
     /**
@@ -398,29 +327,9 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
         $resolver->setDefaults(
             array(
                 /*
-                 * System user entity class.
-                 */
-                'subject_class' => 'DoS\UserBundle\Model\User',
-                /*
                  * The user model property.
                  */
                 'token_property_path' => 'confirmationToken',
-                /*
-                 * The sent template.
-                 */
-                'token_send_template' => null,
-                /*
-                 * The sent template.
-                 */
-                'token_confirm_template' => null,
-                /*
-                 * The verify template.
-                 */
-                'token_verify_template' => null,
-                /*
-                 * The resend template.
-                 */
-                'token_resend_template' => null,
                 /*
                  * The resend form.
                  */
@@ -435,48 +344,21 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
                  * @link http://php.net/manual/en/dateinterval.createfromdatestring.php
                  */
                 'token_time_aware' => null,
-
                 'token_resend_time_aware' => null,
                 /*
                  * Which the prpoerty path to using as channel.
                  */
                 'channel_path' => 'customer.email',
-                /*
-                 * What's error constraint we used for catch exception.
-                 */
-                'channel_constraint_class' => 'Sylius\Bundle\UserBundle\Validator\Constraints\RegisteredUser',
-                /*
-                 * Using when not found any route.
-                 */
-                'routing_failback' => 'route_homepage',
-                /*
-                 * Using for redirection when duplicated registration.
-                 */
-                'routing_confirmation' => null,
             )
         );
 
         $resolver->setRequired(
             array(
-                'subject_class',
                 'token_property_path',
-                'token_send_template',
-                'token_verify_template',
-                'token_confirm_template',
-                'token_resend_template',
-                'routing_confirmation',
                 'token_resend_form',
                 'token_verify_form',
             )
         );
-    }
-
-    /**
-     * @return string
-     */
-    public function getFormType()
-    {
-        return 'text';
     }
 
     /**

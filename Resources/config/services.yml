@@ -1,5 +1,6 @@
 parameters:
-    dos.user.security.class: DoS\UserBundle\OAuth\Security
+    dos.user.security.class: DoS\UserBundle\Security\Security
+    dos.user.security.login.class: DoS\UserBundle\Security\UserLogin
     dos.user.oauth.response.class: DoS\UserBundle\OAuth\ResourceResponse
     dos.user.oauth.response.facebook.class: DoS\UserBundle\OAuth\FacebookResponse
     dos.user.oauth.response.google.class: DoS\UserBundle\OAuth\GoogleResponse

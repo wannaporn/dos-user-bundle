@@ -2,15 +2,12 @@
 
 namespace DoS\UserBundle\Confirmation;
 
-use Symfony\Component\Form\FormError;
-use Symfony\Component\Form\FormErrorIterator;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 interface ConfirmationInterface
 {
     const STORE_KEY = 'user_registration_confirmation_token';
-    const REDIRECT_HEADER_KEY = 'x-user-registration-confirmation-redirect';
 
     /**
      * @param array $options
@@ -57,40 +54,11 @@ interface ConfirmationInterface
     public function getStoredToken($clear = false);
 
     /**
-     * @param FormInterface $form
-     *
-     * @return null|FormError|FormErrorIterator
-     */
-    public function getConstraint(FormInterface $form);
-
-    /**
-     * @return string
-     */
-    public function getTokenSendTemplate();
-
-    /**
      * @return string
      *
      * @see http://php.net/manual/en/dateinterval.createfromdatestring.php
      */
     public function getTokenResendTimeAware();
-
-    /**
-     * @return string
-     * @deprecated
-     */
-    public function getTokenConfirmTemplate();
-
-    /**
-     * @return string
-     * @deprecated
-     */
-    public function getTokenVerifyTemplate();
-
-    /**
-     * @return string
-     */
-    public function getConfirmationResendTemplate();
 
     /**
      * @return string
@@ -101,16 +69,6 @@ interface ConfirmationInterface
      * @return string
      */
     public function getObjectPath();
-
-    /**
-     * @return string
-     */
-    public function getConfirmRoute();
-
-    /**
-     * @return string
-     */
-    public function getFailbackRoute();
 
     /**
      * @param ConfirmationSubjectInterface $subject
@@ -132,6 +90,12 @@ interface ConfirmationInterface
      * @return ConfirmationSubjectInterface
      */
     public function findSubject($value);
+
+    /**
+     * @param ConfirmationSubjectInterface $subject
+     * @return mixed
+     */
+    public function getSubjectValue(ConfirmationSubjectInterface $subject = null);
 
     /**
      * @return string

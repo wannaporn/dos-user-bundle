@@ -35,20 +35,28 @@ services:
 
     dos.form.type.verification:
         class: DoS\UserBundle\Confirmation\Form\Type\VerificationType
+        arguments:
+            - @dos.user.confirmation.email
         tags:
             - {name: form.type, alias: dos_verification}
 
     dos.form.type.verification_otp:
         class: DoS\UserBundle\Confirmation\Form\Type\OtpVerificationType
+        arguments:
+            - @dos.user.confirmation.otp
         tags:
             - {name: form.type, alias: dos_verification_otp}
 
     dos.form.type.resend_confirmation_email:
         class: DoS\UserBundle\Confirmation\Form\Type\EmailResendType
+        arguments:
+            - @dos.user.confirmation.email
         tags:
             - {name: form.type, alias: dos_resend_confirmation_email}
 
     dos.form.type.resend_confirmation_otp:
         class: DoS\UserBundle\Confirmation\Form\Type\OtpResendType
+        arguments:
+            - @dos.user.confirmation.otp
         tags:
             - {name: form.type, alias: dos_resend_confirmation_otp}

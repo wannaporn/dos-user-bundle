@@ -3,14 +3,10 @@
 namespace DoS\UserBundle\Controller;
 
 use DoS\UserBundle\Confirmation\ConfirmationInterface;
-use DoS\UserBundle\Confirmation\Exception\ConfirmationException;
-use DoS\UserBundle\Model\CustomerInterface;
 use DoS\UserBundle\Model\UserInterface;
-use libphonenumber\PhoneNumberUtil;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ConfirmationController extends SyliusUserController
 {
@@ -56,6 +52,7 @@ class ConfirmationController extends SyliusUserController
         $view = $this->view(array(
             'type' => $confirmation->getType(),
             'subject' => $subject,
+            'subjectValue' => $confirmation->getSubjectValue($subject),
             'time_aware' => $confirmation->getTokenTimeAware($subject),
             'resendForm' => $confirmation->createResendForm()->createView(),
             'verifyForm' => $confirmation->createVerifyForm()->createView(),
@@ -74,6 +71,12 @@ class ConfirmationController extends SyliusUserController
     {
         $confirmation = $this->getConfirmationService();
         $form = $confirmation->verify($request, $token);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var UserInterface $user */
+            $user = $form->getData()->getSubject();
+            $this->get('sylius.security.user_login')->login($user);
+        }
 
         $view = $this->view(array(
             'type' => $confirmation->getType(),

@@ -1,0 +1,10 @@
+DoS\UserBundle\Confirmation\Model\EmailVerification:
+    properties:
+
+        subject:
+            - NotBlank:
+                message: ui.trans.user.confirmation.verify.subject.blank
+
+        token:
+            - NotBlank:
+                message: ui.trans.user.confirmation.verify.token.blank

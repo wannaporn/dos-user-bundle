@@ -41,10 +41,7 @@ class Confirmation extends ConfirmationAbstract
         /** @var VerificationInterface $data */
         $data = $form->getData();
         $data->setToken($token);
-
-        $form->submit($request);
-
-        $data->setSubject($this->findSubjectWithToken($data->getToken()));
+        $form->submit($request->query->all());
 
         if (!$form->isValid()) {
             return $form;
@@ -59,6 +56,18 @@ class Confirmation extends ConfirmationAbstract
         }
 
         return $form;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createVerifyForm()
+    {
+        return $this->formFactory->create(
+            $this->options['token_verify_form'],
+            $this->getVerifyModel(),
+            array('csrf_protection' => false)
+        );
     }
 
     /**

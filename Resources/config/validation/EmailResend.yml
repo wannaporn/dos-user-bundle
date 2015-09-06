@@ -1,0 +1,14 @@
+DoS\UserBundle\Confirmation\Model\EmailResend:
+    properties:
+
+        subject:
+            - NotBlank:
+                message: ui.trans.user.confirmation.resend.subject.blank
+
+
+        email:
+            - NotBlank:
+                message: ui.trans.user.confirmation.resend.email.blank
+
+            - Email:
+                message: ui.trans.user.confirmation.resend.email.invalid

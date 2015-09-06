@@ -1,18 +1,10 @@
 parameters:
     dos.user.twig.user_profile.class: DoS\UserBundle\Twig\UserProfile
-    dos.user.twig.user_confirmation.class: DoS\UserBundle\Confirmation\TwigExtension
 
 services:
     dos.user.twig.user_profile:
         class: %dos.user.twig.user_profile.class%
         arguments:
             - @liip_imagine.cache.manager
-        tags:
-            - {name: twig.extension}
-
-    dos.user.twig.user_confirmation:
-        class: %dos.user.twig.user_confirmation.class%
-        arguments:
-            - @service_container
         tags:
             - {name: twig.extension}

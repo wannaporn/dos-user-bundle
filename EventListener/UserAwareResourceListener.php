@@ -4,7 +4,7 @@ namespace DoS\UserBundle\EventListener;
 
 use Doctrine\Common\EventSubscriber;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
-use DoS\UserBundle\OAuth\Security;
+use DoS\UserBundle\Security\Security;
 use DoS\UserBundle\Model\UserUpdaterAwareInterface;
 use DoS\UserBundle\Model\UserAwareInterface;
 use DoS\UserBundle\Model\UserInterface;
