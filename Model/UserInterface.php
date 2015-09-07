@@ -2,14 +2,15 @@
 
 namespace DoS\UserBundle\Model;
 
-use DoS\ResourceBundle\Model\ImageInterface;
+use DoS\CernelBundle\Model\MediaPathAwareInterface;
 use DoS\UserBundle\Confirmation\ConfirmationSubjectInterface;
+use Sylius\Component\Rbac\Model\IdentityInterface;
 use Sylius\Component\User\Model\UserInterface as BaseUserInterface;
 
 /**
  * User interface.
  */
-interface UserInterface extends BaseUserInterface, ImageInterface, ConfirmationSubjectInterface
+interface UserInterface extends BaseUserInterface, MediaPathAwareInterface, ConfirmationSubjectInterface, IdentityInterface
 {
     /**
      * @return bool

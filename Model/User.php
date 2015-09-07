@@ -2,8 +2,11 @@
 
 namespace DoS\UserBundle\Model;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Sylius\Component\Rbac\Model\RoleInterface;
 use Sylius\Component\User\Model\User as BaseUser;
 use Symfony\Component\PropertyAccess\PropertyAccess;
+use Toro\Bundle\CoreBundle\Model\MediaInterface;
 
 class User extends BaseUser implements UserInterface
 {
@@ -18,16 +21,6 @@ class User extends BaseUser implements UserInterface
     protected $displayname;
 
     /**
-     * @var \SplFileInfo
-     */
-    protected $file;
-
-    /**
-     * @var string
-     */
-    protected $path;
-
-    /**
      * @var string
      */
     protected $confirmationType;
@@ -36,6 +29,59 @@ class User extends BaseUser implements UserInterface
      * @var \DateTime
      */
     protected $confirmedAt;
+
+    /**
+     * @var ArrayCollection
+     */
+    protected $authorizationRoles;
+
+    /**
+     * @var MediaInterface
+     */
+    protected $picture;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->authorizationRoles = new ArrayCollection();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAuthorizationRoles()
+    {
+        return $this->authorizationRoles;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addAuthorizationRole(RoleInterface $role)
+    {
+        if (!$this->hasAuthorizationRole($role)) {
+            $this->authorizationRoles->add($role);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function removeAuthorizationRole(RoleInterface $role)
+    {
+        if ($this->hasAuthorizationRole($role)) {
+            $this->authorizationRoles->removeElement($role);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasAuthorizationRole(RoleInterface $role)
+    {
+        return $this->authorizationRoles->contains($role);
+    }
 
     /**
      * @return bool
@@ -84,64 +130,50 @@ class User extends BaseUser implements UserInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return string|void
      */
-    public function hasFile()
+    public function getLang()
     {
-        return null !== $this->file;
-    }
+        if ($this->locale) {
+            if (preg_match('/_([a-z]{2})/i', $this->locale, $match)) {
+                return strtolower($match[1]);
+            }
+        }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getFile()
-    {
-        return $this->file;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setFile(\SplFileInfo $file)
-    {
-        $this->file = $file;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function hasPath()
-    {
-        return null !== $this->path;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getPath()
-    {
-        return $this->path;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setPath($path)
-    {
-        $this->path = $path;
-
-        return $this;
+        return;
     }
 
     /**
      * @inheritdoc
      */
+    public function getMediaPath()
+    {
+        return '/user';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setPicture(MediaInterface $picture = null)
+    {
+        $this->picture = $picture;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPicture()
+    {
+        return $this->picture;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getProfilePicture()
     {
-        if ($this->path) {
-            return $this->path;
+        if ($this->picture) {
+            return $this->picture->getMediaId();
         }
 
         foreach ($this->oauthAccounts as $account) {
@@ -193,7 +225,7 @@ class User extends BaseUser implements UserInterface
      */
     public function setEnabled($boolean)
     {
-        $this->enabled = (Boolean) $boolean;
+        $this->enabled = (Boolean)$boolean;
 
         if (!$this->isConfirmed()) {
             $this->enabled = false;

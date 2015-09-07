@@ -13,11 +13,6 @@ DoS\UserBundle\Model\User:
             nullable: true
             column: displayname
 
-        path:
-            type: string
-            nullable: true
-            column: path
-
         confirmationType:
             type: string
             column: confirmation_type
@@ -27,3 +22,28 @@ DoS\UserBundle\Model\User:
             type: datetime
             nullable: true
             column: confirmed_at
+
+    manyToMany:
+        authorizationRoles:
+            targetEntity: Sylius\Component\Rbac\Model\RoleInterface
+            joinTable:
+                name: dos_user_roles
+                joinColumns:
+                    user_id:
+                        referencedColumnName: id
+                        nullable: false
+                        onDelete: CASCADE
+                inverseJoinColumns:
+                    role_id:
+                        referencedColumnName: id
+                        nullable: false
+                        onDelete: CASCADE
+    manyToOne:
+        picture:
+            targetEntity: Sylius\Component\Media\Model\ImageInterface
+            cascade: [all]
+            joinColumn:
+                nullable: true
+                onDelete: "CASCADE"
+                image_id:
+                    referencedColumnName: id
