@@ -7,8 +7,8 @@ route_account_profile_show:
             template: ui:security:showProfile.html.twig
 
 route_account_profile_update:
-    path: /profile/edit
-    methods: [GET, POST]
+    path: /update
+    methods: [GET, PUT]
     defaults:
         _controller: sylius.controller.customer:updateProfileAction
         _sylius:
@@ -18,7 +18,7 @@ route_account_profile_update:
 
 route_account_change_password:
     path: /change-password
-    methods: [GET, POST]
+    methods: [GET, PUT]
     defaults:
         _controller: sylius.controller.user:changePasswordAction
         _sylius:

@@ -2,8 +2,10 @@
 
 namespace DoS\UserBundle\OAuth;
 
-use Sylius\Component\User\Model\CustomerInterface;
-
+/**
+ * @author liverbool <phaiboon@intbizth.com>
+ * @see https://developers.facebook.com/docs/graph-api/reference/user
+ */
 class FacebookResponse extends ResourceResponse
 {
     /**
@@ -17,22 +19,12 @@ class FacebookResponse extends ResourceResponse
     }
 
     /**
-     * {@inheritdoc}
+     * @return null|string
      */
-    public function getGender()
+    public function getBirthday()
     {
-        $gender = CustomerInterface::UNKNOWN_GENDER;
-
-        switch($this->getPathValue('gender')) {
-            case 'male':
-                $gender = CustomerInterface::MALE_GENDER;
-                break;
-
-            case 'female':
-                $gender = CustomerInterface::FEMALE_GENDER;
-                break;
+        if ($birthday = $this->getPathValue('birthday')) {
+            return \DateTime::createFromFormat('m/d/Y', $birthday);
         }
-
-        return $gender;
     }
 }

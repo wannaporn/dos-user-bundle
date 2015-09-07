@@ -2,6 +2,7 @@
 
 namespace DoS\UserBundle\OAuth;
 
+use DoS\UserBundle\Model\CustomerInterface;
 use HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse;
 
 class ResourceResponse extends PathUserResponse
@@ -35,7 +36,7 @@ class ResourceResponse extends PathUserResponse
      */
     public function getFirstName()
     {
-        return $this->getPathValue('first_name');
+        return $this->getPathValue('firstname');
     }
 
     /**
@@ -43,7 +44,24 @@ class ResourceResponse extends PathUserResponse
      */
     public function getLastName()
     {
-        return $this->getPathValue('last_name');
+        return $this->getPathValue('lastname');
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getBirthday()
+    {
+        if ($birthday = $this->getPathValue('birthday')) {
+            // YYYY-MM-DD
+            if (preg_match("/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/", $birthday)) {
+                return \DateTime::createFromFormat('Y-m-d', $birthday);
+            }
+
+            throw new \LogicException('Unkonw birthday format.');
+        }
+
+        return $birthday;
     }
 
     /**
@@ -51,7 +69,19 @@ class ResourceResponse extends PathUserResponse
      */
     public function getGender()
     {
-        return $this->getPathValue('gender');
+        $gender = CustomerInterface::UNKNOWN_GENDER;
+
+        switch($this->getPathValue('gender')) {
+            case 'male':
+                $gender = CustomerInterface::MALE_GENDER;
+                break;
+
+            case 'female':
+                $gender = CustomerInterface::FEMALE_GENDER;
+                break;
+        }
+
+        return $gender;
     }
 
     /**
