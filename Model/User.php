@@ -6,7 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Sylius\Component\Rbac\Model\RoleInterface;
 use Sylius\Component\User\Model\User as BaseUser;
 use Symfony\Component\PropertyAccess\PropertyAccess;
-use Toro\Bundle\CoreBundle\Model\MediaInterface;
+use Sylius\Component\Media\Model\ImageInterface;
 
 class User extends BaseUser implements UserInterface
 {
@@ -36,7 +36,7 @@ class User extends BaseUser implements UserInterface
     protected $authorizationRoles;
 
     /**
-     * @var MediaInterface
+     * @var ImageInterface
      */
     protected $picture;
 
@@ -154,7 +154,7 @@ class User extends BaseUser implements UserInterface
     /**
      * {@inheritdoc}
      */
-    public function setPicture(MediaInterface $picture = null)
+    public function setPicture(ImageInterface $picture = null)
     {
         $this->picture = $picture;
     }

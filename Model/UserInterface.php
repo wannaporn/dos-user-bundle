@@ -6,6 +6,7 @@ use DoS\CernelBundle\Model\MediaPathAwareInterface;
 use DoS\UserBundle\Confirmation\ConfirmationSubjectInterface;
 use Sylius\Component\Rbac\Model\IdentityInterface;
 use Sylius\Component\User\Model\UserInterface as BaseUserInterface;
+use Sylius\Component\Media\Model\ImageInterface;
 
 /**
  * User interface.
@@ -63,4 +64,14 @@ interface UserInterface extends BaseUserInterface, MediaPathAwareInterface, Conf
      * @param \DateTime|null $confirmedAt
      */
     public function setConfirmedAt(\DateTime $confirmedAt = null);
+
+    /**
+     * @param ImageInterface|null $picture
+     */
+    public function setPicture(ImageInterface $picture = null);
+
+    /**
+     * @return ImageInterface
+     */
+    public function getPicture();
 }
