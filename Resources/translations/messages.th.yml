@@ -12,6 +12,9 @@ ui.trans:
 
         id: ID
         email: อีเมล์
+        profile: Profile
+        username: Username
+        display_name: Display Name
         firstname: ชื่อ
         lastname: นามสกุล
         status: สถานะ

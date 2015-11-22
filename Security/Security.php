@@ -6,8 +6,10 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use DoS\UserBundle\Model\UserInterface;
+use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 
 class Security
 {
@@ -94,5 +96,27 @@ class Security
     public function isLoggedIn()
     {
         return $this->isGranted('IS_AUTHENTICATED_REMEMBERED');
+    }
+
+    /**
+     * @param string $username
+     * @param string $password
+     * @param string $firewall
+     *
+     * @return \Symfony\Component\Security\Core\User\UserInterface
+     *
+     * @throws UsernameNotFoundException
+     */
+    public function simulate($username, $password = null, $firewall = 'main')
+    {
+        if (!$user = $this->container->get('dos.provider.user')->loadUserByUsername($username)) {
+            throw new UsernameNotFoundException();
+        }
+
+        $this->container->get('security.token_storage')->setToken(
+            new UsernamePasswordToken($user, $password, $firewall, $user->getRoles())
+        );
+
+        return $user;
     }
 }
