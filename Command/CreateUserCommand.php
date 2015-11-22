@@ -21,7 +21,7 @@ class CreateUserCommand extends BaseCreateUserCommand
             ->setDefinition(array(
                 new InputArgument('email', InputArgument::REQUIRED, 'Email'),
                 new InputArgument('password', InputArgument::REQUIRED, 'Password'),
-                new InputArgument('roles', InputArgument::IS_ARRAY, 'RBAC roles'),
+                new InputArgument('roles', InputArgument::IS_ARRAY, 'Roles'),
                 new InputOption('disabled', null, InputOption::VALUE_NONE, 'Set the user as a disabled user'),
             ))
             ->setHelp(<<<EOT
