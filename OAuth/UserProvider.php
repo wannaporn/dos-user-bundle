@@ -22,9 +22,9 @@ class UserProvider extends SyliusUserProvider
     protected function createUserByOAuthUserResponse(UserResponseInterface $response)
     {
         /** @var DoSUserInterface $user */
-        $user = $this->userRepository->createNew();
+        $user = $this->userFactory->createNew();
         /** @var CustomerInterface $customer */
-        $customer = $this->customerRepository->createNew();
+        $customer = $this->customerFactory->createNew();
 
         // set default values taken from OAuth sign-in provider account
         // todo: check security configuration provide by `fos....username_email`
@@ -63,7 +63,7 @@ class UserProvider extends SyliusUserProvider
     protected function updateUserByOAuthUserResponse(UserInterface $user, UserResponseInterface $response)
     {
         /** @var UserOAuthInterface $oauth */
-        $oauth = $this->oauthRepository->createNew();
+        $oauth = $this->oauthFactory->createNew();
         $oauth->setIdentifier($response->getUsername());
         $oauth->setProvider($response->getResourceOwner()->getName());
         $oauth->setAccessToken($response->getAccessToken());
