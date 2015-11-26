@@ -34,7 +34,7 @@ class UserProfile extends \Twig_Extension
      *
      * @return null|string
      */
-    public function getUserAvartar(UserInterface $user = null, $filter = 'avatar', array $runtimeConfig = array())
+    public function getUserAvartar(UserInterface $user = null, $filter = '70x70', array $runtimeConfig = array())
     {
         if (!$user) {
             return;
@@ -45,7 +45,27 @@ class UserProfile extends \Twig_Extension
                 return $avatar;
             }
 
-            return $this->cacheManager->getBrowserPath($avatar, $filter, $runtimeConfig);
+            if (empty($runtimeConfig)) {
+                $runtimeConfig = array(
+                    'thumbnail' => array(
+                        "size" => explode('x', $filter),
+                        "mode" => 'inset',
+                    )
+                );
+            }
+
+            /**
+             * We must to define `sizing` filter first!
+             * eg.
+             *
+             *   liip_imagine:
+             *       filter_sets:
+             *           sizing:
+             *               data_loader: cmf_media_doctrine_phpcr
+             *           filters:
+             *               thumbnail: { size: [200, 200], mode: inset }
+             */
+            return $this->cacheManager->getBrowserPath($avatar, 'sizing', $runtimeConfig);
         }
 
         return;
