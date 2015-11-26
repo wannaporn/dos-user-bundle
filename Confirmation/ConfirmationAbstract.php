@@ -3,6 +3,7 @@
 namespace DoS\UserBundle\Confirmation;
 
 use Doctrine\Common\Persistence\ObjectManager;
+use DoS\UserBundle\Confirmation\Exception\ConfirmationException;
 use DoS\UserBundle\Confirmation\Exception\InvalidTokenResendTimeException;
 use DoS\UserBundle\Confirmation\Model\ResendInterface;
 use DoS\UserBundle\Confirmation\Model\VerificationInterface;
@@ -12,6 +13,7 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Translation\TranslatorInterface;
 
 abstract class ConfirmationAbstract implements ConfirmationInterface
 {
@@ -46,6 +48,11 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
     protected $formFactory;
 
     /**
+     * @var TranslatorInterface
+     */
+    protected $translator;
+
+    /**
      * @var array
      */
     protected $options = array();
@@ -62,6 +69,7 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
         StorageInterface $storage,
         TokenProviderInterface $tokenProvider,
         FormFactoryInterface $formFactory,
+        TranslatorInterface $translator,
         array $options = array()
     ) {
         $this->manager = $manager;
@@ -70,8 +78,21 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
         $this->tokenProvider = $tokenProvider;
         $this->sender = $sender;
         $this->formFactory = $formFactory;
+        $this->translator = $translator;
 
         $this->resetOptions($options);
+    }
+
+    /**
+     * @param $id
+     * @param array $parameters
+     * @param string $domain
+     * @param null $local
+     * @return string
+     */
+    private function trans($id, array $parameters = array(), $domain = 'validators', $local = null)
+    {
+        return $this->translator->trans($id, $parameters, $domain, $local);
     }
 
     /**
@@ -145,7 +166,7 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
             try {
                 $this->canResend($data->getSubject());
             } catch (\Exception $e) {
-                $form->addError(new FormError($e->getMessage()));
+                $form->addError(new FormError($this->trans($e->getMessage())));
             }
 
             if (!$form->getErrors(true)->count()) {
@@ -280,7 +301,7 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
     public function canResend(ConfirmationSubjectInterface $subject)
     {
         if ($subject->isConfirmationConfirmed()) {
-            return false;
+            throw new ConfirmationException('ui.trans.user.confirmation.resend.confirmed');
         }
 
         if (null === $timeAware = $this->options['token_resend_time_aware']) {
@@ -288,14 +309,14 @@ abstract class ConfirmationAbstract implements ConfirmationInterface
         }
 
         if (!$time = $subject->getConfirmationRequestedAt()) {
-            return false;
+            return true;
         }
 
         $time->add(\DateInterval::createFromDateString($timeAware));
         $valid = $time->getTimestamp() <= (new \DateTime())->getTimestamp();
 
         if (false === $valid) {
-            $exception = new InvalidTokenResendTimeException();
+            $exception = new InvalidTokenResendTimeException('ui.trans.user.confirmation.invalid_time');
             $exception->setTime($time);
             $exception->setTimeAware($timeAware);
 
