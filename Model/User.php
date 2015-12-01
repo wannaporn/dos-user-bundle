@@ -103,7 +103,8 @@ class User extends BaseUser implements UserInterface
                 $customer && trim($customer->getFullName())
                 ? $customer->getFullName()
                 : $this->username
-            );
+            )
+        ;
     }
 
     /**
