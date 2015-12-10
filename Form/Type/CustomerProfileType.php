@@ -16,9 +16,6 @@ class CustomerProfileType extends BaseCustomerProfileType
         parent::buildForm($builder, $options);
 
         $builder
-            ->remove('email') // use multiple emails strategy like github.
-            ->add('user', 'dos_user_avatar')
-
             ->add('mobile', 'tel', array(
                 'label' => 'ui.trans.customer.form.mobile',
                 'required' => false,
