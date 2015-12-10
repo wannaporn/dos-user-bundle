@@ -26,17 +26,6 @@ class RegisteredUserValidator extends ConstraintValidator
      */
     public function validate($customer, Constraint $constraint)
     {
-        if ($email = $customer->getEmail()) {
-            $existingEmail = $this->customerRepository->findOneBy(array('email' => $email));
-
-            if (null !== $existingEmail
-                && null !== $existingEmail->getUser()
-                && $existingEmail->getId() !== $customer->getId()
-            ) {
-                $this->context->addViolationAt('email', $constraint->emailMessage ?: $constraint->message, array(), null);
-            }
-        }
-
         if ($mobile = $customer->getMobile()) {
             $existingMobile = $this->customerRepository->findOneBy(array('mobile' => $mobile));
 

@@ -35,21 +35,31 @@ class DoSUserExtension extends AbstractResourceExtension implements PrependExten
         $container->prependExtensionConfig('sylius_user', array(
             'classes' => array(
                 'customer' => array(
-                    'model' => $config['classes']['customer']['model'],
-                    'controller' => $config['classes']['customer']['controller'],
+                    'model' => 'DoS\UserBundle\Model\Customer',
+                    'form' => array(
+                        'default' => 'DoS\UserBundle\Form\Type\CustomerType',
+                        'profile' => 'DoS\UserBundle\Form\Type\CustomerProfileType',
+                    )
                 ),
                 'user' => array(
-                    'model' => $config['classes']['user']['model'],
-                    'controller' => $config['classes']['user']['controller'],
-                    'repository' => $config['classes']['user']['repository'],
+                    'model' => 'DoS\UserBundle\Model\User',
+                    'controller' => 'DoS\UserBundle\Controller\UserController',
+                    'repository' => 'DoS\UserBundle\Doctrine\ORM\UserRepository',
+                    'form' => array(
+                        'default' => '\DoS\UserBundle\Form\Type\UserType',
+                    )
                 ),
                 'user_oauth' => array(
-                    'model' => $config['classes']['user_oauth']['model'],
-                ),
-                'group' => array(
-                    'model' => $config['classes']['group']['model'],
+                    'model' => 'DoS\UserBundle\Model\UserOAuth',
                 ),
             ),
+            'validation_groups' => array(
+                'customer' => array('dos', 'sylius', 'sylius_customer_profile'),
+                'customer_profile' => array('dos', 'sylius', 'sylius_customer_profile'),
+                'customer_registration' => array('dos_registration', 'sylius', 'sylius_customer_profile', 'sylius_user_registration'),
+                'user' => array('dos', 'sylius'),
+                'user_registration' => array('dos', 'dos_registration', 'sylius', 'sylius_user_registration'),
+            )
         ));
     }
 }

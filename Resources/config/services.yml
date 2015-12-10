@@ -46,8 +46,8 @@ services:
     dos.user.confirmation.email:
         class: %dos.user.confirmation.email.class%
         arguments:
-            - @dos.manager.user
-            - @dos.repository.user
+            - @sylius.manager.user
+            - @sylius.repository.user
             - @dos.user.confirmation.sender.email
             - @sylius.storage.session
             - @sylius.user.token_provider
@@ -65,6 +65,6 @@ services:
     dos.user.validator.registration:
         class: DoS\UserBundle\Validator\Constraints\RegisteredUserValidator
         arguments:
-            - @dos.repository.customer
+            - @sylius.repository.customer
         tags:
             - { name: validator.constraint_validator, alias: dos_user_registration_validator }

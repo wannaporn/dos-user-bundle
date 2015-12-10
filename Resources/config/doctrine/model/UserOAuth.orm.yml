@@ -1,9 +1,8 @@
 DoS\UserBundle\Model\UserOAuth:
     type: mappedSuperclass
-    table: dos_user_oauth
+    table: sylius_user_oauth
 
     fields:
-
         profilePicture:
             type: string
             nullable: true

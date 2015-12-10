@@ -25,10 +25,9 @@ class DoSUserBundle extends AbstractResourceBundle
     public function getModelInterfaces()
     {
         return array(
-            'DoS\UserBundle\Model\UserInterface' => 'dos.model.user.class',
-            'DoS\UserBundle\Model\CustomerInterface' => 'dos.model.customer.class',
-            'DoS\UserBundle\Model\GroupInterface' => 'dos.model.group.class',
-            'DoS\UserBundle\Model\UserOAuthInterface' => 'dos.model.user_oauth.class',
+            'DoS\UserBundle\Model\UserInterface' => 'sylius.model.user.class',
+            'DoS\UserBundle\Model\CustomerInterface' => 'sylius.model.customer.class',
+            'DoS\UserBundle\Model\UserOAuthInterface' => 'sylius.model.user_oauth.class',
             'DoS\UserBundle\Model\OneTimePasswordInterface' => 'dos.model.otp.class',
         );
     }

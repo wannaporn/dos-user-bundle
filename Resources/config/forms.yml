@@ -2,28 +2,11 @@ services:
     dos.form.type.user_search:
         class: DoS\UserBundle\Form\Type\UserSearchType
         arguments:
-            - @dos.repository.user
+            - @sylius.repository.user
             - @router
             - "route_api_user_search"
         tags:
             - {name: form.type, alias: dos_user_search}
-
-    dos.form.type.user_reistration:
-        class: DoS\UserBundle\Form\Type\RegistrationType
-        arguments:
-            - %dos.model.customer.class%
-            - %dos.validation_group.registration%
-            - @dos.repository.customer
-        tags:
-            - {name: form.type, alias: dos_registration}
-
-    dos.form.type.customer_profile:
-        class: DoS\UserBundle\Form\Type\CustomerProfileType
-        arguments:
-            - %dos.model.user.class%
-            - %dos.validation_group.profile%
-        tags:
-            - {name: form.type, alias: dos_customer_profile}
 
     dos.form.type.verification:
         class: DoS\UserBundle\Confirmation\Form\Type\VerificationType

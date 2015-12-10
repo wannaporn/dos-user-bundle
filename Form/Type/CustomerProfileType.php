@@ -4,7 +4,6 @@ namespace DoS\UserBundle\Form\Type;
 
 use Sylius\Bundle\UserBundle\Form\Type\CustomerProfileType as BaseCustomerProfileType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class CustomerProfileType extends BaseCustomerProfileType
 {
@@ -19,28 +18,8 @@ class CustomerProfileType extends BaseCustomerProfileType
             ->add('mobile', 'tel', array(
                 'label' => 'ui.trans.customer.form.mobile',
                 'required' => false,
-                'default_region' => $options['phone_default_region'],
+                'default_region' => 'TH',
             ))
         ;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
-    {
-        parent::setDefaultOptions($resolver);
-
-        $resolver->setDefaults(array(
-            'phone_default_region' => 'TH',
-        ));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'dos_customer_profile';
     }
 }

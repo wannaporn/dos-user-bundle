@@ -1,6 +1,6 @@
 DoS\UserBundle\Model\User:
     type: mappedSuperclass
-    table: dos_user
+    table: sylius_user
 
     fields:
         locale:
@@ -27,7 +27,7 @@ DoS\UserBundle\Model\User:
         authorizationRoles:
             targetEntity: Sylius\Component\Rbac\Model\RoleInterface
             joinTable:
-                name: dos_user_roles
+                name: sylius_user_roles
                 joinColumns:
                     user_id:
                         referencedColumnName: id
@@ -38,6 +38,7 @@ DoS\UserBundle\Model\User:
                         referencedColumnName: id
                         nullable: false
                         onDelete: CASCADE
+
     manyToOne:
         picture:
             targetEntity: Sylius\Component\Media\Model\ImageInterface

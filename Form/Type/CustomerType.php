@@ -2,10 +2,10 @@
 
 namespace DoS\UserBundle\Form\Type;
 
-use Sylius\Bundle\UserBundle\Form\Type\GroupType as BaseGroupType;
+use Sylius\Bundle\UserBundle\Form\Type\CustomerType as BaseCustomerType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class GroupType extends BaseGroupType
+class CustomerType extends BaseCustomerType
 {
     /**
      * {@inheritdoc}
@@ -15,18 +15,11 @@ class GroupType extends BaseGroupType
         parent::buildForm($builder, $options);
 
         $builder
-            ->add('color', 'text', array(
-                'label' => 'ui.trans.group.form.color.label',
+            ->add('mobile', 'tel', array(
+                'label' => 'ui.trans.customer.form.mobile',
                 'required' => false,
+                'default_region' => 'TH',
             ))
         ;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'dos_group';
     }
 }
