@@ -15,14 +15,16 @@ class Configuration extends AbstractResourceConfiguration
         $treeBuilder = new TreeBuilder();
 
         $this->setDefaults($node = $treeBuilder->root('dos_user'), array(
-            'classes' => array(
+            'resources' => array(
                 'otp' => array(
-                    'model' => 'DoS\UserBundle\Model\OneTimePassword',
-                    'interface' => 'DoS\UserBundle\Model\OneTimePasswordInterface',
+                    'classes' => array(
+                        'model' => 'DoS\UserBundle\Model\OneTimePassword',
+                        'interface' => 'DoS\UserBundle\Model\OneTimePasswordInterface',
+                    ),
+                    'validation_groups' => array(
+                        'default' => array('dos'),
+                    ),
                 ),
-            ),
-            'validation_groups' => array(
-                'otp' => array('dos'),
             ),
         ));
 
