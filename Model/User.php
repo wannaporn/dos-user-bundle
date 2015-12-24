@@ -150,7 +150,7 @@ class User extends BaseUser implements UserInterface
      */
     public function getMediaPath()
     {
-        return '/user';
+        return '/user/' . $this->usernameCanonical;
     }
 
     /**
