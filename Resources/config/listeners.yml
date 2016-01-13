@@ -3,6 +3,7 @@ parameters:
     dos.listener.user_aware.class: DoS\UserBundle\EventListener\UserAwareResourceListener
     dos.listener.user_confirmation.class: DoS\UserBundle\EventListener\UserConfirmationListener
     dos.listener.default_username.class: DoS\UserBundle\EventListener\DefaultUsernameListener
+    dos.listener.user_security_role.class: DoS\UserBundle\EventListener\UserSecurityRoleListener
 
 services:
     dos.listener.user_acl:
@@ -25,3 +26,8 @@ services:
             - @dos.user.confirmation.factory
         tags:
             - {name: kernel.event_listener, event: sylius.customer.post_register, method: sendConfirmation, priority: 128}
+
+    dos.listener.user_security_role:
+        class: %dos.listener.user_security_role.class%
+        tags:
+            - {name: kernel.event_listener, event: sylius.customer.pre_update, method: resizeUserRoles}

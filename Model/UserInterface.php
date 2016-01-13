@@ -74,4 +74,9 @@ interface UserInterface extends BaseUserInterface, MediaPathAwareInterface, Conf
      * @return ImageInterface
      */
     public function getPicture();
+
+    /**
+     * Resize security roles with sylius role map.
+     */
+    public function resizeSecurityRoles();
 }

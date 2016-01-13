@@ -3,7 +3,7 @@
 namespace DoS\UserBundle\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Sylius\Component\Rbac\Model\RoleInterface;
+use Sylius\Component\Rbac\Model\Role;
 use Sylius\Component\User\Model\User as BaseUser;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Sylius\Component\Media\Model\ImageInterface;
@@ -31,7 +31,7 @@ class User extends BaseUser implements UserInterface
     protected $confirmedAt;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection|Role[]
      */
     protected $authorizationRoles;
 
@@ -58,29 +58,15 @@ class User extends BaseUser implements UserInterface
     /**
      * {@inheritdoc}
      */
-    public function addAuthorizationRole(RoleInterface $role)
+    public function resizeSecurityRoles()
     {
-        if (!$this->hasAuthorizationRole($role)) {
-            $this->authorizationRoles->add($role);
-        }
-    }
+        $this->roles = array(self::DEFAULT_ROLE);
 
-    /**
-     * {@inheritdoc}
-     */
-    public function removeAuthorizationRole(RoleInterface $role)
-    {
-        if ($this->hasAuthorizationRole($role)) {
-            $this->authorizationRoles->removeElement($role);
+        foreach($this->authorizationRoles as $role) {
+            foreach($role->getSecurityRoles() as $r) {
+                $this->roles[] = $r;
+            }
         }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function hasAuthorizationRole(RoleInterface $role)
-    {
-        return $this->authorizationRoles->contains($role);
     }
 
     /**
