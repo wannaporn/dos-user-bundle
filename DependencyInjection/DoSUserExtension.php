@@ -40,6 +40,7 @@ class DoSUserExtension extends AbstractResourceExtension implements PrependExten
                 'customer' => array(
                     'classes' => array(
                         'model' => 'DoS\UserBundle\Model\Customer',
+                        'repository' => 'DoS\ResourceBundle\Doctrine\ORM\EntityRepository',
                         'form' => array(
                             'default' => 'DoS\UserBundle\Form\Type\CustomerType',
                             'profile' => 'DoS\UserBundle\Form\Type\CustomerProfileType',
