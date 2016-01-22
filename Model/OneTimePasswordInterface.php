@@ -4,8 +4,9 @@ namespace DoS\UserBundle\Model;
 
 use DoS\ResourceBundle\Model\TimestampableInterface;
 use DoS\UserBundle\Confirmation\ConfirmationSubjectInterface;
+use Sylius\Component\Resource\Model\ResourceInterface;
 
-interface OneTimePasswordInterface extends TimestampableInterface
+interface OneTimePasswordInterface extends TimestampableInterface, ResourceInterface
 {
     /**
      * @return ConfirmationSubjectInterface
