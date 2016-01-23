@@ -4,7 +4,7 @@ namespace DoS\UserBundle\EventListener;
 
 use DoS\UserBundle\Model\CustomerInterface;
 use Sylius\Component\Rbac\Model\IdentityInterface;
-use Sylius\Component\Resource\Event\ResourceEvent;
+use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent as ResourceEvent;
 
 class UserSecurityRoleListener
 {
