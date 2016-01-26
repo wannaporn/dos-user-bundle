@@ -4,6 +4,7 @@ namespace DoS\UserBundle\Controller;
 
 use DoS\UserBundle\Confirmation\ConfirmationInterface;
 use DoS\UserBundle\Model\UserInterface;
+use FOS\RestBundle\View\View;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -31,34 +32,38 @@ class ConfirmationController extends SyliusUserController
     {
         $confirmation = $this->getConfirmationService();
         $form = $confirmation->resend($request);
+        $config = $this->requestConfigurationFactory->create($this->metadata, $request);
 
-        $view = $this->view(array(
+        $view = View::create(array(
             'type' => $confirmation->getType(),
             'form' => $form->createView()
-        ))->setTemplate($this->config->getTemplate('resend'));
+        ))->setTemplate($config->getTemplate('resend'));
 
-        return $this->handleView($view);
+        return $this->viewHandler->handle($config, $view);
     }
 
     /**
+     * @param Request $request
+     *
      * @return Response
      */
-    public function confirmationAction()
+    public function confirmationAction(Request $request)
     {
         $confirmation = $this->getConfirmationService();
         $token = $confirmation->getStoredToken(true);
         $subject = $confirmation->findSubjectWithToken($token);
+        $config = $this->requestConfigurationFactory->create($this->metadata, $request);
 
-        $view = $this->view(array(
+        $view = View::create(array(
             'type' => $confirmation->getType(),
             'subject' => $subject,
             'subjectValue' => $confirmation->getSubjectValue($subject),
             'time_aware' => $confirmation->getTokenTimeAware($subject),
             'resendForm' => $confirmation->createResendForm()->createView(),
             'verifyForm' => $confirmation->createVerifyForm()->createView(),
-        ))->setTemplate($this->config->getTemplate('confirmation'));
+        ))->setTemplate($config->getTemplate('confirmation'));
 
-        return $this->handleView($view);
+        return $this->viewHandler->handle($config, $view);
     }
 
     /**
@@ -71,6 +76,7 @@ class ConfirmationController extends SyliusUserController
     {
         $confirmation = $this->getConfirmationService();
         $form = $confirmation->verify($request, $token);
+        $config = $this->requestConfigurationFactory->create($this->metadata, $request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var UserInterface $user */
@@ -78,12 +84,12 @@ class ConfirmationController extends SyliusUserController
             $this->get('sylius.security.user_login')->login($user);
         }
 
-        $view = $this->view(array(
+        $view = View::create(array(
             'type' => $confirmation->getType(),
             'form' => $form->createView()
-        ))->setTemplate($this->config->getTemplate('verification'));
+        ))->setTemplate($config->getTemplate('verification'));
 
-        return $this->handleView($view);
+        return $this->viewHandler->handle($config, $view);
     }
 
     /**
