@@ -79,4 +79,6 @@ interface UserInterface extends BaseUserInterface, MediaPathAwareInterface, Conf
      * Resize security roles with sylius role map.
      */
     public function resizeSecurityRoles();
+
+    public function setAuthorizationRoles($authorizationRoles);
 }

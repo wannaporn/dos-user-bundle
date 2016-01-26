@@ -12,7 +12,16 @@ class UserType extends BaseUserType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        parent::buildForm($builder, $options);
+        $builder
+            ->add('plainPassword', 'password', array(
+                'label' => 'sylius.form.user.password.label',
+                'required' => false,
+            ))
+            ->add('enabled', 'checkbox', array(
+                'label' => 'sylius.form.user.enabled',
+                'required' => false,
+            ))
+        ;
 
         $builder
             ->add('locale', 'locale', array(

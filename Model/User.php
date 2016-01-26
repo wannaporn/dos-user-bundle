@@ -3,6 +3,7 @@
 namespace DoS\UserBundle\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Sylius\Component\Rbac\Model\Role;
 use Sylius\Component\User\Model\User as BaseUser;
 use Symfony\Component\PropertyAccess\PropertyAccess;
@@ -53,6 +54,18 @@ class User extends BaseUser implements UserInterface
     public function getAuthorizationRoles()
     {
         return $this->authorizationRoles;
+    }
+
+    /**
+     * @param ArrayCollection|\Sylius\Component\Rbac\Model\Role[] $authorizationRoles
+     */
+    public function setAuthorizationRoles($authorizationRoles)
+    {
+        if (!$authorizationRoles instanceof Collection) {
+            $authorizationRoles = new ArrayCollection($authorizationRoles);
+        }
+
+        $this->authorizationRoles = $authorizationRoles;
     }
 
     /**
