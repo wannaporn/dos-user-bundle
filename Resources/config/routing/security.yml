@@ -2,7 +2,7 @@ route_user_security_login:
     path: /login
     methods: [GET]
     defaults:
-        _controller: sylius.controller.security:loginAction
+        _controller: sylius.controller.user_security:loginAction
         _sylius:
             form: sylius_user_security_login
             template: ui:security:login.html.twig
@@ -11,13 +11,13 @@ route_user_security_check:
     path: /login-check
     methods: [POST]
     defaults:
-        _controller: sylius.controller.security:checkAction
+        _controller: sylius.controller.user_security:checkAction
 
 route_user_security_logout:
     path: /logout
     methods: [GET, POST]
     defaults:
-        _controller: sylius.controller.security:logoutAction
+        _controller: sylius.controller.user_security:logoutAction
 
 # provent not found route
 sylius_route_security:
