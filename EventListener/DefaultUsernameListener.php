@@ -2,48 +2,37 @@
 
 namespace DoS\UserBundle\EventListener;
 
-use Doctrine\ORM\Event\LifecycleEventArgs;
 use Sylius\Component\User\Model\CustomerInterface;
-use Sylius\Component\User\Model\UserInterface;
+use Doctrine\ORM\Event\OnFlushEventArgs;
 
 class DefaultUsernameListener
 {
     /**
-     * @param LifecycleEventArgs $event
+     * @param OnFlushEventArgs $onFlushEventArgs
      */
-    public function prePersist(LifecycleEventArgs $event)
+    public function onFlush(OnFlushEventArgs $onFlushEventArgs)
     {
-        $item = $event->getEntity();
+        $entityManager = $onFlushEventArgs->getEntityManager();
+        $unitOfWork = $entityManager->getUnitOfWork();
 
-        if (!$item instanceof UserInterface) {
-            return;
-        }
+        $entities = array_merge(
+            $unitOfWork->getScheduledEntityInsertions(),
+            $unitOfWork->getScheduledEntityUpdates()
+        );
 
-        $customer = $item->getCustomer();
+        foreach ($entities as $entity) {
+            if (!$entity instanceof CustomerInterface) {
+                continue;
+            }
 
-        if (null !== $customer && null === $item->getUsername()) {
-            $item->setUsername($customer->getEmail());
-        }
-    }
+            $user = $entity->getUser();
 
-    /**
-     * @param LifecycleEventArgs $event
-     */
-    public function preUpdate(LifecycleEventArgs $event)
-    {
-        $item = $event->getEntity();
-
-        if (!$item instanceof CustomerInterface) {
-            return;
-        }
-
-        $user = $item->getUser();
-
-        if (null !== $user && $user->getUsername() === null) {
-            $user->setUsername($item->getEmail());
-            $entityManager = $event->getEntityManager();
-            $entityManager->persist($user);
-            $entityManager->flush($user);
+            if (null !== $user && $user->getUsername() === null) {
+                $user->setUsername($entity->getEmail());
+                $entityManager->persist($user);
+                $userMetadata = $entityManager->getClassMetadata(get_class($user));
+                $unitOfWork->recomputeSingleEntityChangeSet($userMetadata, $user);
+            }
         }
     }
 }
