@@ -39,6 +39,18 @@ class UserRepository extends BaseUserRepository implements ConfirmationSubjectFi
         return $queryBuilder
             ->getQuery()
             ->getOneOrNullResult()
-            ;
+        ;
+    }
+
+    public function loadUserByAuthorizationRoles(array $roles)
+    {
+        $queryBuilder = $this->createQueryBuilder('o');
+        $queryBuilder
+            ->join('o.authorizationRoles', 'a')
+            ->andWhere($queryBuilder->expr()->in('a.code', ':roles'))
+            ->setParameter('roles', $roles)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
     }
 }
