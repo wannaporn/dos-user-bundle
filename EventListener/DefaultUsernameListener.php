@@ -29,6 +29,7 @@ class DefaultUsernameListener
 
             if (null !== $user && $user->getUsername() === null) {
                 $user->setUsername($entity->getEmail());
+                $user->setUsernameCanonical($user->getEmail());
                 $entityManager->persist($user);
                 $userMetadata = $entityManager->getClassMetadata(get_class($user));
                 $unitOfWork->recomputeSingleEntityChangeSet($userMetadata, $user);
