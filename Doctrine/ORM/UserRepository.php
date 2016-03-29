@@ -19,7 +19,7 @@ class UserRepository extends BaseUserRepository implements ConfirmationSubjectFi
      */
     public function findConfirmationSubject($propertyPath, $value)
     {
-        $queryBuilder = $this->getQueryBuilder();
+        $queryBuilder = $this->createQueryBuilder('o');
         $paths = explode('.', $propertyPath);
 
         // support only 1 step join
