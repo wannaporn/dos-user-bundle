@@ -14,7 +14,6 @@
         "oneup/acl-bundle": "~0.10",
         "hwi/oauth-bundle": "~0.3",
         "liverbool/dos-mailer-bundle": "0.18.*",
-        "liverbool/dos-settings-bundle": "0.18.*",
         "liverbool/dos-resource-bundle": "0.18.*",
         "sylius/storage": "0.18.*",
         "sylius/rbac-bundle": "0.18.*",
@@ -22,12 +21,6 @@
         "symfony/form": "~2.7",
         "symfony/validator": "~2.7"
     },
-    "repositories": [
-        {
-            "type": "git",
-            "url": "https://github.com/liverbool/SyliusUserBundle.git"
-        }
-    ],
     "require-dev": {
         "liil/kint": "1.0",
         "phpspec/phpspec": "~2.1"
