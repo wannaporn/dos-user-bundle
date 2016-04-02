@@ -5,7 +5,6 @@ parameters:
     dos.user.oauth.response.facebook.class: DoS\UserBundle\OAuth\FacebookResponse
     dos.user.oauth.response.google.class: DoS\UserBundle\OAuth\GoogleResponse
     dos.user.oauth.response.github.class: DoS\UserBundle\OAuth\GithubResponse
-    dos.user.authorization_checker.toggleable.class: DoS\UserBundle\Authorization\ToggleableAuthorizationChecker
 
     dos.user.confirmation.factory.class: DoS\UserBundle\Confirmation\ConfirmationFactory
     dos.user.confirmation.email.class: DoS\UserBundle\Confirmation\Email\Confirmation
@@ -20,12 +19,6 @@ services:
         class: %dos.user.security.class%
         arguments:
             - @service_container
-
-    dos.user.authorization_checker.toggleable:
-        class: %dos.user.authorization_checker.toggleable.class%
-        arguments:
-            - @sylius.authorization_checker.default
-            - @sylius.settings.manager
 
     dos.user.confirmation.factory:
         class: %dos.user.confirmation.factory.class%
