@@ -18,17 +18,4 @@ class DoSUserBundle extends AbstractResourceBundle
         $container->addCompilerPass(new Compiler\SyliusOverridePass());
         $container->addCompilerPass(new Compiler\ConfirmationPass());
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getModelInterfaces()
-    {
-        return array(
-            'DoS\UserBundle\Model\UserInterface' => 'sylius.model.user.class',
-            'DoS\UserBundle\Model\CustomerInterface' => 'sylius.model.customer.class',
-            'DoS\UserBundle\Model\UserOAuthInterface' => 'sylius.model.user_oauth.class',
-            'DoS\UserBundle\Model\OneTimePasswordInterface' => 'dos.model.otp.class',
-        );
-    }
 }
