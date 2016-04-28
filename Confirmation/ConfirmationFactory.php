@@ -51,7 +51,7 @@ class ConfirmationFactory
 
         list($namespace, $name) = explode('.', $name);
 
-        $settings = $this->settingsManager->loadSettings($namespace);
+        $settings = $this->settingsManager->load($namespace);
 
         return $settings->get($name);
     }
