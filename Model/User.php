@@ -3,8 +3,8 @@
 namespace DoS\UserBundle\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Sylius\Component\Rbac\Model\Role;
+use Sylius\Component\Rbac\Model\RoleInterface;
 use Sylius\Component\User\Model\User as BaseUser;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Sylius\Component\Media\Model\ImageInterface;
@@ -46,40 +46,6 @@ class User extends BaseUser implements UserInterface
         parent::__construct();
 
         $this->authorizationRoles = new ArrayCollection();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getAuthorizationRoles()
-    {
-        return $this->authorizationRoles;
-    }
-
-    /**
-     * @param ArrayCollection|\Sylius\Component\Rbac\Model\Role[] $authorizationRoles
-     */
-    public function setAuthorizationRoles($authorizationRoles)
-    {
-        if (!$authorizationRoles instanceof Collection) {
-            $authorizationRoles = new ArrayCollection($authorizationRoles);
-        }
-
-        $this->authorizationRoles = $authorizationRoles;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function resizeSecurityRoles()
-    {
-        $this->roles = array(self::DEFAULT_ROLE);
-
-        foreach($this->authorizationRoles as $role) {
-            foreach($role->getSecurityRoles() as $r) {
-                $this->roles[] = $r;
-            }
-        }
     }
 
     /**
@@ -333,5 +299,55 @@ class User extends BaseUser implements UserInterface
     public function confirmationEnableAccess()
     {
         $this->enabled = true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAuthorizationRoles()
+    {
+        return $this->authorizationRoles;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addAuthorizationRole(RoleInterface $role)
+    {
+        if (!$this->hasAuthorizationRole($role)) {
+            $this->authorizationRoles->add($role);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function removeAuthorizationRole(RoleInterface $role)
+    {
+        if ($this->hasAuthorizationRole($role)) {
+            $this->authorizationRoles->removeElement($role);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasAuthorizationRole(RoleInterface $role)
+    {
+        return $this->authorizationRoles->contains($role);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getRoles()
+    {
+        $roles = parent::getRoles();
+
+        foreach ($this->getAuthorizationRoles() as $role) {
+            $roles = array_merge($roles, $role->getSecurityRoles());
+        }
+
+        return $roles;
     }
 }
