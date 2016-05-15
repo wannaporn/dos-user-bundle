@@ -26,8 +26,3 @@ services:
             - @dos.user.confirmation.factory
         tags:
             - {name: kernel.event_listener, event: sylius.customer.post_register, method: sendConfirmation, priority: 128}
-
-    dos.listener.user_security_role:
-        class: %dos.listener.user_security_role.class%
-        tags:
-            - {name: kernel.event_listener, event: sylius.customer.pre_update, method: resizeUserRoles}
