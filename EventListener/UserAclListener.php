@@ -2,11 +2,10 @@
 
 namespace DoS\UserBundle\EventListener;
 
-use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Event\OnFlushEventArgs;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 use DoS\UserBundle\Model\UserAclOwnerAwareInterface;
-use DoS\UserBundle\Model\UserAwareInterface;
 
 class UserAclListener
 {
@@ -20,28 +19,35 @@ class UserAclListener
         $this->container = $container;
     }
 
-    public function postPersist(LifecycleEventArgs $args)
+    /**
+     * @param OnFlushEventArgs $onFlushEventArgs
+     */
+    public function onFlush(OnFlushEventArgs $onFlushEventArgs)
     {
-        if (!$this->container->has('oneup_acl.manager')) {
-            return;
-        }
+        $entityManager = $onFlushEventArgs->getEntityManager();
+        $unitOfWork = $entityManager->getUnitOfWork();
 
-        $object = $args->getObject();
+        $entities = array_merge(
+            $unitOfWork->getScheduledEntityInsertions(),
+            $unitOfWork->getScheduledEntityUpdates()
+        );
 
-        // explicitly
-        if ($object instanceof UserAclOwnerAwareInterface && $object->getAclOwner()) {
+        foreach ($entities as $entity) {
+            if (!$entity instanceof UserAclOwnerAwareInterface) {
+                continue;
+            }
+
+            if (!$owner = $entity->getAclOwner()) {
+                throw new \RuntimeException("Not found AclOwner for: " . get_class($entity));
+            }
+
             $this->container->get('oneup_acl.manager')
-                ->addObjectPermission($object, MaskBuilder::MASK_OWNER, $object->getAclOwner())
+                ->addObjectPermission($entity, MaskBuilder::MASK_OWNER, $owner)
             ;
-        }
 
-        // default
-        if ($object instanceof UserAwareInterface
-            && !$object instanceof UserAclOwnerAwareInterface
-            && $object->getUser()) {
-            $this->container->get('oneup_acl.manager')
-                ->addObjectPermission($object, MaskBuilder::MASK_OWNER, $object->getUser())
-            ;
+            $entityManager->persist($entity);
+            $metadata = $entityManager->getClassMetadata(get_class($entity));
+            $unitOfWork->recomputeSingleEntityChangeSet($metadata, $entity);
         }
     }
 }

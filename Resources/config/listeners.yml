@@ -3,7 +3,6 @@ parameters:
     dos.listener.user_aware.class: DoS\UserBundle\EventListener\UserAwareResourceListener
     dos.listener.user_confirmation.class: DoS\UserBundle\EventListener\UserConfirmationListener
     dos.listener.default_username.class: DoS\UserBundle\EventListener\DefaultUsernameListener
-    dos.listener.user_security_role.class: DoS\UserBundle\EventListener\UserSecurityRoleListener
 
 services:
     dos.listener.user_acl:
@@ -11,14 +10,14 @@ services:
         arguments:
             - @service_container
         tags:
-            - {name: doctrine.event_listener, event: postPersist, priority: -128}
+            - {name: doctrine.event_listener, event: onFlush, priority: -128}
 
     dos.listener.user_aware:
         class: %dos.listener.user_aware.class%
         arguments:
             - @dos.user.security
         tags:
-            - {name: doctrine.event_subscriber, connection: default}
+            - {name: doctrine.event_listener, event: onFlush, priority: -128}
 
     dos.listener.user_confirmation:
         class: %dos.listener.user_confirmation.class%

@@ -2,14 +2,13 @@
 
 namespace DoS\UserBundle\EventListener;
 
-use Doctrine\Common\EventSubscriber;
-use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
+use Doctrine\ORM\Event\OnFlushEventArgs;
 use DoS\UserBundle\Security\Security;
 use DoS\UserBundle\Model\UserUpdaterAwareInterface;
-use DoS\UserBundle\Model\UserAwareInterface;
 use DoS\UserBundle\Model\UserInterface;
+use Sylius\Component\User\Model\UserAwareInterface;
 
-class UserAwareResourceListener implements EventSubscriber
+class UserAwareResourceListener
 {
     /**
      * @var Security
@@ -21,23 +20,35 @@ class UserAwareResourceListener implements EventSubscriber
         $this->security = $security;
     }
 
-    public function prePersist(LifecycleEventArgs $event)
+    /**
+     * @param OnFlushEventArgs $onFlushEventArgs
+     */
+    public function onFlush(OnFlushEventArgs $onFlushEventArgs)
     {
-        $object = $event->getObject();
+        $entityManager = $onFlushEventArgs->getEntityManager();
+        $unitOfWork = $entityManager->getUnitOfWork();
 
-        if ($object instanceof UserAwareInterface && !$object->getUser()) {
-            $object->setUser($this->getUser());
-            // init updater
-            $this->preUpdate($event);
-        }
-    }
+        $entities = array_merge(
+            $unitOfWork->getScheduledEntityInsertions(),
+            $unitOfWork->getScheduledEntityUpdates()
+        );
 
-    public function preUpdate(LifecycleEventArgs $event)
-    {
-        $object = $event->getObject();
+        foreach ($entities as $entity) {
+            if (!$entity instanceof UserAwareInterface && !$entity instanceof UserUpdaterAwareInterface) {
+                continue;
+            }
 
-        if ($object instanceof UserUpdaterAwareInterface && !$object->getUpdater()) {
-            $object->setUpdater($this->getUser());
+            if ($entity instanceof UserAwareInterface && !$entity->getUser()) {
+                $entity->setUser($this->getUser());
+            }
+
+            if ($entity instanceof UserUpdaterAwareInterface && !$entity->getUpdater()) {
+                $entity->setUpdater($this->getUser());
+            }
+
+            $entityManager->persist($entity);
+            $metadata = $entityManager->getClassMetadata(get_class($entity));
+            $unitOfWork->recomputeSingleEntityChangeSet($metadata, $entity);
         }
     }
 
@@ -47,16 +58,5 @@ class UserAwareResourceListener implements EventSubscriber
     private function getUser()
     {
         return $this->security->getUser();
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getSubscribedEvents()
-    {
-        return array(
-            'prePersist',
-            'preUpdate',
-        );
     }
 }
