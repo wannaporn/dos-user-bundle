@@ -70,11 +70,6 @@ class DoSUserExtension extends AbstractResourceExtension implements PrependExten
                         'model' => 'DoS\UserBundle\Model\UserOAuth',
                     ),
                 ),
-            ),
-            'validation_groups' => array(
-                'customer_profile' => array('dos', 'sylius', 'sylius_customer_profile'),
-                'customer_registration' => array('dos_registration', 'sylius', 'sylius_customer_profile', 'sylius_user_registration'),
-                'user_registration' => array('dos', 'dos_registration', 'sylius', 'sylius_user_registration'),
             )
         ));
     }
