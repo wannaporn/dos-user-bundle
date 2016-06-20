@@ -1,9 +1,0 @@
-DoS\UserBundle\Model\Customer:
-    type: mappedSuperclass
-    table: sylius_customer
-
-    fields:
-        mobile:
-            type: phone_number
-            nullable: true
-            column: mobile

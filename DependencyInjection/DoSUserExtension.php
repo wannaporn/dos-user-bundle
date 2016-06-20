@@ -37,20 +37,6 @@ class DoSUserExtension extends AbstractResourceExtension implements PrependExten
 
         $container->prependExtensionConfig('sylius_user', array(
             'resources' => array(
-                'customer' => array(
-                    'classes' => array(
-                        'model' => 'DoS\UserBundle\Model\Customer',
-                        'repository' => 'DoS\ResourceBundle\Doctrine\ORM\EntityRepository',
-                        'form' => array(
-                            'default' => 'DoS\UserBundle\Form\Type\CustomerType',
-                            'profile' => 'DoS\UserBundle\Form\Type\CustomerProfileType',
-                        )
-                    ),
-                    'validation_groups' => array(
-                        'default' => array('dos', 'sylius', 'sylius_customer_profile'),
-                        'profile' => array('dos', 'sylius', 'sylius_customer_profile'),
-                    )
-                ),
                 'user' => array(
                     'classes' => array(
                         'model' => 'DoS\UserBundle\Model\User',
